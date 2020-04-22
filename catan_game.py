@@ -21,6 +21,12 @@ class CatanGame:
         self.nodes = CatanGame.generate_nodes(self.num_rows, self.tiles)
         self.paths = CatanGame.generate_paths(self.nodes)
 
+    def __str__(self):
+        out = ""
+        for nk in sorted(self.nodes):
+            out += str(self.nodes[nk]) + "\n"
+        return out
+
     @staticmethod
     def generate_tiles(num_rows):
         # TODO make sure 6s and 8s are not next to each other
@@ -44,13 +50,12 @@ class CatanGame:
 
     @staticmethod
     def get_tile_node_neighbors(row, col, num_rows):
-        is_top_half = row < num_rows // 2
         cs = col * 2
+        out = [(row, cs + 1), (row, cs + 2), (row + 1, cs + 1), (row + 1, cs + 2)]
+        out += [(row, cs if row <= num_rows // 2 else cs + 3)]
+        out += [(row + 1, cs if row >= num_rows // 2 else cs + 3)]
 
-        if is_top_half:
-            return [(row, cs), (row, cs + 1), (row, cs + 2), (row + 1, cs + 1), (row + 1, cs + 2), (row + 1, cs + 3)]
-        else:
-            return [(row, cs + 1), (row, cs + 2), (row, cs + 3), (row + 1, cs), (row + 1, cs + 1), (row + 1, cs + 2)]
+        return out
 
     @staticmethod
     def generate_nodes(num_rows, tiles):

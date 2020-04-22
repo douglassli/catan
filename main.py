@@ -5,6 +5,7 @@ import tkinter as tk
 
 def main():
     game = CatanGame()
+    # print(game)
     root = tk.Tk()
     app = Application(game, master=root)
     app.mainloop()

@@ -1,6 +1,5 @@
 import tkinter as tk
 from math import cos, sin, sqrt, radians
-from random import shuffle
 from resources import Resource
 
 
@@ -74,10 +73,10 @@ class Board:
     def draw_board(self, catan_game):
         self.canvas.create_rectangle((0, 0, self.can_wid, self.can_height), fill="#0349fc")
         self.draw_tiles(catan_game.tiles)
-        self.calc_nodes()
+        self.calc_nodes(catan_game.nodes)
         self.draw_ports()
         self.draw_settlments()
-        self.draw_roads()
+        self.draw_roads(catan_game.paths)
 
     def draw_tiles(self, tiles):
         board_width = (self.num_rows * self.hex_wid) + ((self.num_rows + 1) * self.padding)
@@ -94,18 +93,6 @@ class Board:
             HexTile(x, y - 2 * self.vco, self.hex_len + 2 * self.vco, self.BORDER, 0, 0, None).draw_hexagon(self.canvas)
             self.hex_tiles[(tile.row, tile.col)] = HexTile(x, y, self.hex_len, color, tile.row, tile.col, tile.roll_num)
 
-        # for r in range(self.num_rows):
-        #     num_hexes = self.num_rows - abs(r - self.num_rows // 2)
-        #     init_x_offset = init_x + abs(r - self.num_rows // 2) * (self.horiz_offset / 2)
-        #
-        #     for c in range(num_hexes):
-        #         x = init_x_offset + self.horiz_offset * c
-        #         y = init_y + r * self.vert_offset
-        #
-        #         bg_tile = HexTile(x, y - 2 * self.vco, self.hex_len + 2 * self.vco, self.BORDER, 0, 0, "")
-        #         bg_tile.draw_hexagon(self.canvas)
-        #         self.hex_tiles[(r, c)] = HexTile(x, y, self.hex_len, self.COLORS.pop(), r, c, "{}.{}".format(r, c))
-
         for tile in self.hex_tiles.values():
             tile.draw_hexagon(self.canvas)
 
@@ -113,54 +100,42 @@ class Board:
         for node in self.nodes.values():
             settle = SettleTile(node.x, node.y, self.set_rad, "blue")
             self.settles.append(settle)
-            settle.draw_settlement(self.canvas)
+            if node.building is not None:
+                settle.draw_settlement(self.canvas)
 
-    def draw_roads(self):
+    def draw_roads(self, paths):
         num_rows = 2 * self.num_rows + 1
-        for r in range(num_rows):
-            is_even = r % 2 == 0
-            is_bottom_half = r > num_rows // 2
-            num_cols = num_rows - abs(r - 5) if is_even else ((num_rows + 1) // 2) - abs((r // 2) - 2)
+        for path in paths.values():
+            is_even = path.row % 2 == 0
+            is_bottom_half = path.row > num_rows // 2
 
-            for c in range(num_cols):
-                if is_even:
-                    node = self.nodes[(r // 2, (c // 2) * 2 + 1)]
-                    angle = -150 + 120 * (c % 2) if is_bottom_half else 150 - 120 * (c % 2)
-                    road = RoadTile(node.x, node.y, angle, self.road_len, self.padding, self.set_rad, "blue")
-                else:
-                    node = self.nodes[(r // 2, c * 2 + 1 if is_bottom_half else c * 2)]
-                    road = RoadTile(node.x, node.y, 90, self.road_len, self.padding, self.set_rad, "blue")
+            if is_even:
+                node = self.nodes[(path.row // 2, (path.col // 2) * 2 + 1)]
+                angle = -150 + 120 * (path.col % 2) if is_bottom_half else 150 - 120 * (path.col % 2)
+                road = RoadTile(node.x, node.y, angle, self.road_len, self.padding, self.set_rad, "blue")
+            else:
+                node = self.nodes[(path.row // 2, path.col * 2 + 1 if is_bottom_half else path.col * 2)]
+                road = RoadTile(node.x, node.y, 90, self.road_len, self.padding, self.set_rad, "blue")
 
-                self.roads.append(road)
+            self.roads.append(road)
+            if path.road is not None:
                 road.draw_road(self.canvas)
 
-    def calc_nodes(self):
-        for nr in range(self.num_rows + 1):
-            is_top_half = nr < (self.num_rows + 1) / 2
-            node_cols = 2 * (self.num_rows - abs((nr - (0 if is_top_half else 1)) - self.num_rows // 2)) + 1
+    def calc_nodes(self, nodes):
+        for node in nodes.values():
+            is_top_half = node.row < (self.num_rows + 1) / 2
+            node_cols = max([nk[1] for nk in nodes if nk[0] == node.row]) + 1
 
-            for nc in range(node_cols):
-                is_last = nc == node_cols - 1
-                tile = self.hex_tiles[(nr if is_top_half else nr - 1, (nc // 2) - 1 if is_last else nc // 2)]
-                vco_mult = -1 if is_top_half else 1
-                hl_mult = 0.5 if is_top_half else 1.5
+            is_last = node.col == node_cols - 1
+            tile = self.hex_tiles[(node.row if is_top_half else node.row - 1, (node.col // 2) - 1 if is_last else node.col // 2)]
+            vco_mult = -1 if is_top_half else 1
+            hl_mult = 0.5 if is_top_half else 1.5
 
-                horz_offset = ((nc + 1) % 2) * (self.horiz_offset / 2 if is_last else -self.horiz_offset / 2)
-                vert_offset = (tile.leng * (vco_mult + 1)) + (self.vco * vco_mult) if nc % 2 == 1 \
-                    else (tile.leng * hl_mult) + (self.vco / 2 * vco_mult)
+            horz_offset = ((node.col + 1) % 2) * (self.horiz_offset / 2 if is_last else -self.horiz_offset / 2)
+            vert_offset = (tile.leng * (vco_mult + 1)) + (self.vco * vco_mult) if node.col % 2 == 1 \
+                else (tile.leng * hl_mult) + (self.vco / 2 * vco_mult)
 
-                self.nodes[(nr, nc)] = Node(nr, nc, tile.x + horz_offset, tile.y + vert_offset)
-
-    # def draw_numbers(self):
-    #     nums = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12]
-    #     shuffle(nums)
-    #     for tile in self.hex_tiles.values():
-    #         num = nums.pop()
-    #         text_color = "red" if num == 6 or num == 8 else "black"
-    #         num = NumberTile(tile.x, tile.y + self.hex_len, 2 * self.hex_len / 3, 2 * self.hex_len / 3,
-    #                          "white", text_color, num)
-    #         self.numbers.append(num)
-    #         num.draw_number(self.canvas)
+            self.nodes[(node.row, node.col)] = Node(node.row, node.col, tile.x + horz_offset, tile.y + vert_offset, node.building)
 
     def draw_ports(self):
         port_poss = [(0, 0, -90, 0, 1, -150),
@@ -222,8 +197,8 @@ class HexTile:
 
         if self.roll_num is not None:
             text_color = "red" if self.roll_num == 6 or self.roll_num == 8 else "black"
-            num = NumberTile(self.x, self.y + self.leng, 2 * self.leng / 3, 2 * self.leng / 3,
-                             "white", text_color, self.roll_num)
+            num_len = 2 * self.leng / 3
+            num = NumberTile(self.x, self.y + self.leng, num_len, num_len, "white", text_color, self.roll_num)
             num.draw_number(canvas)
 
 
@@ -290,8 +265,9 @@ class NumberTile:
 
 
 class Node:
-    def __init__(self, row, col, x, y):
+    def __init__(self, row, col, x, y, building):
         self.row = row
         self.col = col
         self.x = x
         self.y = y
+        self.building = building
