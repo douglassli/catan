@@ -42,7 +42,7 @@ class CatanGame:
             for c in range(num_hexes):
                 resource = resources.pop()
                 is_desert = resource == Resource.DESERT
-                roll_num = 0 if is_desert else roll_nums.pop()
+                roll_num = None if is_desert else roll_nums.pop()
                 nodes = CatanGame.get_tile_node_neighbors(r, c, num_rows)
                 out[(r, c)] = Tile(r, c, resource, roll_num, nodes, is_desert)
 

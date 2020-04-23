@@ -17,22 +17,44 @@ class Application(tk.Frame):
         self.board = Board(self.hex_len, self.padding, 13, self.can, 800, 800)
         self.board.draw_board(init_game)
 
-        self.can.bind("<Button-1>", self.click)
+        self.can.bind("1", lambda e: self.start_selection(self.board.settles, self.is_settle, e))
+        self.can.bind("2", lambda e: self.start_selection(self.board.roads, self.is_road, e))
+        self.can.focus_set()
 
-    def click(self, evt):
-        clicked = self.can.find_closest(evt.x, evt.y)[0]
-        self.handle_click(self.board.hex_tiles.values(), clicked)
-        self.handle_click(self.board.settles, clicked)
-        self.handle_click(self.board.roads, clicked)
+        self.selecting = False
 
-    def handle_click(self, tiles, clicked):
+    def start_selection(self, tiles, check, evt):
+        if self.selecting:
+            return
+        self.selecting = True
         for tile in tiles:
-            if tile.can_id == clicked:
-                tile.selected = True
-                self.can.itemconfigure(tile.can_id, fill="#ff00ff")
-            else:
-                tile.selected = False
-                self.can.itemconfigure(tile.can_id, fill=tile.color)
+            tile.start_selection(self.can)
+        self.can.bind("<Button-1>", lambda e: self.handle_selection(tiles, check, e))
+
+    def handle_selection(self, tiles, check, evt):
+        clicked = self.can.find_closest(evt.x, evt.y)[0]
+        if check(clicked):
+            for tile in tiles:
+                if tile.can_id == clicked:
+                    tile.build(self.can)
+                else:
+                    tile.end_selection(self.can)
+            self.can.bind("<Button-1>", None)
+            self.selecting = False
+
+    def is_settle(self, cid):
+        for settle in self.board.settles:
+            if settle.can_id == cid:
+                print("true")
+                return True
+        return False
+
+    def is_road(self, cid):
+        for road in self.board.roads:
+            if road.can_id == cid:
+                print("true")
+                return True
+        return False
 
 
 class Board:
@@ -100,8 +122,7 @@ class Board:
         for node in self.nodes.values():
             settle = SettleTile(node.x, node.y, self.set_rad, "blue")
             self.settles.append(settle)
-            if node.building is not None:
-                settle.draw_settlement(self.canvas)
+            settle.draw_settlement(self.canvas)
 
     def draw_roads(self, paths):
         num_rows = 2 * self.num_rows + 1
@@ -118,8 +139,7 @@ class Board:
                 road = RoadTile(node.x, node.y, 90, self.road_len, self.padding, self.set_rad, "blue")
 
             self.roads.append(road)
-            if path.road is not None:
-                road.draw_road(self.canvas)
+            road.draw_road(self.canvas)
 
     def calc_nodes(self, nodes):
         for node in nodes.values():
@@ -127,7 +147,8 @@ class Board:
             node_cols = max([nk[1] for nk in nodes if nk[0] == node.row]) + 1
 
             is_last = node.col == node_cols - 1
-            tile = self.hex_tiles[(node.row if is_top_half else node.row - 1, (node.col // 2) - 1 if is_last else node.col // 2)]
+            tile = self.hex_tiles[(node.row if is_top_half else node.row - 1,
+                                   (node.col // 2) - 1 if is_last else node.col // 2)]
             vco_mult = -1 if is_top_half else 1
             hl_mult = 0.5 if is_top_half else 1.5
 
@@ -135,7 +156,8 @@ class Board:
             vert_offset = (tile.leng * (vco_mult + 1)) + (self.vco * vco_mult) if node.col % 2 == 1 \
                 else (tile.leng * hl_mult) + (self.vco / 2 * vco_mult)
 
-            self.nodes[(node.row, node.col)] = Node(node.row, node.col, tile.x + horz_offset, tile.y + vert_offset, node.building)
+            self.nodes[(node.row, node.col)] = Node(node.row, node.col, tile.x + horz_offset,
+                                                    tile.y + vert_offset, node.building)
 
     def draw_ports(self):
         port_poss = [(0, 0, -90, 0, 1, -150),
@@ -169,9 +191,9 @@ class Port:
 
     def draw_port(self, canvas):
         RoadTile(self.node1_x, self.node1_y, self.angle1, self.length, self.width, self.set_rad,
-                 self.color, border="").draw_road(canvas)
+                 self.color, border="", state="normal").draw_road(canvas)
         RoadTile(self.node2_x, self.node2_y, self.angle2, self.length, self.width, self.set_rad,
-                 self.color, border="").draw_road(canvas)
+                 self.color, border="", state="normal").draw_road(canvas)
 
 
 class HexTile:
@@ -184,7 +206,6 @@ class HexTile:
         self.color = color
         self.roll_num = roll_num
 
-        self.selected = False
         self.can_id = None
 
     def draw_hexagon(self, canvas):
@@ -193,7 +214,7 @@ class HexTile:
         for i in range(1, 6):
             coords.append(coords[2 * i - 2] + self.leng * cos(radians(angle * (i - 1)) + radians(30)))
             coords.append(coords[2 * i - 1] + self.leng * sin(radians(angle * (i - 1)) + radians(30)))
-        self.can_id = canvas.create_polygon(*coords, fill=self.color)
+        self.can_id = canvas.create_polygon(*coords, fill=self.color, tags="hex")
 
         if self.roll_num is not None:
             text_color = "red" if self.roll_num == 6 or self.roll_num == 8 else "black"
@@ -209,16 +230,32 @@ class SettleTile:
         self.radius = radius
         self.color = color
 
-        self.selected = False
+        self.open_select = False
+        self.built = False
         self.can_id = None
 
     def draw_settlement(self, canvas):
         bbox = (self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius)
-        self.can_id = canvas.create_oval(bbox, fill=self.color)
+        self.can_id = canvas.create_oval(bbox, fill=self.color, state="hidden", tags="settle")
+
+    def start_selection(self, canvas):
+        if not self.built:
+            self.open_select = True
+            canvas.itemconfigure(self.can_id, state="normal", fill="", outline="white", activefill="white")
+
+    def end_selection(self, canvas):
+        if self.open_select:
+            self.open_select = False
+            canvas.itemconfigure(self.can_id, state="hidden", fill=self.color, outline="black", activefill="")
+
+    def build(self, canvas):
+        self.open_select = False
+        self.built = True
+        canvas.itemconfigure(self.can_id, state="normal", fill="blue", outline="black", activefill="")
 
 
 class RoadTile:
-    def __init__(self, node_x, node_y, angle, length, width, set_rad, color, border="black"):
+    def __init__(self, node_x, node_y, angle, length, width, set_rad, color, border="black", state="hidden"):
         self.node_x = node_x
         self.node_y = node_y
         self.angle = angle
@@ -227,8 +264,10 @@ class RoadTile:
         self.set_rad = set_rad
         self.color = color
         self.border = border
+        self.state = state
 
-        self.selected = False
+        self.open_select = False
+        self.built = False
         self.can_id = None
 
     def draw_road(self, canvas):
@@ -241,7 +280,23 @@ class RoadTile:
         x4 = x3 + self.length * cos(radians(self.angle + 180))
         y4 = y3 + self.length * sin(radians(self.angle + 180))
 
-        self.can_id = canvas.create_polygon(x1, y1, x2, y2, x3, y3, x4, y4, fill=self.color, outline=self.border)
+        self.can_id = canvas.create_polygon(x1, y1, x2, y2, x3, y3, x4, y4,
+                                            fill=self.color, outline=self.border, state=self.state, tags="road")
+
+    def start_selection(self, canvas):
+        if not self.built:
+            self.open_select = True
+            canvas.itemconfigure(self.can_id, state="normal", fill="", outline="white", activefill="white")
+
+    def end_selection(self, canvas):
+        if self.open_select:
+            self.open_select = False
+            canvas.itemconfigure(self.can_id, state="hidden", fill=self.color, outline="black", activefill="")
+
+    def build(self, canvas):
+        self.open_select = False
+        self.built = True
+        canvas.itemconfigure(self.can_id, state="normal", fill="blue", outline="black", activefill="")
 
 
 class NumberTile:
@@ -254,7 +309,6 @@ class NumberTile:
         self.text_color = text_color
         self.number = number
 
-        self.selected = False
         self.can_id = None
 
     def draw_number(self, canvas):
