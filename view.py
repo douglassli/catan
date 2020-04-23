@@ -17,23 +17,23 @@ class Application(tk.Frame):
         self.board = Board(self.hex_len, self.padding, 13, self.can, 800, 800)
         self.board.draw_board(init_game)
 
-        self.can.bind("1", lambda e: self.start_selection(self.board.settles, self.is_settle, e))
-        self.can.bind("2", lambda e: self.start_selection(self.board.roads, self.is_road, e))
+        self.can.bind("1", lambda e: self.start_selection(self.board.settles, e))
+        self.can.bind("2", lambda e: self.start_selection(self.board.roads, e))
         self.can.focus_set()
 
         self.selecting = False
 
-    def start_selection(self, tiles, check, evt):
+    def start_selection(self, tiles, evt):
         if self.selecting:
             return
         self.selecting = True
         for tile in tiles:
             tile.start_selection(self.can)
-        self.can.bind("<Button-1>", lambda e: self.handle_selection(tiles, check, e))
+        self.can.bind("<Button-1>", lambda e: self.handle_selection(tiles, e))
 
-    def handle_selection(self, tiles, check, evt):
+    def handle_selection(self, tiles, evt):
         clicked = self.can.find_closest(evt.x, evt.y)[0]
-        if check(clicked):
+        if self.is_in_list(tiles, clicked):
             for tile in tiles:
                 if tile.can_id == clicked:
                     tile.build(self.can)
@@ -42,16 +42,9 @@ class Application(tk.Frame):
             self.can.bind("<Button-1>", None)
             self.selecting = False
 
-    def is_settle(self, cid):
-        for settle in self.board.settles:
-            if settle.can_id == cid:
-                print("true")
-                return True
-        return False
-
-    def is_road(self, cid):
-        for road in self.board.roads:
-            if road.can_id == cid:
+    def is_in_list(self, items, cid):
+        for item in items:
+            if item.can_id == cid:
                 print("true")
                 return True
         return False
