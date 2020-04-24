@@ -1,9 +1,9 @@
-from resources import Resource
-from development_cards import DevCards
+from model.resources import Resource
+from model.development_cards import DevCards
 from random import shuffle
-from tile import Tile
-from node import Node
-from path import Path
+from model.tile import Tile
+from model.node import Node
+from model.path import Path
 
 
 class CatanGame:

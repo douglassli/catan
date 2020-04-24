@@ -1,5 +1,5 @@
-from catan_game import CatanGame
-from view import Application
+from model.catan_game import CatanGame
+from view.view import Application
 import tkinter as tk
 
 

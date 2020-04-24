@@ -1,0 +1,29 @@
+class SettleTile:
+    def __init__(self, x, y, radius, color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+
+        self.open_select = False
+        self.built = False
+        self.can_id = None
+
+    def draw_settlement(self, canvas):
+        bbox = (self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius)
+        self.can_id = canvas.create_oval(bbox, fill=self.color, state="hidden", tags="settle")
+
+    def start_selection(self, canvas):
+        if not self.built:
+            self.open_select = True
+            canvas.itemconfigure(self.can_id, state="normal", fill="", outline="white", activefill="white")
+
+    def end_selection(self, canvas):
+        if self.open_select:
+            self.open_select = False
+            canvas.itemconfigure(self.can_id, state="hidden", fill=self.color, outline="black", activefill="")
+
+    def build(self, canvas):
+        self.open_select = False
+        self.built = True
+        canvas.itemconfigure(self.can_id, state="normal", fill="blue", outline="black", activefill="")
