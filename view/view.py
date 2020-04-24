@@ -1,11 +1,11 @@
 import tkinter as tk
 from math import sqrt
-from resources import Resource
-from hex_tile import HexTile
-from node_pos import Node
-from path_tile import PathTile
-from settle_tile import SettleTile
-from port_tile import PortTile
+from model.resources import Resource
+from view.hex_tile import HexTile
+from view.node_pos import Node
+from view.path_tile import PathTile
+from view.settle_tile import SettleTile
+from view.port_tile import PortTile
 
 
 class Application(tk.Frame):

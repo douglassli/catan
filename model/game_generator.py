@@ -1,10 +1,10 @@
 from random import shuffle
-from resources import Resource
-from tile import Tile
-from node import Node
-from path import Path
-from development_cards import DevCards
-from catan_game import CatanGame
+from model.resources import Resource
+from model.tile import Tile
+from model.node import Node
+from model.path import Path
+from model.development_cards import DevCards
+from model.catan_game import CatanGame
 
 
 def generate_catan_game(num_rows=5, num_players=4):

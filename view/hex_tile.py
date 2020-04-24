@@ -1,5 +1,5 @@
 from math import cos, sin, radians
-from number_tile import NumberTile
+from view.number_tile import NumberTile
 
 
 class HexTile:
