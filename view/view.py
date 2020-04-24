@@ -94,8 +94,8 @@ class Board:
         self.draw_tiles(catan_game.tiles)
         self.calc_nodes(catan_game.nodes)
         self.draw_ports()
-        self.draw_settlments()
         self.draw_roads(catan_game.paths)
+        self.draw_settlments()
 
     def draw_tiles(self, tiles):
         board_width = (self.num_rows * self.hex_wid) + ((self.num_rows + 1) * self.padding)
@@ -130,10 +130,10 @@ class Board:
             if is_even:
                 node = self.nodes[(path.row // 2, (path.col // 2) * 2 + 1)]
                 angle = -150 + 120 * (path.col % 2) if is_bottom_half else 150 - 120 * (path.col % 2)
-                road = PathTile(node.x, node.y, angle, self.road_len, self.padding, self.set_rad, "blue")
+                road = PathTile(node.x, node.y, angle, self.hex_len, self.padding, self.set_rad, "blue")
             else:
                 node = self.nodes[(path.row // 2, path.col * 2 + 1 if is_bottom_half else path.col * 2)]
-                road = PathTile(node.x, node.y, 90, self.road_len, self.padding, self.set_rad, "blue")
+                road = PathTile(node.x, node.y, 90, self.hex_len, self.padding, self.set_rad, "blue")
 
             self.roads.append(road)
             road.draw_road(self.canvas)
