@@ -1,6 +1,6 @@
 import tkinter as tk
 from math import sqrt
-from model.resources import Resource
+from resources import Resource
 from hex_tile import HexTile
 from node_pos import Node
 from path_tile import PathTile
@@ -46,7 +46,7 @@ class Application(tk.Frame):
             self.can.bind("<Button-1>", None)
             self.selecting = False
             self.controller.handle_settle_build(selected)
-            
+
     def handle_selection(self, tiles, evt):
         clicked = self.can.find_closest(evt.x, evt.y)[0]
         if self.is_in_list(tiles, clicked):

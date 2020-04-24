@@ -1,6 +1,6 @@
-from model.catan_game import CatanGame
 from view.view import Application
 import tkinter as tk
+from model.game_generator import generate_catan_game
 
 
 class Controller:
@@ -17,7 +17,7 @@ class Controller:
 
 
 def main():
-    game = CatanGame()
+    game = generate_catan_game()
     root = tk.Tk()
     app = Application(game, master=root)
     controller = Controller(game, app)
