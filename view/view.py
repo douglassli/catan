@@ -22,20 +22,31 @@ class Application(tk.Frame):
         self.board = Board(self.hex_len, self.padding, 13, self.can, 800, 800)
         self.board.draw_board(init_game)
 
-        self.can.bind("1", lambda e: self.start_selection(self.board.settles))
-        self.can.bind("2", lambda e: self.start_selection(self.board.roads))
+        self.can.bind("1", lambda e: self.start_settle_selection())
+        # self.can.bind("2", lambda e: self.start_selection(self.board.roads))
         self.can.focus_set()
 
         self.selecting = False
+        self.controller = None
 
-    def start_selection(self, tiles):
+    def start_settle_selection(self):
         if self.selecting:
             return
         self.selecting = True
-        for tile in tiles:
-            tile.start_selection(self.can)
-        self.can.bind("<Button-1>", lambda e: self.handle_selection(tiles, e))
+        self.controller.start_settle_selection()
 
+    def display_settle_options(self, avail):
+        self.board.show_settle_options(avail)
+        self.can.bind("<Button-1>", lambda e: self.handle_settle_selection(e))
+
+    def handle_settle_selection(self, evt):
+        clicked = self.can.find_closest(evt.x, evt.y)[0]
+        if self.board.is_id_in_settles(clicked):
+            selected = self.board.build_settle(clicked)
+            self.can.bind("<Button-1>", None)
+            self.selecting = False
+            self.controller.handle_settle_build(selected)
+            
     def handle_selection(self, tiles, evt):
         clicked = self.can.find_closest(evt.x, evt.y)[0]
         if self.is_in_list(tiles, clicked):
@@ -65,7 +76,7 @@ class Board:
         self.num_rows = 5
         self.hex_tiles = {}
         self.nodes = {}
-        self.settles = []
+        self.settles = {}
         self.roads = []
         self.numbers = []
 
@@ -117,8 +128,8 @@ class Board:
 
     def draw_settlments(self):
         for node in self.nodes.values():
-            settle = SettleTile(node.x, node.y, self.set_rad, "blue")
-            self.settles.append(settle)
+            settle = SettleTile(node.row, node.col, node.x, node.y, self.set_rad, "blue")
+            self.settles[(node.row, node.col)] = settle
             settle.draw_settlement(self.canvas)
 
     def draw_roads(self, paths):
@@ -171,3 +182,24 @@ class Board:
             n2 = self.nodes[(pos[3], pos[4])]
             port = PortTile(n1.x, n1.y, pos[2], n2.x, n2.y, pos[5], self.road_len, self.padding, 0, self.PORT)
             port.draw_port(self.canvas)
+
+    def is_id_in_settles(self, cid):
+        for settle in self.settles.values():
+            if settle.can_id == cid:
+                return True
+        return False
+
+    def show_settle_options(self, avail):
+        for coord in avail:
+            self.settles[coord].start_selection(self.canvas)
+
+    def build_settle(self, cid):
+        out = None
+        for settle in self.settles.values():
+            if settle.can_id == cid:
+                settle.build(self.canvas)
+                out = (settle.row, settle.col)
+            else:
+                settle.end_selection(self.canvas)
+
+        return out

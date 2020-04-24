@@ -1,5 +1,7 @@
 class SettleTile:
-    def __init__(self, x, y, radius, color):
+    def __init__(self, row, col, x, y, radius, color):
+        self.row = row
+        self.col = col
         self.x = x
         self.y = y
         self.radius = radius

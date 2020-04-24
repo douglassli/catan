@@ -10,3 +10,6 @@ class Node:
     def __str__(self):
         return "{:2}, {:2}, {}, {}, {}, {}".format(self.row, self.col, self.building,
                                                self.neighbor_nodes, self.neighbor_paths, self.port)
+
+    def build_settle(self, player):
+        self.building = True

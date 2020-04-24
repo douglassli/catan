@@ -10,6 +10,8 @@ class CatanGame:
     def __init__(self, num_rows=5, num_players=4):
         self.num_rows = num_rows
         self.num_players = num_players
+        self.is_setup = True
+        self.cur_player = 0
 
         self.deck = [Resource.WOOD, Resource.SHEEP, Resource.STONE, Resource.WHEAT, Resource.BRICK] * 19
         self.dev_cards = [DevCards.KNIGHT] * 14 + [DevCards.VP] * 5 + \
@@ -26,6 +28,17 @@ class CatanGame:
         for nk in sorted(self.nodes):
             out += str(self.nodes[nk]) + "\n"
         return out
+
+    def get_available_nodes(self):
+        out = []
+        for coord, node in self.nodes.items():
+            no_ngbrs = all([self.nodes[ngbr].building is None for ngbr in node.neighbor_nodes])
+            if no_ngbrs:
+                out.append(coord)
+        return out
+
+    def build_settle(self, node):
+        self.nodes[node].build_settle(self.cur_player)
 
     @staticmethod
     def generate_tiles(num_rows):
@@ -121,7 +134,3 @@ class CatanGame:
             out[(r, c)] = Path(r, c, None, neighbor_nodes, neighbor_paths)
 
         return out
-
-
-if __name__ == '__main__':
-    print(CatanGame.get_node_path_neighbors(2, 3, 5))
