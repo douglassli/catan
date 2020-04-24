@@ -23,7 +23,7 @@ class Application(tk.Frame):
         self.board.draw_board(init_game)
 
         self.can.bind("1", lambda e: self.start_settle_selection())
-        # self.can.bind("2", lambda e: self.start_selection(self.board.roads))
+        self.can.bind("2", lambda e: self.start_road_selection())
         self.can.focus_set()
 
         self.selecting = False
@@ -36,33 +36,34 @@ class Application(tk.Frame):
         self.controller.start_settle_selection()
 
     def display_settle_options(self, avail):
-        self.board.show_settle_options(avail)
+        self.board.show_options(avail, self.board.settles)
         self.can.bind("<Button-1>", lambda e: self.handle_settle_selection(e))
 
     def handle_settle_selection(self, evt):
         clicked = self.can.find_closest(evt.x, evt.y)[0]
-        if self.board.is_id_in_settles(clicked):
+        if self.board.is_id_in_tiles(clicked, self.board.settles):
             selected = self.board.build_settle(clicked)
             self.can.bind("<Button-1>", None)
             self.selecting = False
             self.controller.handle_settle_build(selected)
 
-    def handle_selection(self, tiles, evt):
+    def start_road_selection(self):
+        if self.selecting:
+            return
+        self.selecting = True
+        self.controller.start_road_selection()
+
+    def display_road_options(self, avail):
+        self.board.show_options(avail, self.board.roads)
+        self.can.bind("<Button-1>", lambda e: self.handle_road_selection(e))
+
+    def handle_road_selection(self, evt):
         clicked = self.can.find_closest(evt.x, evt.y)[0]
-        if self.is_in_list(tiles, clicked):
-            for tile in tiles:
-                if tile.can_id == clicked:
-                    tile.build(self.can)
-                else:
-                    tile.end_selection(self.can)
+        if self.board.is_id_in_tiles(clicked, self.board.roads):
+            selected = self.board.build_road(clicked)
             self.can.bind("<Button-1>", None)
             self.selecting = False
-
-    def is_in_list(self, items, cid):
-        for item in items:
-            if item.can_id == cid:
-                return True
-        return False
+            self.controller.handle_road_build(selected)
 
 
 class Board:
@@ -77,7 +78,7 @@ class Board:
         self.hex_tiles = {}
         self.nodes = {}
         self.settles = {}
-        self.roads = []
+        self.roads = {}
         self.numbers = []
 
         self.hex_wid = self.hex_len * sqrt(3)
@@ -141,12 +142,12 @@ class Board:
             if is_even:
                 node = self.nodes[(path.row // 2, (path.col // 2) * 2 + 1)]
                 angle = -150 + 120 * (path.col % 2) if is_bottom_half else 150 - 120 * (path.col % 2)
-                road = PathTile(node.x, node.y, angle, self.hex_len, self.padding, self.set_rad, "blue")
+                road = PathTile(path.row, path.col, node.x, node.y, angle, self.hex_len, self.padding, self.set_rad, "blue")
             else:
                 node = self.nodes[(path.row // 2, path.col * 2 + 1 if is_bottom_half else path.col * 2)]
-                road = PathTile(node.x, node.y, 90, self.hex_len, self.padding, self.set_rad, "blue")
+                road = PathTile(path.row, path.col, node.x, node.y, 90, self.hex_len, self.padding, self.set_rad, "blue")
 
-            self.roads.append(road)
+            self.roads[(path.row, path.col)] = road
             road.draw_road(self.canvas)
 
     def calc_nodes(self, nodes):
@@ -183,23 +184,34 @@ class Board:
             port = PortTile(n1.x, n1.y, pos[2], n2.x, n2.y, pos[5], self.road_len, self.padding, 0, self.PORT)
             port.draw_port(self.canvas)
 
-    def is_id_in_settles(self, cid):
-        for settle in self.settles.values():
-            if settle.can_id == cid:
+    def is_id_in_tiles(self, cid, tiles):
+        for tile in tiles.values():
+            if tile.can_id == cid:
                 return True
         return False
 
-    def show_settle_options(self, avail):
+    def show_options(self, avail, tiles):
         for coord in avail:
-            self.settles[coord].start_selection(self.canvas)
+            tiles[coord].start_selection(self.canvas)
 
     def build_settle(self, cid):
         out = None
-        for settle in self.settles.values():
+        for coord, settle in self.settles.items():
             if settle.can_id == cid:
                 settle.build(self.canvas)
-                out = (settle.row, settle.col)
+                out = coord
             else:
                 settle.end_selection(self.canvas)
+
+        return out
+
+    def build_road(self, cid):
+        out = None
+        for coord, road in self.roads.items():
+            if road.can_id == cid:
+                road.build(self.canvas)
+                out = coord
+            else:
+                road.end_selection(self.canvas)
 
         return out

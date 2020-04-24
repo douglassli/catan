@@ -32,5 +32,11 @@ class CatanGame:
                 out.append(coord)
         return out
 
-    def build_settle(self, node):
-        self.nodes[node].build_settle(self.cur_player)
+    def build_settle(self, coord):
+        self.nodes[coord].build_settle(self.cur_player)
+
+    def get_available_paths(self):
+        return [coord for coord, path in self.paths.items() if path.road is None]
+
+    def build_road(self, coord):
+        self.paths[coord].build_road(self.cur_player)

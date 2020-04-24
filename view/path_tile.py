@@ -2,7 +2,9 @@ from math import cos, sin, radians, sqrt
 
 
 class PathTile:
-    def __init__(self, node_x, node_y, angle, hex_len, padding, set_rad, color, border="black", state="hidden"):
+    def __init__(self, row, col, node_x, node_y, angle, hex_len, padding, set_rad, color, border="black", state="hidden"):
+        self.row = row
+        self.col = col
         self.node_x = node_x
         self.node_y = node_y
         self.angle = angle

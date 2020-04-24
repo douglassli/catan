@@ -12,8 +12,15 @@ class Controller:
         avail = self.model.get_available_nodes()
         self.view.display_settle_options(avail)
 
-    def handle_settle_build(self, node):
-        self.model.build_settle(node)
+    def handle_settle_build(self, coord):
+        self.model.build_settle(coord)
+
+    def start_road_selection(self):
+        avail = self.model.get_available_paths()
+        self.view.display_road_options(avail)
+
+    def handle_road_build(self, coord):
+        self.model.build_road(coord)
 
 
 def main():
