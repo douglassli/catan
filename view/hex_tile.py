@@ -14,7 +14,7 @@ class HexTile:
 
         self.can_id = None
 
-    def draw_hexagon(self, canvas):
+    def draw(self, canvas):
         angle = 60
         coords = [self.x, self.y]
         for i in range(1, 6):
@@ -26,4 +26,4 @@ class HexTile:
             text_color = "red" if self.roll_num == 6 or self.roll_num == 8 else "black"
             num_len = 2 * self.leng / 3
             num = NumberTile(self.x, self.y + self.leng, num_len, num_len, "white", text_color, self.roll_num)
-            num.draw_number(canvas)
+            num.draw(canvas)

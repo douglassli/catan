@@ -11,7 +11,7 @@ class SettleTile:
         self.built = False
         self.can_id = None
 
-    def draw_settlement(self, canvas):
+    def draw(self, canvas):
         bbox = (self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius)
         self.can_id = canvas.create_oval(bbox, fill=self.color, state="hidden", tags="settle")
 

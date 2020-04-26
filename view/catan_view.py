@@ -42,20 +42,8 @@ class Application(tk.Frame):
 
     def draw_board(self):
         self.can.create_rectangle((0, 0, self.can_wid, self.can_height), fill="#0349fc")
-        for port in self.ports:
-            port.draw_port(self.can)
-
-        for bg_tile in self.bg_tiles:
-            bg_tile.draw_hexagon(self.can)
-
-        for hex_tile in self.hex_tiles.values():
-            hex_tile.draw_hexagon(self.can)
-
-        for road in self.roads.values():
-            road.draw_road(self.can)
-
-        for settle in self.settles.values():
-            settle.draw_settlement(self.can)
+        for tile_list in self.ports, self.bg_tiles, self.hex_tiles.values(), self.roads.values(), self.settles.values():
+            [tile.draw(self.can) for tile in tile_list]
 
     def start_settle_selection(self):
         if self.selecting:

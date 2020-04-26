@@ -19,7 +19,7 @@ class PathTile:
         self.built = False
         self.can_id = None
 
-    def draw_road(self, canvas):
+    def draw(self, canvas):
         short_len = self.padding / sqrt(3)
         start_angle = self.angle - 60
 

@@ -10,7 +10,7 @@ class NumberTile:
 
         self.can_id = None
 
-    def draw_number(self, canvas):
+    def draw(self, canvas):
         bbox = self.cx - self.width / 2, self.cy - self.height / 2, self.cx + self.width / 2, self.cy + self.height / 2
         self.can_id = canvas.create_rectangle(bbox, fill=self.color, outline="black")
         canvas.create_text(self.cx, self.cy, text=self.number, font=("Purisa", int(self.height // 2)),

@@ -14,7 +14,7 @@ class PortTile:
         self.set_rad = set_rad
         self.color = color
 
-    def draw_port(self, canvas):
+    def draw(self, canvas):
         self.draw_bridge(self.node1_x, self.node1_y, self.angle1, canvas)
         self.draw_bridge(self.node2_x, self.node2_y, self.angle2, canvas)
 
