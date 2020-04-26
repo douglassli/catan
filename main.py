@@ -1,4 +1,4 @@
-from view.view import Application
+from view.catan_view import Application
 import tkinter as tk
 from model.game_generator import generate_catan_game
 
