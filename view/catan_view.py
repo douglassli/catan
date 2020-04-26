@@ -43,13 +43,13 @@ class Application(tk.Frame):
     def draw_board(self):
         self.can.create_rectangle((0, 0, self.can_wid, self.can_height), fill="#0349fc")
         for tile_list in self.ports, self.bg_tiles, self.hex_tiles.values(), self.roads.values(), self.settles.values():
-            [tile.draw(self.can) for tile in tile_list]
+            for tile in tile_list:
+                tile.draw(self.can)
 
     def start_settle_selection(self):
-        if self.selecting:
-            return
-        self.selecting = True
-        self.controller.start_settle_selection()
+        if not self.selecting:
+            self.selecting = True
+            self.controller.start_settle_selection()
 
     def display_settle_options(self, avail):
         self.show_options(avail, self.settles)
@@ -57,10 +57,9 @@ class Application(tk.Frame):
                                                                     self.controller.handle_settle_build))
 
     def start_road_selection(self):
-        if self.selecting:
-            return
-        self.selecting = True
-        self.controller.start_road_selection()
+        if not self.selecting:
+            self.selecting = True
+            self.controller.start_road_selection()
 
     def display_road_options(self, avail):
         self.show_options(avail, self.roads)
