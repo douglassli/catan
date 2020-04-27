@@ -1,3 +1,6 @@
+from math import sqrt
+
+
 class SettleTile:
     def __init__(self, row, col, x, y, radius, color):
         self.row = row
@@ -29,3 +32,6 @@ class SettleTile:
         self.open_select = False
         self.built = True
         canvas.itemconfigure(self.can_id, state="normal", fill="blue", outline="black", activefill="")
+
+    def clicked_on(self, evt_x, evt_y):
+        return self.open_select and sqrt((evt_x - self.x) ** 2 + (evt_y - self.y) ** 2) < self.radius

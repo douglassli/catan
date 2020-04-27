@@ -53,8 +53,17 @@ class Application(tk.Frame):
 
     def display_settle_options(self, avail):
         self.show_options(avail, self.settles)
-        self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles,
-                                                                    self.controller.handle_settle_build))
+        self.can.bind("<Button-1>", self.handle_settle_selection)
+
+    def handle_settle_selection(self, evt):
+        for settle in self.settles.values():
+            if settle.clicked_on(evt.x, evt.y):
+                settle.build(self.can)
+                self.can.bind("<Button-1>", None)
+                self.selecting = False
+                self.end_selection()
+                self.controller.handle_settle_build((settle.row, settle.col))
+                return
 
     def start_road_selection(self):
         if not self.selecting:
