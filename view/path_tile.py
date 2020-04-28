@@ -45,10 +45,11 @@ class PathTile:
             self.open_select = False
             canvas.itemconfigure(self.can_id, state="hidden", fill=self.color, outline="black", activefill="")
 
-    def build(self, canvas):
+    def build(self, canvas, color):
+        self.color = color
         self.open_select = False
         self.built = True
-        canvas.itemconfigure(self.can_id, state="normal", fill="blue", outline="black", activefill="")
+        canvas.itemconfigure(self.can_id, state="normal", fill=self.color, outline="black", activefill="")
 
     def clicked_on(self, evt_x, evt_y):
         num_crossed = 0

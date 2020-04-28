@@ -13,14 +13,22 @@ class Controller:
         self.view.display_settle_options(avail)
 
     def handle_settle_build(self, coord):
-        self.model.build_settle(coord)
+        color = self.model.build_settle(coord)
+        return color
 
     def start_road_selection(self):
         avail = self.model.get_available_paths()
         self.view.display_road_options(avail)
 
     def handle_road_build(self, coord):
-        self.model.build_road(coord)
+        color = self.model.build_road(coord)
+        return color
+
+    def handle_turn_change(self):
+        self.model.change_turn()
+
+    def handle_end_setup(self):
+        self.model.end_setup()
 
 
 def main():

@@ -38,6 +38,8 @@ class Application(tk.Frame):
 
         self.can.bind("1", lambda e: self.start_settle_selection())
         self.can.bind("2", lambda e: self.start_road_selection())
+        self.can.bind("3", lambda e: self.controller.handle_turn_change())
+        self.can.bind("4", lambda e: self.controller.handle_end_setup())
         self.can.focus_set()
 
     def draw_board(self):
@@ -47,7 +49,6 @@ class Application(tk.Frame):
                 tile.draw(self.can)
 
     def start_settle_selection(self):
-        print("start_settle_selection")
         if not self.selecting:
             self.selecting = True
             self.controller.start_settle_selection()
@@ -57,7 +58,6 @@ class Application(tk.Frame):
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
 
     def start_road_selection(self):
-        print("start_road_selection")
         if not self.selecting:
             self.selecting = True
             self.controller.start_road_selection()
@@ -67,12 +67,11 @@ class Application(tk.Frame):
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.roads, self.controller.handle_road_build))
 
     def handle_selection(self, evt, tiles, control_handler):
-        print("handler")
-        for road in tiles.values():
-            if road.clicked_on(evt.x, evt.y):
-                road.build(self.can)
+        for tile in tiles.values():
+            if tile.clicked_on(evt.x, evt.y):
+                color = control_handler((tile.row, tile.col))
+                tile.build(self.can, color=color)
                 self.end_selection()
-                control_handler((road.row, road.col))
                 return
 
     def get_from_cid(self, cid, tiles):

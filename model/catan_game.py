@@ -25,7 +25,10 @@ class CatanGame:
         return out
 
     def change_turn(self):
-        self.cur_plyr_ind = self.cur_plyr_ind + 1 % len(self.players)
+        self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
+
+    def end_setup(self):
+        self.is_setup = False
 
     def get_available_settle_nodes(self):
         out = []
@@ -37,7 +40,9 @@ class CatanGame:
         return out
 
     def build_settle(self, coord):
-        self.nodes[coord].build_settle(self.players[self.cur_plyr_ind])
+        cur_player = self.players[self.cur_plyr_ind]
+        self.nodes[coord].build_settle(cur_player)
+        return cur_player.color
 
     def get_available_paths(self):
         out = []
@@ -49,5 +54,7 @@ class CatanGame:
         return out
 
     def build_road(self, coord):
-        self.paths[coord].build_road(self.players[self.cur_plyr_ind])
+        cur_player = self.players[self.cur_plyr_ind]
+        self.paths[coord].build_road(cur_player)
         # TODO check longest road
+        return cur_player.color
