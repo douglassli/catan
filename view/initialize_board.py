@@ -109,6 +109,7 @@ class ViewInitializer:
         return out_paths
 
     def init_ports(self):
+        # TODO move port calculation into model
         out_ports = []
         road_len = self.vco + self.hex_len - (2 * self.set_rad)
         port_poss = [(0, 0, -90, 0, 1, -150),

@@ -53,17 +53,7 @@ class Application(tk.Frame):
 
     def display_settle_options(self, avail):
         self.show_options(avail, self.settles)
-        self.can.bind("<Button-1>", self.handle_settle_selection)
-
-    def handle_settle_selection(self, evt):
-        for settle in self.settles.values():
-            if settle.clicked_on(evt.x, evt.y):
-                settle.build(self.can)
-                self.can.bind("<Button-1>", None)
-                self.selecting = False
-                self.end_selection()
-                self.controller.handle_settle_build((settle.row, settle.col))
-                return
+        self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
 
     def start_road_selection(self):
         if not self.selecting:
@@ -72,18 +62,18 @@ class Application(tk.Frame):
 
     def display_road_options(self, avail):
         self.show_options(avail, self.roads)
-        self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.roads,
-                                                                    self.controller.handle_road_build))
+        self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.roads, self.controller.handle_road_build))
 
     def handle_selection(self, evt, tiles, control_handler):
-        clicked = self.can.find_closest(evt.x, evt.y)[0]
-        selected = self.get_from_cid(clicked, tiles)
-        if selected is not None:
-            selected.build(self.can)
-            self.can.bind("<Button-1>", None)
-            self.selecting = False
-            self.end_selection()
-            control_handler((selected.row, selected.col))
+        print("handler")
+        for road in tiles.values():
+            if road.clicked_on(evt.x, evt.y):
+                road.build(self.can)
+                self.can.bind("<Button-1>", None)
+                self.selecting = False
+                self.end_selection()
+                control_handler((road.row, road.col))
+                return
 
     def get_from_cid(self, cid, tiles):
         for tile in tiles.values():
