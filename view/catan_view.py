@@ -71,8 +71,6 @@ class Application(tk.Frame):
         for road in tiles.values():
             if road.clicked_on(evt.x, evt.y):
                 road.build(self.can)
-                self.can.bind("<Button-1>", None)
-                self.selecting = False
                 self.end_selection()
                 control_handler((road.row, road.col))
                 return
@@ -85,13 +83,14 @@ class Application(tk.Frame):
 
     def show_options(self, avail, tiles):
         if len(avail) == 0:
-            self.can.bind("<Button-1>", None)
-            self.selecting = False
             self.end_selection()
-        for coord in avail:
-            tiles[coord].start_selection(self.can)
+        else:
+            for coord in avail:
+                tiles[coord].start_selection(self.can)
 
     def end_selection(self):
+        self.can.bind("<Button-1>", lambda e: None)
+        self.selecting = False
         for settle in self.settles.values():
             settle.end_selection(self.can)
         for road in self.roads.values():
