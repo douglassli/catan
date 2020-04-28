@@ -5,6 +5,7 @@ class CatanGame:
         self.players = players
         self.cur_plyr_ind = 0
         self.is_setup = is_setup
+        self.reverse_turns = False
 
         self.dev_cards = dev_cards
 
@@ -25,7 +26,15 @@ class CatanGame:
         return out
 
     def change_turn(self):
-        self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
+        if self.is_setup and self.cur_plyr_ind == len(self.players) - 1 and not self.reverse_turns:
+            self.reverse_turns = True
+        elif self.reverse_turns and self.cur_plyr_ind == 0:
+            self.is_setup = False
+            self.reverse_turns = False
+        elif self.reverse_turns:
+            self.cur_plyr_ind -= 1
+        else:
+            self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
 
     def end_setup(self):
         self.is_setup = False
