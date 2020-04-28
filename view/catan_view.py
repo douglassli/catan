@@ -47,6 +47,7 @@ class Application(tk.Frame):
                 tile.draw(self.can)
 
     def start_settle_selection(self):
+        print("start_settle_selection")
         if not self.selecting:
             self.selecting = True
             self.controller.start_settle_selection()
@@ -56,6 +57,7 @@ class Application(tk.Frame):
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
 
     def start_road_selection(self):
+        print("start_road_selection")
         if not self.selecting:
             self.selecting = True
             self.controller.start_road_selection()
@@ -82,6 +84,10 @@ class Application(tk.Frame):
         return None
 
     def show_options(self, avail, tiles):
+        if len(avail) == 0:
+            self.can.bind("<Button-1>", None)
+            self.selecting = False
+            self.end_selection()
         for coord in avail:
             tiles[coord].start_selection(self.can)
 

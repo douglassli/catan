@@ -32,7 +32,7 @@ class CatanGame:
         out = []
         for coord, node in self.nodes.items():
             no_ngbrs = all([self.nodes[ngbr].building is None for ngbr in node.neighbor_nodes])
-            if no_ngbrs:
+            if no_ngbrs and node.building is None:
                 out.append(coord)
         return out
 
@@ -41,7 +41,7 @@ class CatanGame:
 
     def get_available_paths(self):
         # TODO add logic for limiting where roads may be built
-        return [coord for coord, path in self.paths.items() if path.road is None]
+        return [coord for coord, path in self.paths.items() if path.road is False]
 
     def build_road(self, coord):
         self.paths[coord].build_road(self.players[self.cur_plyr_ind])
