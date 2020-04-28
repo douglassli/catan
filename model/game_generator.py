@@ -5,6 +5,7 @@ from model.node import Node
 from model.path import Path
 from model.development_cards import DevCards
 from model.catan_game import CatanGame
+from model.player import Player
 
 
 def generate_catan_game(num_rows=5, num_players=4):
@@ -21,7 +22,8 @@ def generate_catan_game(num_rows=5, num_players=4):
 
 
 def generate_players(num_players):
-    return []
+    colors = ["red", "green", "blue", "yellow"]
+    return [Player(i, colors[i]) for i in range(num_players)]
 
 
 def generate_tiles(num_rows):
@@ -62,7 +64,7 @@ def generate_nodes(num_rows, tiles):
         neighbor_paths = get_node_path_neighbors(r, c, num_rows)
         # TODO determine if there is a port on this node
         port = None
-        out[(r, c)] = Node(r, c, None, neighbor_nodes, neighbor_paths, port)
+        out[(r, c)] = Node(r, c, neighbor_nodes, neighbor_paths, port)
 
     return out
 
@@ -114,6 +116,6 @@ def generate_paths(nodes):
     for r, c in path_coords:
         neighbor_nodes = [crd for crd in nodes if (r, c) in nodes[crd].neighbor_paths]
         neighbor_paths = [pcrd for ncrd in neighbor_nodes for pcrd in nodes[ncrd].neighbor_paths if (r, c) != pcrd]
-        out[(r, c)] = Path(r, c, None, neighbor_nodes, neighbor_paths)
+        out[(r, c)] = Path(r, c, neighbor_nodes, neighbor_paths)
 
     return out
