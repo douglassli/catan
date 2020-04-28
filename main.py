@@ -9,7 +9,7 @@ class Controller:
         self.view = view
 
     def start_settle_selection(self):
-        avail = self.model.get_available_nodes()
+        avail = self.model.get_available_settle_nodes()
         self.view.display_settle_options(avail)
 
     def handle_settle_build(self, coord):

@@ -27,12 +27,12 @@ class CatanGame:
     def change_turn(self):
         self.cur_plyr_ind = self.cur_plyr_ind + 1 % len(self.players)
 
-    def get_available_nodes(self):
-        # TODO add additional logic for when not in game setup mode
+    def get_available_settle_nodes(self):
         out = []
         for coord, node in self.nodes.items():
             no_ngbrs = all([self.nodes[ngbr].building is None for ngbr in node.neighbor_nodes])
-            if no_ngbrs and node.building is None:
+            own_ngbr_road = any([self.paths[pcrd].owner == self.cur_plyr_ind for pcrd in node.neighbor_paths])
+            if no_ngbrs and node.building is None and (self.is_setup or own_ngbr_road):
                 out.append(coord)
         return out
 
@@ -40,8 +40,13 @@ class CatanGame:
         self.nodes[coord].build_settle(self.players[self.cur_plyr_ind])
 
     def get_available_paths(self):
-        # TODO add logic for limiting where roads may be built
-        return [coord for coord, path in self.paths.items() if path.road is False]
+        out = []
+        for coord, path in self.paths.items():
+            own_ngbr_node = any([self.nodes[ncrd].owner == self.cur_plyr_ind for ncrd in path.neighbor_nodes])
+            own_ngbr_road = any([self.paths[pcrd].owner == self.cur_plyr_ind for pcrd in path.neighbor_paths])
+            if not path.road and (own_ngbr_node or own_ngbr_road):
+                out.append(coord)
+        return out
 
     def build_road(self, coord):
         self.paths[coord].build_road(self.players[self.cur_plyr_ind])
