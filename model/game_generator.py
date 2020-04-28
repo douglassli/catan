@@ -18,7 +18,7 @@ def generate_catan_game(num_rows=5, num_players=4):
     nodes = generate_nodes(num_rows, tiles)
     paths = generate_paths(nodes)
 
-    return CatanGame(players, 19, dev_cards, tiles, nodes, paths, is_setup=True)
+    return CatanGame(players, 19, dev_cards, tiles, nodes, paths)
 
 
 def generate_players(num_players):

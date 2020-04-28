@@ -8,8 +8,11 @@ class Controller:
         self.model = model
         self.view = view
 
+        self.is_setup = True
+        self.is_reverse = False
+
     def start_settle_selection(self):
-        avail = self.model.get_available_settle_nodes()
+        avail = self.model.get_available_settle_nodes(self.is_setup)
         self.view.display_settle_options(avail)
 
     def handle_settle_build(self, coord):
@@ -22,13 +25,15 @@ class Controller:
 
     def handle_road_build(self, coord):
         color = self.model.build_road(coord)
+        if self.is_setup:
+            self.handle_turn_change()
         return color
 
     def handle_turn_change(self):
-        self.model.change_turn()
+        self.is_setup, self.is_reverse = self.model.change_turn(self.is_setup, self.is_reverse)
 
-    def handle_end_setup(self):
-        self.model.end_setup()
+    # def handle_end_setup(self):
+    #     self.model.end_setup()
 
 
 def main():

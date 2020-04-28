@@ -1,11 +1,9 @@
 
 
 class CatanGame:
-    def __init__(self, players, num_each_res, dev_cards, tiles, nodes, paths, is_setup=True):
+    def __init__(self, players, num_each_res, dev_cards, tiles, nodes, paths):
         self.players = players
         self.cur_plyr_ind = 0
-        self.is_setup = is_setup
-        self.reverse_turns = False
 
         self.dev_cards = dev_cards
 
@@ -25,26 +23,24 @@ class CatanGame:
             out += str(self.nodes[nk]) + "\n"
         return out
 
-    def change_turn(self):
-        if self.is_setup and self.cur_plyr_ind == len(self.players) - 1 and not self.reverse_turns:
-            self.reverse_turns = True
-        elif self.reverse_turns and self.cur_plyr_ind == 0:
-            self.is_setup = False
-            self.reverse_turns = False
-        elif self.reverse_turns:
+    def change_turn(self, is_setup, reverse_turns):
+        if is_setup and self.cur_plyr_ind == len(self.players) - 1 and not reverse_turns:
+            return True, True
+        elif reverse_turns and self.cur_plyr_ind == 0:
+            return False, False
+        elif reverse_turns:
             self.cur_plyr_ind -= 1
+            return True, True
         else:
             self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
+            return is_setup, False
 
-    def end_setup(self):
-        self.is_setup = False
-
-    def get_available_settle_nodes(self):
+    def get_available_settle_nodes(self, is_setup):
         out = []
         for coord, node in self.nodes.items():
             no_ngbrs = all([self.nodes[ngbr].building is None for ngbr in node.neighbor_nodes])
             own_ngbr_road = any([self.paths[pcrd].owner == self.cur_plyr_ind for pcrd in node.neighbor_paths])
-            if no_ngbrs and node.building is None and (self.is_setup or own_ngbr_road):
+            if no_ngbrs and node.building is None and (is_setup or own_ngbr_road):
                 out.append(coord)
         return out
 
