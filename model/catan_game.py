@@ -50,6 +50,7 @@ class CatanGame:
         return cur_player.color
 
     def get_available_paths(self):
+        # TODO if setup, only allow roads placed neighboring most recently placed settlement
         out = []
         for coord, path in self.paths.items():
             own_ngbr_node = any([self.nodes[ncrd].owner == self.cur_plyr_ind for ncrd in path.neighbor_nodes])

@@ -69,10 +69,16 @@ class Application(tk.Frame):
     def handle_selection(self, evt, tiles, control_handler):
         for tile in tiles.values():
             if tile.clicked_on(evt.x, evt.y):
-                color = control_handler((tile.row, tile.col))
-                tile.build(self.can, color=color)
+                # tile.build(self.can, color=color)
                 self.end_selection()
+                control_handler((tile.row, tile.col))
                 return
+
+    def build_settle(self, coord, color):
+        self.settles[coord].build(self.can, color)
+
+    def build_road(self, coord, color):
+        self.roads[coord].build(self.can, color)
 
     def get_from_cid(self, cid, tiles):
         for tile in tiles.values():

@@ -17,7 +17,10 @@ class Controller:
 
     def handle_settle_build(self, coord):
         color = self.model.build_settle(coord)
-        return color
+        self.view.build_settle(coord, color)
+
+        if self.is_setup:
+            self.view.start_road_selection()
 
     def start_road_selection(self):
         avail = self.model.get_available_paths()
@@ -25,15 +28,18 @@ class Controller:
 
     def handle_road_build(self, coord):
         color = self.model.build_road(coord)
+        self.view.build_road(coord, color)
         if self.is_setup:
             self.handle_turn_change()
-        return color
+
+        if self.is_setup:
+            self.view.start_settle_selection()
 
     def handle_turn_change(self):
         self.is_setup, self.is_reverse = self.model.change_turn(self.is_setup, self.is_reverse)
 
-    # def handle_end_setup(self):
-    #     self.model.end_setup()
+    def start_game(self):
+        self.view.start_settle_selection()
 
 
 def main():
@@ -42,6 +48,7 @@ def main():
     app = Application(game, master=root)
     controller = Controller(game, app)
     app.controller = controller
+    controller.start_game()
     app.mainloop()
 
 
