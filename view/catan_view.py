@@ -39,6 +39,7 @@ class Application(tk.Frame):
         self.can.bind("1", lambda e: self.start_settle_selection())
         self.can.bind("2", lambda e: self.start_road_selection())
         self.can.bind("3", lambda e: self.controller.handle_turn_change())
+        self.can.bind("4", lambda e: self.controller.roll_dice())
         self.can.focus_set()
 
     def draw_board(self):

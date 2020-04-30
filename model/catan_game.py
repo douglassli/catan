@@ -88,6 +88,4 @@ class CatanGame:
 
     def distribute_resources(self, roll_num):
         for tile in self.tiles.values():
-            if tile.roll_num == roll_num:
-                # TODO give players correct resources
-                pass
+            tile.give_resources(roll_num)

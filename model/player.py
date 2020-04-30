@@ -25,3 +25,7 @@ class Player:
     def can_build_road(self):
         # TODO check correct number of resources
         return self.num_roads > 0
+
+    def gain_resource(self, resource, count):
+        print("{}: {} {}".format(self.color, count, resource.name))
+        self.resources[resource] += count

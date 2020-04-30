@@ -33,3 +33,9 @@ class Node:
 
     def owns_ngbr_path(self, pid):
         return any([ngbr_path.owned_by(pid) for ngbr_path in self.neighbor_paths])
+
+    def give_resource(self, resource):
+        if self.building == Buildings.SETTLE:
+            self.owner.gain_resource(resource, 1)
+        elif self.building == Buildings.CITY:
+            self.owner.gain_resource(resource, 2)

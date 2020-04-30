@@ -53,6 +53,15 @@ class Controller:
     def start_game(self):
         self.view.start_settle_selection()
 
+    def roll_dice(self):
+        roll_num = self.model.roll_dice()
+        print("Dice roll: {}".format(roll_num))
+        if roll_num == 7:
+            # TODO move robber
+            pass
+        else:
+            self.model.distribute_resources(roll_num)
+
 
 def main():
     game = generate_catan_game()
