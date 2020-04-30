@@ -39,7 +39,6 @@ class Application(tk.Frame):
         self.can.bind("1", lambda e: self.start_settle_selection())
         self.can.bind("2", lambda e: self.start_road_selection())
         self.can.bind("3", lambda e: self.controller.handle_turn_change())
-        # self.can.bind("4", lambda e: self.controller.handle_end_setup())
         self.can.focus_set()
 
     def draw_board(self):
@@ -101,7 +100,9 @@ class Application(tk.Frame):
             road.end_selection(self.can)
 
     def cannot_build_settle(self):
+        # TODO add alert to UI
         print("Cannot build settle")
 
     def cannot_build_road(self):
+        # TODO add alert to UI
         print("Cannot build road")

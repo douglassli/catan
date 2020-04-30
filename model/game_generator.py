@@ -18,6 +18,17 @@ def generate_catan_game(num_rows=5, num_players=4):
     nodes = generate_nodes(num_rows, tiles)
     paths = generate_paths(nodes)
 
+    for tile in tiles.values():
+        tile.nodes = [nodes[ncrd] for ncrd in tile.nodes]
+
+    for node in nodes.values():
+        node.neighbor_nodes = [nodes[ncrd] for ncrd in node.neighbor_nodes]
+        node.neighbor_paths = [paths[pcrd] for pcrd in node.neighbor_paths]
+
+    for path in paths.values():
+        path.neighbor_nodes = [nodes[ncrd] for ncrd in path.neighbor_nodes]
+        path.neighbor_paths = [paths[pcrd] for pcrd in path.neighbor_paths]
+
     return CatanGame(players, 19, dev_cards, tiles, nodes, paths)
 
 

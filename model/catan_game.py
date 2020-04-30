@@ -1,3 +1,4 @@
+from random import randint
 
 
 class CatanGame:
@@ -41,8 +42,8 @@ class CatanGame:
     def get_available_settle_nodes(self, is_setup):
         out = []
         for coord, node in self.nodes.items():
-            no_ngbrs = all([self.nodes[ngbr].building is None for ngbr in node.neighbor_nodes])
-            own_ngbr_road = any([self.paths[pcrd].owner == self.cur_plyr_ind for pcrd in node.neighbor_paths])
+            no_ngbrs = all([ngbr_node.building is None for ngbr_node in node.neighbor_nodes])
+            own_ngbr_road = any([ngbr_path.owner == self.cur_plyr_ind for ngbr_path in node.neighbor_paths])
             if no_ngbrs and node.building is None and (is_setup or own_ngbr_road):
                 out.append(coord)
         return out
@@ -59,18 +60,18 @@ class CatanGame:
     def get_avail_paths(self):
         out = []
         for coord, path in self.paths.items():
-            own_ngbr_node = any([self.nodes[ncrd].owner == self.cur_plyr_ind for ncrd in path.neighbor_nodes])
-            own_ngbr_road = any([self.paths[pcrd].owner == self.cur_plyr_ind for pcrd in path.neighbor_paths])
+            own_ngbr_node = any([ngbr_node.owner == self.cur_plyr_ind for ngbr_node in path.neighbor_nodes])
+            own_ngbr_road = any([ngbr_path.owner == self.cur_plyr_ind for ngbr_path in path.neighbor_paths])
             if not path.road and (own_ngbr_node or own_ngbr_road):
                 out.append(coord)
         return out
 
     def get_setup_avail_paths(self):
         for node in self.nodes.values():
-            empty_roads = all([self.paths[pcrd].owner is None for pcrd in node.neighbor_paths])
+            empty_roads = all([ngbr_path.owner is None for ngbr_path in node.neighbor_paths])
             is_owner = node.owner == self.cur_plyr_ind
             if is_owner and empty_roads:
-                return node.neighbor_paths
+                return [(ngbr_path.row, ngbr_path.col) for ngbr_path in node.neighbor_paths]
 
     def build_road(self, coord):
         cur_player = self.players[self.cur_plyr_ind]
