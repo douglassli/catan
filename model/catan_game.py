@@ -42,8 +42,8 @@ class CatanGame:
     def get_available_settle_nodes(self, is_setup):
         out = []
         for coord, node in self.nodes.items():
-            no_ngbrs = all([ngbr_node.building is None for ngbr_node in node.neighbor_nodes])
-            own_ngbr_road = any([ngbr_path.owner == self.cur_plyr_ind for ngbr_path in node.neighbor_paths])
+            no_ngbrs = node.no_ngbr_nodes()
+            own_ngbr_road = node.owns_ngbr_path(self.cur_plyr_ind)
             if no_ngbrs and node.building is None and (is_setup or own_ngbr_road):
                 out.append(coord)
         return out
@@ -60,17 +60,15 @@ class CatanGame:
     def get_avail_paths(self):
         out = []
         for coord, path in self.paths.items():
-            own_ngbr_node = any([ngbr_node.owner == self.cur_plyr_ind for ngbr_node in path.neighbor_nodes])
-            own_ngbr_road = any([ngbr_path.owner == self.cur_plyr_ind for ngbr_path in path.neighbor_paths])
+            own_ngbr_node = path.owns_any_ngbr_node(self.cur_plyr_ind)
+            own_ngbr_road = path.owns_any_ngbr_path(self.cur_plyr_ind)
             if not path.road and (own_ngbr_node or own_ngbr_road):
                 out.append(coord)
         return out
 
     def get_setup_avail_paths(self):
         for node in self.nodes.values():
-            empty_roads = all([ngbr_path.owner is None for ngbr_path in node.neighbor_paths])
-            is_owner = node.owner == self.cur_plyr_ind
-            if is_owner and empty_roads:
+            if node.owned_by(self.cur_plyr_ind) and node.all_empty_roads():
                 return [(ngbr_path.row, ngbr_path.col) for ngbr_path in node.neighbor_paths]
 
     def build_road(self, coord):
@@ -79,3 +77,14 @@ class CatanGame:
         self.paths[coord].build_road(cur_player)
         # TODO check longest road
         return cur_player.color
+
+    def roll_dice(self):
+        d1 = randint(1, 6)
+        d2 = randint(1, 6)
+        return d1 + d2
+
+    def distribute_resources(self, roll_num):
+        for tile in self.tiles.values():
+            if tile.roll_num == roll_num:
+                # TODO give players correct resources
+                pass

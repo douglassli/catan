@@ -18,3 +18,18 @@ class Node:
     def build_settle(self, player):
         self.building = Buildings.SETTLE
         self.owner = player.pid
+
+    def owned_by(self, pid):
+        return self.owner == pid
+
+    def has_owner(self):
+        return self.owner is not None
+
+    def all_empty_roads(self):
+        return all([not ngbr_path.has_owner() for ngbr_path in self.neighbor_paths])
+
+    def no_ngbr_nodes(self):
+        return all([not ngbr_node.has_owner() for ngbr_node in self.neighbor_nodes])
+
+    def owns_ngbr_path(self, pid):
+        return any([ngbr_path.owned_by(pid) for ngbr_path in self.neighbor_paths])
