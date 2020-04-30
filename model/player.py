@@ -19,13 +19,45 @@ class Player:
         self.victory_points = 0
 
     def can_build_settle(self):
-        # TODO check correct number of resources
-        return self.num_settles > 0
+        has_settles = self.num_settles >= 1
+        has_resources = self.resources[Resource.WOOD] >= 1 and self.resources[Resource.WHEAT] >= 1 and \
+                        self.resources[Resource.BRICK] >= 1 and self.resources[Resource.SHEEP] >= 1
+        return has_settles and has_resources
 
     def can_build_road(self):
-        # TODO check correct number of resources
-        return self.num_roads > 0
+        has_roads = self.num_roads >= 1
+        has_resources = self.resources[Resource.WOOD] >= 1 and self.resources[Resource.BRICK] >= 1
+        return has_roads and has_resources
+
+    def can_build_city(self):
+        has_cities = self.num_cities >= 1
+        has_resources = self.resources[Resource.WHEAT] >= 2 and self.resources[Resource.STONE] >= 3
+        return has_cities and has_resources
+
+    def can_buy_dev_card(self):
+        has_resources = self.resources[Resource.WHEAT] >= 1 and self.resources[Resource.STONE] >= 1 and \
+                        self.resources[Resource.SHEEP] >= 1
+        return has_resources
+
+    def buy_road(self):
+        self.resources[Resource.WOOD] -= 1
+        self.resources[Resource.BRICK] -= 1
+
+    def buy_settle(self):
+        self.resources[Resource.WOOD] -= 1
+        self.resources[Resource.BRICK] -= 1
+        self.resources[Resource.SHEEP] -= 1
+        self.resources[Resource.WHEAT] -= 1
+
+    def buy_city(self):
+        self.resources[Resource.WHEAT] -= 2
+        self.resources[Resource.STONE] -= 3
+
+    def buy_dev_card(self):
+        self.resources[Resource.WHEAT] -= 1
+        self.resources[Resource.SHEEP] -= 1
+        self.resources[Resource.STONE] -= 1
 
     def gain_resource(self, resource, count):
-        print("{}: {} {}".format(self.color, count, resource.name))
         self.resources[resource] += count
+        print("{} -> {}".format(self.color, self.resources))
