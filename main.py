@@ -23,7 +23,10 @@ class Controller:
             self.view.start_road_selection()
 
     def start_road_selection(self):
-        avail = self.model.get_available_paths()
+        if self.is_setup:
+            avail = self.model.get_setup_avail_paths()
+        else:
+            avail = self.model.get_avail_paths()
         self.view.display_road_options(avail)
 
     def handle_road_build(self, coord):

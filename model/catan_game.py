@@ -49,8 +49,7 @@ class CatanGame:
         self.nodes[coord].build_settle(cur_player)
         return cur_player.color
 
-    def get_available_paths(self):
-        # TODO if setup, only allow roads placed neighboring most recently placed settlement
+    def get_avail_paths(self):
         out = []
         for coord, path in self.paths.items():
             own_ngbr_node = any([self.nodes[ncrd].owner == self.cur_plyr_ind for ncrd in path.neighbor_nodes])
@@ -58,6 +57,13 @@ class CatanGame:
             if not path.road and (own_ngbr_node or own_ngbr_road):
                 out.append(coord)
         return out
+
+    def get_setup_avail_paths(self):
+        for node in self.nodes.values():
+            empty_roads = all([self.paths[pcrd].owner is None for pcrd in node.neighbor_paths])
+            is_owner = node.owner == self.cur_plyr_ind
+            if is_owner and empty_roads:
+                return node.neighbor_paths
 
     def build_road(self, coord):
         cur_player = self.players[self.cur_plyr_ind]
