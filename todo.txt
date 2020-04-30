@@ -1,0 +1,19 @@
+ - building cities
+ - buying dev cards
+ - determining longest road
+ - using dev cards
+ - trading with bank
+ - trading with other players
+ - turn flow, roll dice then trade and build then end turn
+ - ports
+ - additional UI elements
+   - action buttons
+   - current player
+   - deck status
+   - player status
+ - determining end of game
+ - handle no more cards of certain resource
+ - count victory points
+ - subtracting cards from available bank resources when distributing resources
+ - return resources when items are bought
+ - steal from player of choice where robber is when robber is moved

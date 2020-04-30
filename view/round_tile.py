@@ -1,7 +1,7 @@
 from math import sqrt
 
 
-class SettleTile:
+class RoundTile:
     def __init__(self, row, col, x, y, radius, color):
         self.row = row
         self.col = col

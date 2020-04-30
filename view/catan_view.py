@@ -21,6 +21,7 @@ class Application(tk.Frame):
                                       self.padding, self.hex_len, self.set_rad)
         self.hex_tiles = initializer.hex_tiles
         self.bg_tiles = initializer.bg_tiles
+        self.robbers = initializer.robber_tiles
         self.nodes = initializer.nodes
         self.settles = initializer.settles
         self.roads = initializer.roads
@@ -44,7 +45,7 @@ class Application(tk.Frame):
 
     def draw_board(self):
         self.can.create_rectangle((0, 0, self.can_wid, self.can_height), fill="#0349fc")
-        for tile_list in self.ports, self.bg_tiles, self.hex_tiles.values(), self.roads.values(), self.settles.values():
+        for tile_list in self.ports, self.bg_tiles, self.hex_tiles.values(), self.roads.values(), self.settles.values(), self.robbers.values():
             for tile in tile_list:
                 tile.draw(self.can)
 
@@ -56,6 +57,14 @@ class Application(tk.Frame):
         self.selecting = True
         self.show_options(avail, self.settles)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
+
+    def display_robber_options(self, avail):
+        self.selecting = True
+        self.show_options(avail, self.robbers)
+        self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.robbers, self.controller.handle_robber_move))
+
+    def move_robber(self, coord):
+        self.robbers[coord].build(self.can, "black")
 
     def start_road_selection(self):
         if not self.selecting:
@@ -99,6 +108,8 @@ class Application(tk.Frame):
             settle.end_selection(self.can)
         for road in self.roads.values():
             road.end_selection(self.can)
+        for robber in self.robbers.values():
+            robber.end_selection(self.can)
 
     def cannot_build_settle(self):
         # TODO add alert to UI

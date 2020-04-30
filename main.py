@@ -51,14 +51,21 @@ class Controller:
         self.is_setup, self.is_reverse = self.model.change_turn(self.is_setup, self.is_reverse)
 
     def start_game(self):
+        rcrd = self.model.get_robber_coord()
+        self.view.move_robber(rcrd)
         self.view.start_settle_selection()
+
+    def handle_robber_move(self, coord):
+        self.model.move_robber(coord)
+        self.view.move_robber(coord)
 
     def roll_dice(self):
         roll_num = self.model.roll_dice()
         print("Dice roll: {}".format(roll_num))
         if roll_num == 7:
             # TODO move robber
-            pass
+            avail = self.model.get_avail_robber_coords()
+            self.view.display_robber_options(avail)
         else:
             self.model.distribute_resources(roll_num)
 

@@ -3,7 +3,7 @@ from model.resources import Resource
 from view.hex_tile import HexTile
 from view.node_pos import Node
 from view.path_tile import PathTile
-from view.settle_tile import SettleTile
+from view.round_tile import RoundTile
 from view.port_tile import PortTile
 
 
@@ -36,6 +36,7 @@ class ViewInitializer:
         self.PORT = "#b97c31"
 
         self.hex_tiles, self.bg_tiles = self.init_hex_tiles(self.init_game.tiles)
+        self.robber_tiles = self.init_robbers()
         self.nodes = self.init_nodes(self.init_game.nodes)
         self.settles = self.init_settlments()
         self.roads = self.init_roads(self.init_game.paths)
@@ -82,10 +83,18 @@ class ViewInitializer:
 
         return hex_tiles, bg_tiles
 
+    def init_robbers(self):
+        robbers = {}
+        for hex_tile in self.hex_tiles.values():
+            r = hex_tile.row
+            c = hex_tile.col
+            robbers[(r, c)] = RoundTile(r, c, hex_tile.x, hex_tile.y + self.hex_len * 1.65, self.set_rad, "black")
+        return robbers
+
     def init_settlments(self):
         settles = {}
         for node in self.nodes.values():
-            settle = SettleTile(node.row, node.col, node.x, node.y, self.set_rad, "blue")
+            settle = RoundTile(node.row, node.col, node.x, node.y, self.set_rad, "blue")
             settles[(node.row, node.col)] = settle
         return settles
 

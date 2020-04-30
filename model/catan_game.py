@@ -1,4 +1,5 @@
 from random import randint
+from model.resources import Resource
 
 
 class CatanGame:
@@ -7,12 +8,7 @@ class CatanGame:
         self.cur_plyr_ind = 0
 
         self.dev_cards = dev_cards
-
-        self.num_wood = num_each_res
-        self.num_sheep = num_each_res
-        self.num_stone = num_each_res
-        self.num_wheat = num_each_res
-        self.num_brick = num_each_res
+        self.resources = {res: num_each_res for res in Resource if res != Resource.DESERT}
 
         self.tiles = tiles
         self.nodes = nodes
@@ -84,6 +80,18 @@ class CatanGame:
         self.paths[coord].build_road(cur_player)
         # TODO check longest road
         return cur_player.color
+
+    def get_robber_coord(self):
+        for tcrd, tile in self.tiles.items():
+            if tile.has_robber:
+                return tcrd
+
+    def get_avail_robber_coords(self):
+        return [coord for coord, tile in self.tiles.items() if not tile.has_robber]
+
+    def move_robber(self, coord):
+        for tcrd, tile in self.tiles.items():
+            tile.has_robber = tcrd == coord
 
     def roll_dice(self):
         d1 = randint(1, 6)
