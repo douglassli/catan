@@ -18,3 +18,11 @@ class Player:
         self.largest_army = False
         self.longest_road = False
         self.victory_points = 0
+
+    def can_build_settle(self):
+        # TODO check correct number of resources
+        return self.num_settles > 0
+
+    def can_build_road(self):
+        # TODO check correct number of resources
+        return self.num_roads > 0

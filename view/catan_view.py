@@ -50,26 +50,25 @@ class Application(tk.Frame):
 
     def start_settle_selection(self):
         if not self.selecting:
-            self.selecting = True
             self.controller.start_settle_selection()
 
     def display_settle_options(self, avail):
+        self.selecting = True
         self.show_options(avail, self.settles)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
 
     def start_road_selection(self):
         if not self.selecting:
-            self.selecting = True
             self.controller.start_road_selection()
 
     def display_road_options(self, avail):
+        self.selecting = True
         self.show_options(avail, self.roads)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.roads, self.controller.handle_road_build))
 
     def handle_selection(self, evt, tiles, control_handler):
         for tile in tiles.values():
             if tile.clicked_on(evt.x, evt.y):
-                # tile.build(self.can, color=color)
                 self.end_selection()
                 control_handler((tile.row, tile.col))
                 return
@@ -100,3 +99,9 @@ class Application(tk.Frame):
             settle.end_selection(self.can)
         for road in self.roads.values():
             road.end_selection(self.can)
+
+    def cannot_build_settle(self):
+        print("Cannot build settle")
+
+    def cannot_build_road(self):
+        print("Cannot build road")

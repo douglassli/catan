@@ -12,8 +12,12 @@ class Controller:
         self.is_reverse = False
 
     def start_settle_selection(self):
+        can_build = self.model.can_build_settle()
         avail = self.model.get_available_settle_nodes(self.is_setup)
-        self.view.display_settle_options(avail)
+        if can_build and len(avail) > 0:
+            self.view.display_settle_options(avail)
+        else:
+            self.view.cannot_build_settle()
 
     def handle_settle_build(self, coord):
         color = self.model.build_settle(coord)
@@ -23,11 +27,16 @@ class Controller:
             self.view.start_road_selection()
 
     def start_road_selection(self):
+        can_build = self.model.can_build_road()
         if self.is_setup:
             avail = self.model.get_setup_avail_paths()
         else:
             avail = self.model.get_avail_paths()
-        self.view.display_road_options(avail)
+
+        if can_build and len(avail) > 0:
+            self.view.display_road_options(avail)
+        else:
+            self.view.cannot_build_road()
 
     def handle_road_build(self, coord):
         color = self.model.build_road(coord)
