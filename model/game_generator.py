@@ -34,7 +34,7 @@ def generate_catan_game(num_rows=5, num_players=4):
 
 def generate_players(num_players):
     colors = ["red", "green", "blue", "yellow"]
-    return [Player(i, colors[i]) for i in range(num_players)]
+    return [Player(colors[i]) for i in range(num_players)]
 
 
 def generate_tiles(num_rows):

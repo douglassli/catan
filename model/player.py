@@ -3,8 +3,7 @@ from model.development_cards import DevCards
 
 
 class Player:
-    def __init__(self, pid, color, num_roads=15, num_settles=5, num_cities=4):
-        self.pid = pid
+    def __init__(self, color, num_roads=15, num_settles=5, num_cities=4):
         self.color = color
 
         self.resources = {res: 0 for res in Resource}
