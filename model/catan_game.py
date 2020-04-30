@@ -24,6 +24,9 @@ class CatanGame:
             out += str(self.nodes[nk]) + "\n"
         return out
 
+    def cur_player(self):
+        return self.players[self.cur_plyr_ind]
+
     def change_turn(self, is_setup, reverse_turns):
         if is_setup and self.cur_plyr_ind == len(self.players) - 1 and not reverse_turns:
             return True, True
@@ -37,42 +40,42 @@ class CatanGame:
             return is_setup, False
 
     def can_build_settle(self):
-        return self.players[self.cur_plyr_ind].can_build_settle()
+        return self.cur_player().can_build_settle()
 
     def get_available_settle_nodes(self, is_setup):
         out = []
         for coord, node in self.nodes.items():
             no_ngbrs = node.no_ngbr_nodes()
-            own_ngbr_road = node.owns_ngbr_path(self.cur_plyr_ind)
+            own_ngbr_road = node.owns_ngbr_path(self.cur_player())
             if no_ngbrs and node.building is None and (is_setup or own_ngbr_road):
                 out.append(coord)
         return out
 
     def build_settle(self, coord):
-        cur_player = self.players[self.cur_plyr_ind]
+        cur_player = self.cur_player()
         cur_player.num_settles -= 1
         self.nodes[coord].build_settle(cur_player)
         return cur_player.color
 
     def can_build_road(self):
-        return self.players[self.cur_plyr_ind].can_build_road()
+        return self.cur_player().can_build_road()
 
     def get_avail_paths(self):
         out = []
         for coord, path in self.paths.items():
-            own_ngbr_node = path.owns_any_ngbr_node(self.cur_plyr_ind)
-            own_ngbr_road = path.owns_any_ngbr_path(self.cur_plyr_ind)
+            own_ngbr_node = path.owns_any_ngbr_node(self.cur_player())
+            own_ngbr_road = path.owns_any_ngbr_path(self.cur_player())
             if not path.road and (own_ngbr_node or own_ngbr_road):
                 out.append(coord)
         return out
 
     def get_setup_avail_paths(self):
         for node in self.nodes.values():
-            if node.owned_by(self.cur_plyr_ind) and node.all_empty_roads():
+            if node.owned_by(self.cur_player()) and node.all_empty_roads():
                 return [(ngbr_path.row, ngbr_path.col) for ngbr_path in node.neighbor_paths]
 
     def build_road(self, coord):
-        cur_player = self.players[self.cur_plyr_ind]
+        cur_player = self.cur_player()
         cur_player.num_roads -= 1
         self.paths[coord].build_road(cur_player)
         # TODO check longest road

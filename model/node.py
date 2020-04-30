@@ -17,10 +17,10 @@ class Node:
 
     def build_settle(self, player):
         self.building = Buildings.SETTLE
-        self.owner = player.pid
+        self.owner = player
 
-    def owned_by(self, pid):
-        return self.owner == pid
+    def owned_by(self, player):
+        return self.owner is player
 
     def has_owner(self):
         return self.owner is not None

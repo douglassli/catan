@@ -9,10 +9,10 @@ class Path:
 
     def build_road(self, player):
         self.road = True
-        self.owner = player.pid
+        self.owner = player
 
-    def owned_by(self, pid):
-        return self.owner == pid
+    def owned_by(self, player):
+        return self.owner is player
 
     def has_owner(self):
         return self.owner is not None
