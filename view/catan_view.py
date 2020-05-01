@@ -1,7 +1,7 @@
 import tkinter as tk
 from view.initialize_board import ViewInitializer
 from view.button_bar import ButtonBar
-from view.player_frame import PlayerFrame
+from view.player_bar import PlayerBar
 
 
 class Application(tk.Frame):
@@ -16,7 +16,7 @@ class Application(tk.Frame):
         self.padding = 10
         self.set_rad = 13
 
-        self.selecting = False
+        self.active = False
         self.controller = None
 
         initializer = ViewInitializer(self.can_wid, self.can_height, init_game, self.num_rows,
@@ -42,7 +42,7 @@ class Application(tk.Frame):
                      "Roll Dice": lambda e: self.start_dice_roll(),
                      "End Turn": lambda e: self.controller.handle_turn_change()}
         self.button_bar = ButtonBar(b_actions, master=self)
-        self.player_frame = PlayerFrame(self.right_width, self.window_height, master=self)
+        self.player_frame = PlayerBar(self.right_width, self.window_height, master=self)
 
         self.grid()
         self.button_bar.grid(row=1)
@@ -58,20 +58,20 @@ class Application(tk.Frame):
                 tile.draw(self.can)
 
     def start_settle_selection(self):
-        if not self.selecting:
+        if not self.active:
             self.controller.start_settle_selection()
 
     def start_dice_roll(self):
-        if not self.selecting:
+        if not self.active:
             self.controller.roll_dice()
 
     def display_settle_options(self, avail):
-        self.selecting = True
+        self.active = True
         self.show_options(avail, self.settles)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.settles, self.controller.handle_settle_build))
 
     def display_robber_options(self, avail):
-        self.selecting = True
+        self.active = True
         self.show_options(avail, self.robbers)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.robbers, self.controller.handle_robber_move))
 
@@ -79,11 +79,11 @@ class Application(tk.Frame):
         self.robbers[coord].build(self.can, "black")
 
     def start_road_selection(self):
-        if not self.selecting:
+        if not self.active:
             self.controller.start_road_selection()
 
     def display_road_options(self, avail):
-        self.selecting = True
+        self.active = True
         self.show_options(avail, self.roads)
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.roads, self.controller.handle_road_build))
 
@@ -115,7 +115,7 @@ class Application(tk.Frame):
 
     def end_selection(self):
         self.can.bind("<Button-1>", lambda e: None)
-        self.selecting = False
+        self.active = False
         for settle in self.settles.values():
             settle.end_selection(self.can)
         for road in self.roads.values():
