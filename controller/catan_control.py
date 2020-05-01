@@ -17,6 +17,7 @@ class Controller:
     def handle_settle_build(self, coord):
         color = self.model.build_settle(coord, self.is_setup)
         self.view.build_settle(coord, color)
+        self.update_player_info()
 
         if self.is_setup:
             self.view.start_road_selection()
@@ -36,6 +37,8 @@ class Controller:
     def handle_road_build(self, coord):
         color = self.model.build_road(coord, self.is_setup)
         self.view.build_road(coord, color)
+        self.update_player_info()
+
         if self.is_setup:
             self.handle_turn_change()
 
@@ -62,3 +65,8 @@ class Controller:
             self.view.display_robber_options(avail)
         else:
             self.model.distribute_resources(roll_num)
+            self.update_player_info()
+
+    def update_player_info(self):
+        player_states = self.model.get_player_states()
+        self.view.update_player_info(player_states)

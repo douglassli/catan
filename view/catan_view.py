@@ -42,11 +42,11 @@ class Application(tk.Frame):
                      "Roll Dice": lambda e: self.start_dice_roll(),
                      "End Turn": lambda e: self.controller.handle_turn_change()}
         self.button_bar = ButtonBar(b_actions, master=self)
-        self.player_frame = PlayerBar(self.right_width, self.window_height, master=self)
+        self.player_bar = PlayerBar(self.right_width, self.window_height, master=self)
 
         self.grid()
         self.button_bar.grid(row=1)
-        self.player_frame.grid(column=1, row=0, rowspan=2, padx=5)
+        self.player_bar.grid(column=1, row=0, rowspan=2, padx=5)
         self.can.grid(row=0)
         self.draw_board()
         self.can.focus_set()
@@ -130,3 +130,6 @@ class Application(tk.Frame):
     def cannot_build_road(self):
         # TODO add alert to UI
         print("Cannot build road")
+
+    def update_player_info(self, player_states):
+        self.player_bar.update_player_info(player_states)

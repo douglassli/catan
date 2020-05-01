@@ -101,3 +101,6 @@ class CatanGame:
     def distribute_resources(self, roll_num):
         for tile in self.tiles.values():
             tile.give_resources(roll_num)
+
+    def get_player_states(self):
+        return [player.get_state() for player in self.players]
