@@ -7,10 +7,11 @@
  - turn flow, roll dice then trade and build then end turn
  - ports
  - additional UI elements
-   - action buttons
    - current player
    - deck status
+ - make UI prettier
    - player status
+   - action buttons
  - determining end of game
  - handle no more cards of certain resource
  - count victory points

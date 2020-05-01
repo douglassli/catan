@@ -49,6 +49,7 @@ class Controller:
         self.is_setup, self.is_reverse = self.model.change_turn(self.is_setup, self.is_reverse)
 
     def start_game(self):
+        self.update_player_info()
         rcrd = self.model.get_robber_coord()
         self.view.move_robber(rcrd)
         self.view.start_settle_selection()
