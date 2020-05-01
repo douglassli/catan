@@ -58,7 +58,6 @@ class Controller:
         roll_num = self.model.roll_dice()
         print("Dice roll: {}".format(roll_num))
         if roll_num == 7:
-            # TODO move robber
             avail = self.model.get_avail_robber_coords()
             self.view.display_robber_options(avail)
         else:
