@@ -1,10 +1,12 @@
 import tkinter as tk
 from view.initialize_board import ViewInitializer
+from view.button_bar import ButtonBar
+from view.player_frame import PlayerFrame
 
 
 class Application(tk.Frame):
     def __init__(self, init_game, master=None):
-        super().__init__(master)
+        super().__init__(master, bg="#0349fc")
         self.master = master
 
         self.num_rows = 5
@@ -27,20 +29,26 @@ class Application(tk.Frame):
         self.roads = initializer.roads
         self.ports = initializer.ports
 
-        self.can = tk.Canvas(self, width=self.can_wid, height=self.can_height)
+        self.bar_height = 75
+        self.window_height = self.can_height + self.bar_height + 10
+        self.right_width = 300
 
-        self.initialize()
+        self.can = tk.Canvas(master=self, width=self.can_wid, height=self.can_height, highlightthickness=0, borderwidth=0)
+        b_actions = {"Trade": lambda e: None,
+                     "Buy Road": lambda e: self.start_road_selection(),
+                     "Buy Settle": lambda e: self.start_settle_selection(),
+                     "Buy City": lambda e: None,
+                     "Buy Dev Card": lambda e: None,
+                     "Roll Dice": lambda e: self.start_dice_roll(),
+                     "End Turn": lambda e: self.controller.handle_turn_change()}
+        self.button_bar = ButtonBar(b_actions, master=self)
+        self.player_frame = PlayerFrame(self.right_width, self.window_height, master=self)
 
-    def initialize(self):
-        self.can.pack()
-        self.pack()
-
+        self.grid()
+        self.button_bar.grid(row=1)
+        self.player_frame.grid(column=1, row=0, rowspan=2, padx=5)
+        self.can.grid(row=0)
         self.draw_board()
-
-        self.can.bind("1", lambda e: self.start_settle_selection())
-        self.can.bind("2", lambda e: self.start_road_selection())
-        self.can.bind("3", lambda e: self.controller.handle_turn_change())
-        self.can.bind("4", lambda e: self.controller.roll_dice())
         self.can.focus_set()
 
     def draw_board(self):
@@ -52,6 +60,10 @@ class Application(tk.Frame):
     def start_settle_selection(self):
         if not self.selecting:
             self.controller.start_settle_selection()
+
+    def start_dice_roll(self):
+        if not self.selecting:
+            self.controller.roll_dice()
 
     def display_settle_options(self, avail):
         self.selecting = True
