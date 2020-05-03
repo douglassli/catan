@@ -34,5 +34,9 @@ class RoundTile:
         self.built = True
         canvas.itemconfigure(self.can_id, state="normal", fill=self.color, outline="black", activefill="")
 
+    def hide(self, canvas):
+        self.built = False
+        canvas.itemconfigure(self.can_id, state="hidden", fill=self.color, outline="black", activefill="")
+
     def clicked_on(self, evt_x, evt_y):
         return self.open_select and sqrt((evt_x - self.x) ** 2 + (evt_y - self.y) ** 2) < self.radius

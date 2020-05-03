@@ -76,6 +76,9 @@ class Application(tk.Frame):
         self.can.bind("<Button-1>", lambda e: self.handle_selection(e, self.robbers, self.controller.handle_robber_move))
 
     def move_robber(self, coord):
+        for robber in self.robbers.values():
+            if robber.built:
+                robber.hide(self.can)
         self.robbers[coord].build(self.can, "black")
 
     def start_road_selection(self):
