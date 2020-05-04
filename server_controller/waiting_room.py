@@ -1,3 +1,4 @@
+import uuid
 
 
 class Room:
@@ -22,3 +23,15 @@ class Room:
 
         for other_plyr in other_players:
             await other_plyr.send_player_joined(new_player.name, new_player.color)
+
+    def has_plyr_id(self, plyr_id):
+        return uuid.UUID(plyr_id) in self.players
+
+    async def mark_ready(self, player_id):
+        plyr_uuid = uuid.UUID(player_id)
+        player = self.players[plyr_uuid]
+        await player.send_ready_success()
+
+        others = [other_plyr for other_plyr in self.players.values() if other_plyr.plyr_id != plyr_uuid]
+        for other_plyr in others:
+            await other_plyr.send_player_ready(player.name)

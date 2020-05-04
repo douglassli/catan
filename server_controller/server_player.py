@@ -31,6 +31,15 @@ class ServerPlayer:
                       cs.OTHER_PLAYERS: other_plyrs_data}
         await self.web_socket.send(json.dumps(return_msg))
 
+    async def send_ready_success(self):
+        self.is_ready = True
+        return_msg = {cs.TYPE: cs.READY_SUCCESS}
+        await self.web_socket.send(json.dumps(return_msg))
+
+    async def send_player_ready(self, plyr_name):
+        return_msg = {cs.TYPE: cs.PLAYER_READY, cs.NAME: plyr_name}
+        await self.web_socket.send(json.dumps(return_msg))
+
     async def send_error(self, msg):
         return_msg = {cs.TYPE: cs.ERROR, cs.MSG: msg}
         await self.web_socket.send(json.dumps(return_msg))

@@ -65,20 +65,13 @@ class CatanServer:
                 player = ServerPlayer(uuid4(), websocket, msg[NAME], room.get_next_color())
                 await room.add_player(player)
         elif msg_type == READY:
-            pass
+            if not self.is_valid_ready(msg):
+                self.log("Invalid ready message: {}".format(msg))
+            else:
+                room = self.rooms[msg[ROOM_ID]]
+                await room.mark_ready(msg[PLAYER_ID])
         else:
             self.log("Unknown type: {}".format(msg))
-
-        # if msg["type"] == "INIT":
-        #     new_id = uuid4()
-        #     print("Initialized {}".format(new_id))
-        #     self.client_ids.add(new_id)
-        #     await websocket.send(json.dumps({"type": "id", "id": str(new_id)}))
-        # elif msg["type"] == "msg" and msg["id"] in self.client_ids:
-        #     print("{}: {}".format(msg["id"], msg["msg"]))
-        #     await websocket.send(json.dumps({"type": "msg", "msg": "Hello client {}".format(msg["id"])}))
-        # else:
-        #     await websocket.send(json.dumps({"type": "error", "error": "Error, unknown client"}))
 
     def is_valid_create_room(self, msg):
         return msg[NAME].isalnum()
@@ -87,6 +80,11 @@ class CatanServer:
         room_id = msg[ROOM_ID]
         name = msg[NAME]
         return room_id in self.rooms and name.isalnum() and self.rooms[room_id].is_name_available(name)
+
+    def is_valid_ready(self, msg):
+        room_id = msg[ROOM_ID]
+        plyr_id = msg[PLAYER_ID]
+        return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id)
 
     def generate_room_id(self):
         room_id = random.randint(100000, 999999)

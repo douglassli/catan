@@ -53,7 +53,7 @@ socket.addEventListener('message', function (event) {
       // do nothing
       break;
     case PLAYER_READY:
-      // code block
+      displayReady(obj.name);
       break;
     default:
       // code block
@@ -78,9 +78,37 @@ function addOtherPlayers() {
 
 function appendPlayer(playerName, playerColor, playerReady) {
   var playerList = document.getElementById('playerList');
-  var newPlayer = document.createElement("LI");
-  newPlayer.innerHTML = `Name: ${playerName}, Color: ${playerColor}, Ready: ${playerReady}`;
+  var newPlayer = document.createElement("li");
+
+  var nameText = document.createTextNode("Name: ");
+  var colorText = document.createTextNode(", Color: ");
+  var readyText = document.createTextNode(", Ready: ");
+
+  var nameSpan = document.createElement("span");
+  nameSpan.id = `${playerName}_NameSpan`;
+  nameSpan.innerHTML = `${playerName}`;
+
+  var colorSpan = document.createElement("span");
+  colorSpan.id = `${playerName}_ColorSpan`;
+  colorSpan.innerHTML = `${playerColor}`;
+
+  var readySpan = document.createElement("span");
+  readySpan.id = `${playerName}_ReadySpan`;
+  readySpan.innerHTML = `${playerReady}`;
+
+  newPlayer.appendChild(nameText);
+  newPlayer.appendChild(nameSpan);
+  newPlayer.appendChild(colorText);
+  newPlayer.appendChild(colorSpan);
+  newPlayer.appendChild(readyText);
+  newPlayer.appendChild(readySpan);
+
   playerList.appendChild(newPlayer);
+}
+
+function displayReady(playerName) {
+  var readySpan = document.getElementById(`${playerName}_ReadySpan`);
+  readySpan.innerHTML = `${true}`;
 }
 
 function createRoom() {
@@ -97,6 +125,7 @@ function joinRoom() {
 }
 
 function markReady() {
-    var out = {type: READY, playerID: playerID, roomID: roomId};
-    socket.send(JSON.stringify(out));
+  displayReady(username);
+  var out = {type: READY, playerID: playerId, roomID: roomId};
+  socket.send(JSON.stringify(out));
 }
