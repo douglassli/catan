@@ -136,3 +136,9 @@ class Application(tk.Frame):
 
     def update_player_info(self, player_states):
         self.player_bar.update_player_info(player_states)
+
+    def init_player_info(self, player_states):
+        self.player_bar.init_players(player_states)
+
+    def start_turn(self, player_state):
+        self.player_bar.start_turn(player_state)

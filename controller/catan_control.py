@@ -47,9 +47,14 @@ class Controller:
 
     def handle_turn_change(self):
         self.is_setup, self.is_reverse = self.model.change_turn(self.is_setup, self.is_reverse)
+        cur_player = self.model.cur_player()
+        self.view.start_turn(cur_player)
 
     def start_game(self):
-        self.update_player_info()
+        player_states = self.model.get_player_states()
+        self.view.init_player_info(player_states)
+        self.view.start_turn(player_states[0])
+
         rcrd = self.model.get_robber_coord()
         self.view.move_robber(rcrd)
         self.view.start_settle_selection()

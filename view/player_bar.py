@@ -18,3 +18,14 @@ class PlayerBar(tk.Frame):
     def update_player_info(self, player_states):
         for i, p_frame in enumerate(self.p_frames):
             p_frame.update_info(player_states[i])
+
+    def init_players(self, player_states):
+        for i, p_frame in enumerate(self.p_frames):
+            p_frame.init_player(player_states[i])
+
+    def start_turn(self, player_state):
+        for p_frame in self.p_frames:
+            if p_frame.color == player_state.color:
+                p_frame.start_turn()
+            else:
+                p_frame.end_turn()
