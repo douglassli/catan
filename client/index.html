@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="client.js"></script>
+  </head>
+  <body>
+    <label for="nameInput">Name:</label>
+    <input type="text" id="nameInput" name="nameInput"><br><br>
+    <button type="button" onclick="createRoom()" id="createRoomButton">Create room</button>
+    <br><br><br><br>
+    <label for="roomIdInput">Room ID:</label>
+    <input type="text" id="roomIdInput" name="roomIdInput">
+    <br><br>
+    <button type="button" onclick="joinRoom()" id="joinRoomButton">Join room</button>
+    <br><br>
+    <button type="button" onclick="markReady()" id="readyButton">Mark ready</button>
+    <br><br><br><br>
+    <h2 id="roomHeader">Room ID: </h2>
+    <ul id="playerList">
+    </ul>
+  </body>
+</html>
