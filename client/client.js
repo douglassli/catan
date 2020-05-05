@@ -57,7 +57,7 @@ socket.addEventListener('message', function (event) {
         break;
         default:
         // code block
-    };
+    }
 
     console.log(obj);
 });
@@ -67,7 +67,6 @@ function addRoomId() {
 }
 
 function addOtherPlayers() {
-    var playerList = document.getElementById('playerList');
     console.log(others)
     for (var i = 0; i < others.length; i++) {
         const plyr = others[i];
