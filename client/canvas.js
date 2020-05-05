@@ -34,9 +34,15 @@ function draw() {
 }
 
 function initBoard(ctx, data) {
-    var tilesObj = initHexTiles(ctx, data.tiles);
+    var tilesObj = initHexTiles(data.tiles);
     var bgTiles = tilesObj.bgTiles;
     var hexTiles = tilesObj.hexTiles;
+    for (var i = 0; i < bgTiles.length; i++) {
+        bgTiles[i].draw(ctx);
+    }
+    for (var i = 0; i < hexTiles.length; i++) {
+        hexTiles[i].draw(ctx);
+    }
 }
 
 function initHexTiles(tiles) {
@@ -57,8 +63,8 @@ function initHexTiles(tiles) {
         const x = initXOffset + horizOffset * curTile.col;
         const y = initY + curTile.row * vertOffset;
 
-        hexTile = HexTile(curTile.row, curTile.col, x, y, hexLen, color, curTile.rollNum);
-        bgTile = HexTile(curTile.row, curTile.col, x, y - 2 * vco, hexLen + 2 * vco, borderColor, null);
+        var hexTile = new HexTile(curTile.row, curTile.col, x, y, hexLen, color, curTile.rollNum);
+        var bgTile = new HexTile(curTile.row, curTile.col, x, y - 2 * vco, hexLen + 2 * vco, borderColor, null);
         out.hexTiles.push(hexTile);
         out.bgTiles.push(bgTile);
     }
@@ -76,17 +82,17 @@ class HexTile {
         this.col = col;
         this.coords = [x, y];
         for (var i = 1; i < 6; i++) {
-            var nx = coords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
-            var ny = coords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
-            coords.push(nx);
-            coords.push(ny);
+            var nx = this.coords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
+            var ny = this.coords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
+            this.coords.push(nx);
+            this.coords.push(ny);
         }
         this.color = color;
         this.rollNum = rollNum;
     }
 
     draw(ctx) {
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.moveTo(this.coords[0], this.coords[1]);
         for (var i = 1; i < 6; i++) {
