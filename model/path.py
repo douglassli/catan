@@ -7,6 +7,14 @@ class Path:
         self.neighbor_nodes = neighbor_nodes
         self.neighbor_paths = neighbor_paths
 
+    def as_data(self):
+        return {
+            "row": self.row,
+            "col": self.col,
+            "hasRoad": self.road,
+            "owner": ""
+        }
+
     def build_road(self, player):
         self.road = True
         self.owner = player

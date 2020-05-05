@@ -18,8 +18,8 @@ class HexTile:
         angle = 60
         coords = [self.x, self.y]
         for i in range(1, 6):
-            coords.append(coords[-2] + self.leng * cos(radians(angle * (i - 1)) + radians(30)))
-            coords.append(coords[-2] + self.leng * sin(radians(angle * (i - 1)) + radians(30)))
+            coords.append(coords[-2] + self.leng * cos(radians(angle * (i - 1) + 30)))
+            coords.append(coords[-2] + self.leng * sin(radians(angle * (i - 1) + 30)))
         self.can_id = canvas.create_polygon(*coords, fill=self.color, tags="hex")
 
         if self.roll_num is not None:

@@ -15,6 +15,14 @@ class Node:
         return "{:2}, {:2}, {}, {}, {}, {}".format(self.row, self.col, self.building,
                                                    self.neighbor_nodes, self.neighbor_paths, self.port)
 
+    def as_data(self):
+        return {
+            "row": self.row,
+            "col": self.col,
+            "building": self.building.name if self.building is not None else "",
+            "owner": ""
+        }
+
     def build_settle(self, player):
         self.building = Buildings.SETTLE
         self.owner = player

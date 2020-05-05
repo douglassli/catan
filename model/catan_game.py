@@ -20,6 +20,13 @@ class CatanGame:
             out += str(self.nodes[nk]) + "\n"
         return out
 
+    def as_data(self):
+        return {
+            "tiles": [tile.as_data() for tile in self.tiles.values()],
+            "paths": [path.as_data() for path in self.paths.values()],
+            "nodes": [node.as_data() for node in self.nodes.values()]
+        }
+
     def cur_player(self):
         return self.players[self.cur_plyr_ind]
 
