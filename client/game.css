@@ -1,3 +1,13 @@
-canvas {
+#bgCanvas {
   background-color: #0349fc;
+}
+
+.canvasWrapper {
+    position: relative;
+}
+
+.canvasWrapper canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title></title>
     <script src="canvas.js"></script>
     <link href="game.css" rel="stylesheet">
-  </head>
-  <body onload="draw()">
-    <canvas id="canvas" width="750" height="750"></canvas>
-  </body>
+</head>
+<body onload="draw()">
+    <div class="canvasWrapper">
+        <canvas id="bgCanvas" width="750" height="750"></canvas>
+        <canvas id="fgCanvas" width="750" height="750"></canvas>
+    </div>
+</body>
 </html>
