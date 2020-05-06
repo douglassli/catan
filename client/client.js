@@ -31,32 +31,32 @@ socket.addEventListener('message', function (event) {
 
     switch(obj.type) {
         case CREATED_ROOM:
-        roomId = obj.roomID;
-        playerId = obj.playerID;
-        usercolor = obj.color;
-        addRoomId();
-        appendPlayer(username, usercolor, false);
-        break;
+            roomId = obj.roomID;
+            playerId = obj.playerID;
+            usercolor = obj.color;
+            addRoomId();
+            appendPlayer(username, usercolor, false);
+            break;
         case JOINED_ROOM:
-        playerId = obj.playerID;
-        usercolor = obj.color;
-        others = obj.otherPlayers;
-        addRoomId();
-        appendPlayer(username, usercolor, false);
-        addOtherPlayers();
-        break;
+            playerId = obj.playerID;
+            usercolor = obj.color;
+            others = obj.otherPlayers;
+            addRoomId();
+            appendPlayer(username, usercolor, false);
+            addOtherPlayers();
+            break;
         case PLAYER_JOINED:
-        others.push({name: obj.name, color: obj.color, isReady: false});
-        appendPlayer(obj.name, obj.color, false);
-        break;
+            others.push({name: obj.name, color: obj.color, isReady: false});
+            appendPlayer(obj.name, obj.color, false);
+            break;
         case READY_SUCCESS:
-        // do nothing
-        break;
+            // do nothing
+            break;
         case PLAYER_READY:
-        displayReady(obj.name);
-        break;
-        default:
-        // code block
+            displayReady(obj.name);
+            break;
+            default:
+            // code block
     }
 
     console.log(obj);
