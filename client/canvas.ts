@@ -29,6 +29,11 @@ interface ModelData {
     nodes: ModelNode[];
 }
 
+interface HexTilePair {
+    hexTiles: HexTile[];
+    bgTiles: HexTile[];
+}
+
 const canWidth: number = 750;
 const canHeight: number = 750;
 const numRows: number = 5;
@@ -78,11 +83,6 @@ function initBackground(ctx: CanvasRenderingContext2D, data: ModelData): void {
 
 function initForeground(ctx: CanvasRenderingContext2D, data: ModelData): void {
 
-}
-
-interface HexTilePair {
-    hexTiles: HexTile[];
-    bgTiles: HexTile[];
 }
 
 function initHexTiles(tiles: ModelTile[]): HexTilePair {
