@@ -79,24 +79,42 @@ class HexTile {
     constructor(row, col, x, y, len, color, rollNum) {
         this.row = row;
         this.col = col;
-        this.coords = [x, y];
+        this.hexCoords = [x, y];
         for (var i = 1; i < 6; i++) {
-            var nx = this.coords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
-            var ny = this.coords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
-            this.coords.push(nx);
-            this.coords.push(ny);
+            var nx = this.hexCoords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
+            var ny = this.hexCoords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
+            this.hexCoords.push(nx);
+            this.hexCoords.push(ny);
         }
         this.color = color;
         this.rollNum = rollNum;
+        this.numTileLen = 2 * len / 3;
+        this.numTileX = x - this.numTileLen / 2;
+        this.numTileY = y + len - (this.numTileLen / 2);
+        this.numColor = this.rollNum == 6 || this.rollNum == 8 ? "#ff0000" : "#000000";
+        this.numX = x;
+        this.numY = y + len;
+        this.numFont = `${this.numTileLen / 1.25}px serif`;
     }
 
     draw(ctx) {
         ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.moveTo(this.coords[0], this.coords[1]);
+        ctx.moveTo(this.hexCoords[0], this.hexCoords[1]);
         for (var i = 1; i < 6; i++) {
-            ctx.lineTo(this.coords[i * 2], this.coords[i * 2 + 1]);
+            ctx.lineTo(this.hexCoords[i * 2], this.hexCoords[i * 2 + 1]);
         }
         ctx.fill();
+
+        if (this.rollNum) {
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(this.numTileX, this.numTileY, this.numTileLen, this.numTileLen);
+
+            ctx.fillStyle = this.numColor;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = this.numFont;
+            ctx.fillText(this.rollNum, this.numX, this.numY);
+        }
     }
 }
