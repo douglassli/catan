@@ -81,6 +81,28 @@ function draw(): void {
     }
 }
 
+function initPaths(paths: ModelPath[], nodes: TileNode[]): PathTile[] {
+    const outPaths: PathTile[] = [];
+    const numPathRows: number = numRows * 2 + 1;
+
+    for (var path of paths) {
+        const isEven: boolean = path.row % 2 === 0;
+        const isBottomHalf: boolean = path.row > Math.floor(numPathRows / 2);
+
+        if (isEven) {
+            const node: TileNode = findEntry(nodes, Math.floor(path.row / 2), Math.floor(path.col / 2) * 2 + 1) as TileNode;
+            const angle: number = isBottomHalf ? -150 + 120 * (path.col % 2) : 150 - 120 * (path.col % 2);
+            const road: PathTile = new PathTile(path.row, path.col, node.x, node.y, angle, "blue");
+            outPaths.push(road);
+        } else {
+            const node: TileNode = findEntry(nodes, Math.floor(path.row / 2), isBottomHalf ? path.col * 2 + 1 : path.col * 2) as TileNode;
+            const road: PathTile = new PathTile(path.row, path.col, node.x, node.y, 90, "blue");
+            outPaths.push(road);
+        }
+    }
+    return outPaths;
+}
+
 function initSettles(tileNodes: TileNode[]): RoundTile[] {
     const outSettles: RoundTile[] = [];
     for (var tileNode of tileNodes) {
@@ -94,7 +116,7 @@ function initNodes(nodes: ModelNode[], hexTiles: HexTile[]): TileNode[] {
     const outNodes: TileNode[] = [];
     for (var node of nodes) {
         const isTopHalf: boolean = node.row < (numRows + 1) / 2;
-        const nodeCols: number = Math.max(...nodes.map((curNode) => curNode.row === node.row ? curNode.col : -1)) + 1;
+        const nodeCols: number = Math.max(...nodes.map((cn) => cn.row === node.row ? cn.col : -1)) + 1;
 
         const isLast: boolean = node.col === nodeCols - 1;
 
@@ -194,7 +216,7 @@ class RoundTile extends Tile {
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
-        
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fillStyle = "black";
@@ -202,12 +224,52 @@ class RoundTile extends Tile {
     }
 }
 
-class HexTile extends Tile {
-    hexCoords: number[];
+class HexagonShapeTile extends Tile {
+    coords: number[];
     x: number;
     y: number;
-    len: number;
     color: string;
+
+    constructor(row: number, col: number, coords: number[], x: number, y: number, color: string) {
+        super(row, col);
+        this.coords = coords;
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    }
+
+    drawHexagon(ctx: CanvasRenderingContext2D): void {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(this.coords[0], this.coords[1]);
+        for (let i: number = 1; i < 6; i++) {
+            ctx.lineTo(this.coords[i * 2], this.coords[i * 2 + 1]);
+        }
+        ctx.fill();
+    }
+}
+
+class PathTile extends HexagonShapeTile {
+    constructor(row: number, col: number, x: number, y: number, angle: number, color: string) {
+        const tmpCoords: number[] = [x, y];
+        const startAngle: number = angle - 60;
+        for (let i: number = 1; i < 6; i++) {
+            const sideLen: number = i === 2 || i === 5 ? hexLen : padding / Math.sqrt(3);
+            const nx: number = tmpCoords[i * 2 - 2] + sideLen * Math.cos(radians(60 * (i - 1) + startAngle));
+            const ny: number = tmpCoords[i * 2 - 1] + sideLen * Math.sin(radians(60 * (i - 1) + startAngle));
+            tmpCoords.push(nx);
+            tmpCoords.push(ny);
+        }
+        super(row, col, tmpCoords, x, y, color);
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        this.drawHexagon(ctx);
+    }
+}
+
+class HexTile extends HexagonShapeTile {
+    len: number;
     rollNum: number;
     numTileLen: number;
     numTileX: number;
@@ -218,18 +280,15 @@ class HexTile extends Tile {
     numFont: string;
 
     constructor(row: number, col: number, x: number, y: number, len: number, color: string, rollNum: number) {
-        super(row, col);
-        this.hexCoords = [x, y];
+        const tmpCoords: number[] = [x, y];
         for (let i: number = 1; i < 6; i++) {
-            const nx: number = this.hexCoords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
-            const ny: number = this.hexCoords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
-            this.hexCoords.push(nx);
-            this.hexCoords.push(ny);
+            const nx: number = tmpCoords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
+            const ny: number = tmpCoords[i * 2 - 1] + len * Math.sin(radians(60 * (i - 1) + 30));
+            tmpCoords.push(nx);
+            tmpCoords.push(ny);
         }
-        this.x = x;
-        this.y = y;
+        super(row, col, tmpCoords, x, y, color);
         this.len = len;
-        this.color = color;
         this.rollNum = rollNum;
         this.numTileLen = 2 * len / 3;
         this.numTileX = x - this.numTileLen / 2;
@@ -241,13 +300,7 @@ class HexTile extends Tile {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.moveTo(this.hexCoords[0], this.hexCoords[1]);
-        for (let i: number = 1; i < 6; i++) {
-            ctx.lineTo(this.hexCoords[i * 2], this.hexCoords[i * 2 + 1]);
-        }
-        ctx.fill();
+        this.drawHexagon(ctx);
 
         if (this.rollNum) {
             ctx.fillStyle = "#ffffff";
