@@ -61,28 +61,57 @@ const portColor: string = "#b97c31";
 function draw(): void {
     const bgCanvas: HTMLCanvasElement = document.getElementById("bgCanvas") as HTMLCanvasElement;
     const bgCtx: CanvasRenderingContext2D = bgCanvas.getContext("2d");
-    initBackground(bgCtx, testData);
-
-    const fgCanvas: HTMLCanvasElement = document.getElementById("fgCanvas") as HTMLCanvasElement;
-    const fgCtx = fgCanvas.getContext("2d");
-    initForeground(fgCtx, testData);
-}
-
-function initBackground(ctx: CanvasRenderingContext2D, data: ModelData): void {
-    const tilesObj = initHexTiles(data.tiles);
+    const tilesObj = initHexTiles(testData.tiles);
     const bgTiles = tilesObj.bgTiles;
     const hexTiles = tilesObj.hexTiles;
-    for (let i: number = 0; i < bgTiles.length; i++) {
-        bgTiles[i].draw(ctx);
+    for (var bgTile of bgTiles) {
+        bgTile.draw(bgCtx);
     }
-    for (let i: number = 0; i < hexTiles.length; i++) {
-        hexTiles[i].draw(ctx);
+    for (var hexTile of hexTiles) {
+        hexTile.draw(bgCtx);
     }
-    // TODO: ports
+    // todo: ports
+
+    const fgCanvas: HTMLCanvasElement = document.getElementById("fgCanvas") as HTMLCanvasElement;
+    const fgCtx: CanvasRenderingContext2D = fgCanvas.getContext("2d");
+    const tileNodes: TileNode[] = initNodes(testData.nodes, hexTiles);
+    const settles: RoundTile[] = initSettles(tileNodes);
+    for (var settle of settles) {
+        settle.draw(fgCtx);
+    }
 }
 
-function initForeground(ctx: CanvasRenderingContext2D, data: ModelData): void {
+function initSettles(tileNodes: TileNode[]): RoundTile[] {
+    const outSettles: RoundTile[] = [];
+    for (var tileNode of tileNodes) {
+        const settle: RoundTile = new RoundTile(tileNode.row, tileNode.col, tileNode.x, tileNode.y, setRad, "blue");
+        outSettles.push(settle);
+    }
+    return outSettles;
+}
 
+function initNodes(nodes: ModelNode[], hexTiles: HexTile[]): TileNode[] {
+    const outNodes: TileNode[] = [];
+    for (var node of nodes) {
+        const isTopHalf: boolean = node.row < (numRows + 1) / 2;
+        const nodeCols: number = Math.max(...nodes.map((curNode) => curNode.row === node.row ? curNode.col : -1)) + 1;
+
+        const isLast: boolean = node.col === nodeCols - 1;
+
+        const tileRow: number = isTopHalf ? node.row : node.row - 1;
+        const tileCol: number = isLast ? Math.floor(node.col / 2) - 1 : Math.floor(node.col / 2);
+        const curTile: HexTile = findEntry(hexTiles, tileRow, tileCol) as HexTile;
+
+        const vcoMult = isTopHalf ? -1 : 1;
+        const hlMult = isTopHalf ? 0.5 : 1.5;
+
+        const hOffset = ((node.col + 1) % 2) * ((horizOffset / 2) * (isLast ? 1 : -1));
+        const vOffset = node.col % 2 === 1 ? (curTile.len * (vcoMult + 1)) + (vco * vcoMult) : (curTile.len * hlMult) + (vco / 2 * vcoMult);
+
+        const newNode: TileNode = new TileNode(node.row, node.col, curTile.x + hOffset, curTile.y + vOffset);
+        outNodes.push(newNode);
+    }
+    return outNodes;
 }
 
 function initHexTiles(tiles: ModelTile[]): HexTilePair {
@@ -116,10 +145,68 @@ function radians(degrees: number): number {
     return degrees * Math.PI / 180;
 }
 
-class HexTile {
+function findEntry(list: Tile[], row: number, col: number): Tile {
+    for (var entry of list) {
+        if (entry.row === row && entry.col === col) {
+            return entry;
+        }
+    }
+    return null;
+}
+
+class Tile {
     row: number;
     col: number;
+
+    constructor(row: number, col: number) {
+        this.row = row;
+        this.col = col;
+    }
+}
+
+class TileNode extends Tile {
+    x: number;
+    y: number;
+
+    constructor(row: number, col: number, x: number, y: number) {
+        super(row, col);
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class RoundTile extends Tile {
+    x: number;
+    y: number;
+    radius: number;
+    color: string;
+
+    constructor(row: number, col: number, x: number, y: number, radius: number, color: string) {
+        super(row, col);
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
+        ctx.stroke();
+    }
+}
+
+class HexTile extends Tile {
     hexCoords: number[];
+    x: number;
+    y: number;
+    len: number;
     color: string;
     rollNum: number;
     numTileLen: number;
@@ -131,8 +218,7 @@ class HexTile {
     numFont: string;
 
     constructor(row: number, col: number, x: number, y: number, len: number, color: string, rollNum: number) {
-        this.row = row;
-        this.col = col;
+        super(row, col);
         this.hexCoords = [x, y];
         for (let i: number = 1; i < 6; i++) {
             const nx: number = this.hexCoords[i * 2 - 2] + len * Math.cos(radians(60 * (i - 1) + 30));
@@ -140,6 +226,9 @@ class HexTile {
             this.hexCoords.push(nx);
             this.hexCoords.push(ny);
         }
+        this.x = x;
+        this.y = y;
+        this.len = len;
         this.color = color;
         this.rollNum = rollNum;
         this.numTileLen = 2 * len / 3;
