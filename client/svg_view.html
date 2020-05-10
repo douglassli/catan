@@ -23,15 +23,14 @@
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 800">
         <defs>
             <style>
-                .cls-3 {font-size: 15px;}
-                .cls-2,.cls-17 {font-size: 32px;}
+                .font15px {font-size: 15px;}
+                .font32px {font-size: 32px;}
 
-                .cls-14,.cls-26,.cls-27,.cls-24,.cls-31 {stroke-width: 2px;}
-                .cls-23 {stroke-width: 7px;}
-                .blckStrk {stroke: #000;}
-                .cls-16 {stroke: #ed2024;}
+                .stroke2px {stroke-width: 2px;}
+                .stroke7px {stroke-width: 7px;}
+                .blckStrk {stroke: #000000;}
+                .redStrk {stroke: #ed2024;}
 
-                .cls-17,.cls-18,.cls-19 {fill: #ed2024;}
                 .cls-4 {fill: #c4a060;}
                 .cls-6 {fill: #754c24;}
                 .cls-7 {fill: #fbb03b;}
@@ -52,6 +51,7 @@
                 .cls-32 {fill: #20953d;}
                 .cls-33 {fill: #0349fc;}
                 .whiteFill {fill: #ffffff;}
+                .redFill {fill: #ed2024;}
             </style>
             <symbol id="portBridge" data-name="portBridge" viewBox="0 0 56.96 38.66">
                 <polygon class="cls-20" points="56.96 30 51.96 38.66 0 8.66 5 0 56.96 30" />
@@ -93,14 +93,14 @@
             </symbol>
             <symbol id="wheatPort" data-name="wheatPort" viewBox="0 0 26.42 29.26">
                 <use width="281.8" height="540.02" transform="translate(0 13.79) rotate(-90) scale(0.05)" xlink:href="#wheat" />
-                <text class="cls-3" transform="translate(3.92 25.53)">2:1</text>
+                <text class="font15px" transform="translate(3.92 25.53)">2:1</text>
             </symbol>
             <symbol id="tree" data-name="tree" viewBox="0 0 316.82 452.38">
                 <path d="M306.8,346.15H182.17v96.23a10,10,0,0,1-10,10H144.65a10,10,0,0,1-10-10V346.15H10A10,10,0,0,1,3.08,329L67,267.44H29.41a10,10,0,0,1-7.76-16.31l61.78-76.08H52.36a10,10,0,0,1-8.25-15.64l106-155.06a10,10,0,0,1,16.51,0l106,155.06a10,10,0,0,1-8.26,15.64H233.39l61.78,76.08a10,10,0,0,1-7.76,16.31h-37.6L313.73,329A10,10,0,0,1,306.8,346.15Z"
                 />
             </symbol>
             <symbol id="woodPort" data-name="woodPort" viewBox="0 0 18.38 30.18">
-                <text class="cls-3" transform="translate(0 26.46)">2:1</text>
+                <text class="font15px" transform="translate(0 26.46)">2:1</text>
                 <use width="316.82" height="452.38" transform="translate(3.46) scale(0.04)" xlink:href="#tree" />
             </symbol>
             <symbol id="brick" data-name="brick" viewBox="0 0 308.02 160">
@@ -113,7 +113,7 @@
                 <rect x="104.34" y="55" width="99.34" height="50" rx="10" />
             </symbol>
             <symbol id="brickPort" data-name="brickPort" viewBox="0 0 19.19 25.63">
-                <text class="cls-3" transform="translate(0.81 21.9)">2:1</text>
+                <text class="font15px" transform="translate(0.81 21.9)">2:1</text>
                 <use width="308.02" height="160" transform="scale(0.06)" xlink:href="#brick" />
             </symbol>
             <symbol id="blackSheep" data-name="blackSheep" viewBox="0 0 213.85 162">
@@ -123,24 +123,24 @@
                 </g>
             </symbol>
             <symbol id="sheepPort" data-name="sheepPort" viewBox="0 0 18.38 26.1">
-                <text class="cls-3" transform="translate(0 22.38)">2:1</text>
+                <text class="font15px" transform="translate(0 22.38)">2:1</text>
                 <use width="213.85" height="162.01" transform="translate(1.38) scale(0.07)" xlink:href="#blackSheep" />
             </symbol>
             <symbol id="simpleRockBlack" data-name="simpleRockBlack" viewBox="0 0 169.97 127.37">
-                <ellipse class="cls-27 blckStrk" cx="32.22" cy="109.37" rx="31.22" ry="17" />
-                <ellipse class="cls-27 blckStrk" cx="29.52" cy="79.81" rx="22.05" ry="11.82" transform="matrix(0.97, -0.25, 0.25, 0.97, -19.02, 9.92)" />
-                <ellipse class="cls-27 blckStrk" cx="88.52" cy="110.92" rx="25.27" ry="14.25" />
-                <ellipse class="cls-27 blckStrk" cx="70.02" cy="85.47" rx="23.1" ry="13.48" transform="translate(-10.34 9.64) rotate(-7.34)" />
-                <ellipse class="cls-27 blckStrk" cx="141.13" cy="113.97" rx="27.84" ry="12.4" />
-                <ellipse class="cls-27 blckStrk" cx="110.15" cy="86.37" rx="13.11" ry="23.21" transform="translate(-29.39 97.34) rotate(-42.6)" />
-                <ellipse class="cls-27 blckStrk" cx="140.51" cy="82.15" rx="14.25" ry="24.23" transform="translate(-16.93 123.42) rotate(-45)" />
-                <ellipse class="cls-27 blckStrk" cx="110.05" cy="54.05" rx="31.47" ry="12.73" transform="translate(-6 14.5) rotate(-7.34)" />
-                <ellipse class="cls-27 blckStrk" cx="55.77" cy="59.86" rx="11.8" ry="25.44" transform="translate(-15.06 100.81) rotate(-77.06)" />
-                <ellipse class="cls-27 blckStrk" cx="77.59" cy="39.84" rx="25.22" ry="9.03" transform="translate(-5.6 13.63) rotate(-9.69)" />
-                <ellipse class="cls-27 blckStrk" cx="86.01" cy="15.73" rx="28.91" ry="14.73" />
+                <ellipse class="stroke2px blckStrk" cx="32.22" cy="109.37" rx="31.22" ry="17" />
+                <ellipse class="stroke2px blckStrk" cx="29.52" cy="79.81" rx="22.05" ry="11.82" transform="matrix(0.97, -0.25, 0.25, 0.97, -19.02, 9.92)" />
+                <ellipse class="stroke2px blckStrk" cx="88.52" cy="110.92" rx="25.27" ry="14.25" />
+                <ellipse class="stroke2px blckStrk" cx="70.02" cy="85.47" rx="23.1" ry="13.48" transform="translate(-10.34 9.64) rotate(-7.34)" />
+                <ellipse class="stroke2px blckStrk" cx="141.13" cy="113.97" rx="27.84" ry="12.4" />
+                <ellipse class="stroke2px blckStrk" cx="110.15" cy="86.37" rx="13.11" ry="23.21" transform="translate(-29.39 97.34) rotate(-42.6)" />
+                <ellipse class="stroke2px blckStrk" cx="140.51" cy="82.15" rx="14.25" ry="24.23" transform="translate(-16.93 123.42) rotate(-45)" />
+                <ellipse class="stroke2px blckStrk" cx="110.05" cy="54.05" rx="31.47" ry="12.73" transform="translate(-6 14.5) rotate(-7.34)" />
+                <ellipse class="stroke2px blckStrk" cx="55.77" cy="59.86" rx="11.8" ry="25.44" transform="translate(-15.06 100.81) rotate(-77.06)" />
+                <ellipse class="stroke2px blckStrk" cx="77.59" cy="39.84" rx="25.22" ry="9.03" transform="translate(-5.6 13.63) rotate(-9.69)" />
+                <ellipse class="stroke2px blckStrk" cx="86.01" cy="15.73" rx="28.91" ry="14.73" />
             </symbol>
             <symbol id="stonePort" data-name="stonePort" viewBox="0 0 18.38 26.61">
-                <text class="cls-3" transform="translate(0 22.88)">2:1</text>
+                <text class="font15px" transform="translate(0 22.88)">2:1</text>
                 <use width="169.97" height="127.37" transform="translate(1.38) scale(0.09)" xlink:href="#simpleRockBlack" />
             </symbol>
             <symbol id="huh" data-name="huh" viewBox="0 0 86.06 123.62">
@@ -149,20 +149,20 @@
                 <path d="M43,93a15.34,15.34,0,1,0,15.34,15.33A15.34,15.34,0,0,0,43,93Z" />
             </symbol>
             <symbol id="anyPort" data-name="anyPort" viewBox="0 0 18.38 28.55">
-                <text class="cls-3" transform="translate(0 24.82)">3:1</text>
+                <text class="font15px" transform="translate(0 24.82)">3:1</text>
                 <use width="86.06" height="123.62" transform="translate(3.71) scale(0.11)" xlink:href="#huh" />
             </symbol>
             <symbol id="bgTile" data-name="bgTile" viewBox="0 0 135.1 152.91">
                 <path class="cls-4" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
             </symbol>
             <symbol id="wheat_color" data-name="wheat_color" viewBox="0 0 87.7 168.66">
-                <path class="cls-31 blckStrk" d="M38.56,94.1c-.43,41.76,19.8,72.69,17.73,73.73-1.32,1.77-26-29-25.7-73.73C30.29,49.36,55,18.59,56.29,20.36,58.36,21.4,38.12,52.34,38.56,94.1Z" />
-                <path class="cls-31 blckStrk" d="M86.94,40.43c-.29-2-9.68-1.71-20.86,3.72S47,58.16,48,60.34s9.64-2.9,20.24-8.44S87.27,42.51,86.94,40.43Z" />
-                <path class="cls-31 blckStrk" d="M25.27.87c-2.67,1.43-6,16.45-3.81,31.78s7.67,24.73,9.48,23-.06-13.82-1.3-28.92S28-.62,25.27.87Z" />
-                <path class="cls-31 blckStrk" d="M73.2,74.3c-1-1.68-9.6,1.75-18.07,10.6S42.34,104.47,44,106.18s8-6.12,15.91-14.92S74.27,76.06,73.2,74.3Z" />
-                <path class="cls-31 blckStrk" d="M78.32,57.17c-.67-1.87-9.78,0-19.71,7.31s-16.06,17.06-14.77,19,8.94-4.59,18.3-11.88S79.05,59.11,78.32,57.17Z" />
-                <path class="cls-31 blckStrk" d="M1.39,59.71c-1.95,2.19.49,16.92,8,30.25s16,20.14,17,17.89-4.93-12.8-11.53-26.16S3.36,57.43,1.39,59.71Z" />
-                <path class="cls-31 blckStrk" d="M10.29,29.94C8,31.78,7.68,46.86,12.66,61.36S24.79,84.05,26.25,82s-2.6-13.46-6.68-27.88S12.65,28,10.29,29.94Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M38.56,94.1c-.43,41.76,19.8,72.69,17.73,73.73-1.32,1.77-26-29-25.7-73.73C30.29,49.36,55,18.59,56.29,20.36,58.36,21.4,38.12,52.34,38.56,94.1Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M86.94,40.43c-.29-2-9.68-1.71-20.86,3.72S47,58.16,48,60.34s9.64-2.9,20.24-8.44S87.27,42.51,86.94,40.43Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M25.27.87c-2.67,1.43-6,16.45-3.81,31.78s7.67,24.73,9.48,23-.06-13.82-1.3-28.92S28-.62,25.27.87Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M73.2,74.3c-1-1.68-9.6,1.75-18.07,10.6S42.34,104.47,44,106.18s8-6.12,15.91-14.92S74.27,76.06,73.2,74.3Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M78.32,57.17c-.67-1.87-9.78,0-19.71,7.31s-16.06,17.06-14.77,19,8.94-4.59,18.3-11.88S79.05,59.11,78.32,57.17Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M1.39,59.71c-1.95,2.19.49,16.92,8,30.25s16,20.14,17,17.89-4.93-12.8-11.53-26.16S3.36,57.43,1.39,59.71Z" />
+                <path class="cls-31 stroke2px blckStrk" d="M10.29,29.94C8,31.78,7.68,46.86,12.66,61.36S24.79,84.05,26.25,82s-2.6-13.46-6.68-27.88S12.65,28,10.29,29.94Z" />
             </symbol>
             <symbol id="wheatTile" data-name="wheatTile" viewBox="0 0 121.24 136.91">
                 <path class="cls-30" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
@@ -174,9 +174,9 @@
                 <path d="M33.25,135.46a5.44,5.44,0,0,1,0-7.7L70.42,90.59a5.44,5.44,0,1,1,7.7,7.7L41,135.46A5.46,5.46,0,0,1,33.25,135.46Z" />
                 <path d="M48.52,154.54a5.46,5.46,0,0,1-2-7.44l26.28-45.53A5.45,5.45,0,0,1,82.25,107L56,152.54A5.45,5.45,0,0,1,48.52,154.54Z" />
                 <path d="M62.66,15.4C79.56,37.35,19.54,82.86,3,60.66-13.93,38.71,46.09-6.8,62.66,15.4Z" />
-                <path class="cls-23 whiteFill blckStrk" d="M194.71,73.43a17,17,0,0,0-3.06-14.23c5-11-4.05-24.44-16.23-23.68a17.07,17.07,0,0,0-19.65-12.4c-5.21-5.28-14.81-6.2-21-1.9-6.56-4.6-16.85-3.17-21.91,2.88-6.52-5.18-17.38-4-22.66,2.29-5.13-4-13.53-3.42-18.09,1.12-9.27-3.37-19.66,4.37-18.93,14.27a17.05,17.05,0,0,0-8.82,11.81c-7.56,5.3-7.18,18.25.64,23.12C41.57,86,47.71,96.86,57.18,98.87c-.64,11.82,12,20.77,22.92,16.43,4.27,9,17.62,12.08,25.41,5.59,5.24,9.18,19.93,10.59,26.81,2.48,7.58,7.93,22.53,5.28,27-4.63,10.85,5.52,24.67-3.09,24.36-15.35C199.13,103.94,206.62,82.86,194.71,73.43Z"
+                <path class="stroke7px whiteFill blckStrk" d="M194.71,73.43a17,17,0,0,0-3.06-14.23c5-11-4.05-24.44-16.23-23.68a17.07,17.07,0,0,0-19.65-12.4c-5.21-5.28-14.81-6.2-21-1.9-6.56-4.6-16.85-3.17-21.91,2.88-6.52-5.18-17.38-4-22.66,2.29-5.13-4-13.53-3.42-18.09,1.12-9.27-3.37-19.66,4.37-18.93,14.27a17.05,17.05,0,0,0-8.82,11.81c-7.56,5.3-7.18,18.25.64,23.12C41.57,86,47.71,96.86,57.18,98.87c-.64,11.82,12,20.77,22.92,16.43,4.27,9,17.62,12.08,25.41,5.59,5.24,9.18,19.93,10.59,26.81,2.48,7.58,7.93,22.53,5.28,27-4.63,10.85,5.52,24.67-3.09,24.36-15.35C199.13,103.94,206.62,82.86,194.71,73.43Z"
                 />
-                <path class="cls-24 whiteFill blckStrk" d="M68.77,16.45a7.51,7.51,0,0,0-5.68-7.27C62.52,4.06,56.2,1,51.83,3.85c-3.42-4-10.74-2.62-12.45,2.34-8.46-.87-11.06,11.87-3.13,14.5a7.52,7.52,0,0,0,10,7.51c-.79,8.51,12,11,14.54,2.94A7.52,7.52,0,0,0,66,22.25,7.5,7.5,0,0,0,68.77,16.45Z"
+                <path class="stroke2px whiteFill blckStrk" d="M68.77,16.45a7.51,7.51,0,0,0-5.68-7.27C62.52,4.06,56.2,1,51.83,3.85c-3.42-4-10.74-2.62-12.45,2.34-8.46-.87-11.06,11.87-3.13,14.5a7.52,7.52,0,0,0,10,7.51c-.79,8.51,12,11,14.54,2.94A7.52,7.52,0,0,0,66,22.25,7.5,7.5,0,0,0,68.77,16.45Z"
                 />
             </symbol>
             <symbol id="sheepTile" data-name="sheepTile" viewBox="0 0 121.24 136.91">
@@ -197,7 +197,7 @@
                 <use width="116.32" height="60.9" transform="translate(37.13 22.83) scale(0.43)" xlink:href="#brick_color" />
             </symbol>
             <symbol id="colorCactus" data-name="colorCactus" viewBox="0 0 149.31 231.01">
-                <path class="cls-14 blckStrk" d="M134.31,28.28c-21-.37-12.9,30.75-14.36,43.21H99.57C98.22,47,108.89,1.33,70.86,1a28,28,0,0,0-28,28V131.35H31.34V120.42c-.08-19.64-30-19.65-30.12,0-1.14,43.07.8,39.43,41.64,39.29V230H99.57V97c9,0,25.9,0,34.74,0a14,14,0,0,0,14-14V42.28A14,14,0,0,0,134.31,28.28Z"
+                <path class="cls-14 stroke2px blckStrk" d="M134.31,28.28c-21-.37-12.9,30.75-14.36,43.21H99.57C98.22,47,108.89,1.33,70.86,1a28,28,0,0,0-28,28V131.35H31.34V120.42c-.08-19.64-30-19.65-30.12,0-1.14,43.07.8,39.43,41.64,39.29V230H99.57V97c9,0,25.9,0,34.74,0a14,14,0,0,0,14-14V42.28A14,14,0,0,0,134.31,28.28Z"
                 />
             </symbol>
             <symbol id="desertTile" data-name="desertTile" viewBox="0 0 121.24 136.91">
@@ -213,17 +213,17 @@
                 <use width="72.71" height="103.39" transform="translate(46.42 13.3) scale(0.39)" xlink:href="#tree_color" />
             </symbol>
             <symbol id="simpleRock" data-name="simpleRock" viewBox="0 0 169.97 127.37">
-                <ellipse class="cls-26 blckStrk" cx="32.22" cy="109.37" rx="31.22" ry="17" />
-                <ellipse class="cls-26 blckStrk" cx="29.52" cy="79.81" rx="22.05" ry="11.82" transform="matrix(0.97, -0.25, 0.25, 0.97, -19.02, 9.92)" />
-                <ellipse class="cls-26 blckStrk" cx="88.52" cy="110.92" rx="25.27" ry="14.25" />
-                <ellipse class="cls-26 blckStrk" cx="70.02" cy="85.47" rx="23.1" ry="13.48" transform="translate(-10.34 9.64) rotate(-7.34)" />
-                <ellipse class="cls-26 blckStrk" cx="141.13" cy="113.97" rx="27.84" ry="12.4" />
-                <ellipse class="cls-26 blckStrk" cx="110.15" cy="86.37" rx="13.11" ry="23.21" transform="translate(-29.39 97.34) rotate(-42.6)" />
-                <ellipse class="cls-26 blckStrk" cx="140.51" cy="82.15" rx="14.25" ry="24.23" transform="translate(-16.93 123.42) rotate(-45)" />
-                <ellipse class="cls-26 blckStrk" cx="110.05" cy="54.05" rx="31.47" ry="12.73" transform="translate(-6 14.5) rotate(-7.34)" />
-                <ellipse class="cls-26 blckStrk" cx="55.77" cy="59.86" rx="11.8" ry="25.44" transform="translate(-15.06 100.81) rotate(-77.06)" />
-                <ellipse class="cls-26 blckStrk" cx="77.59" cy="39.84" rx="25.22" ry="9.03" transform="translate(-5.6 13.63) rotate(-9.69)" />
-                <ellipse class="cls-26 blckStrk" cx="86.01" cy="15.73" rx="28.91" ry="14.73" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="32.22" cy="109.37" rx="31.22" ry="17" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="29.52" cy="79.81" rx="22.05" ry="11.82" transform="matrix(0.97, -0.25, 0.25, 0.97, -19.02, 9.92)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="88.52" cy="110.92" rx="25.27" ry="14.25" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="70.02" cy="85.47" rx="23.1" ry="13.48" transform="translate(-10.34 9.64) rotate(-7.34)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="141.13" cy="113.97" rx="27.84" ry="12.4" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="110.15" cy="86.37" rx="13.11" ry="23.21" transform="translate(-29.39 97.34) rotate(-42.6)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="140.51" cy="82.15" rx="14.25" ry="24.23" transform="translate(-16.93 123.42) rotate(-45)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="110.05" cy="54.05" rx="31.47" ry="12.73" transform="translate(-6 14.5) rotate(-7.34)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="55.77" cy="59.86" rx="11.8" ry="25.44" transform="translate(-15.06 100.81) rotate(-77.06)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="77.59" cy="39.84" rx="25.22" ry="9.03" transform="translate(-5.6 13.63) rotate(-9.69)" />
+                <ellipse class="cls-26 stroke2px blckStrk" cx="86.01" cy="15.73" rx="28.91" ry="14.73" />
             </symbol>
             <symbol id="stoneTile" data-name="stoneTile" viewBox="0 0 121.24 136.91">
                 <path class="cls-28" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
@@ -231,42 +231,42 @@
             </symbol>
             <symbol id="num3" data-name="num3" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(14.3 28.89) scale(1.06 1)">3</text>
+                <text class="font32px" transform="translate(14.3 28.89) scale(1.06 1)">3</text>
                 <circle cx="26.99" cy="36.53" r="2.5" />
                 <circle cx="19.01" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num2" data-name="num2" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(14.3 28.89) scale(1.06 1)">2</text>
+                <text class="font32px" transform="translate(14.3 28.89) scale(1.06 1)">2</text>
                 <circle cx="23" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num4" data-name="num4" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(14.3 28.89) scale(1.06 1)">4</text>
+                <text class="font32px" transform="translate(14.3 28.89) scale(1.06 1)">4</text>
                 <circle cx="23" cy="36.53" r="2.5" />
                 <circle cx="15.03" cy="36.53" r="2.5" />
                 <circle cx="30.97" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num5" data-name="num5" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(14.3 28.89) scale(1.06 1)">5</text>
+                <text class="font32px" transform="translate(14.3 28.89) scale(1.06 1)">5</text>
                 <circle cx="19.01" cy="36.53" r="2.5" />
                 <circle cx="11.04" cy="36.53" r="2.5" />
                 <circle cx="34.96" cy="36.53" r="2.5" />
                 <circle cx="26.99" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num6" data-name="num6" viewBox="0 0 46 46">
-                <rect class="cls-16 whiteFill" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-17" transform="translate(14.3 28.89) scale(1.06 1)">6</text>
-                <circle class="cls-18" cx="15.03" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="7.05" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="23" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="38.95" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="30.97" cy="36.53" r="2.5" />
+                <rect class="redStrk whiteFill" x="0.5" y="0.5" width="45" height="45" rx="10" />
+                <text class="font32px redFill" transform="translate(14.3 28.89) scale(1.06 1)">6</text>
+                <circle class="redFill" cx="15.03" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="7.05" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="23" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="38.95" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="30.97" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num9" data-name="num9" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(14.3 28.89) scale(1.06 1)">9</text>
+                <text class="font32px" transform="translate(14.3 28.89) scale(1.06 1)">9</text>
                 <circle cx="19.01" cy="36.53" r="2.5" />
                 <circle cx="11.04" cy="36.53" r="2.5" />
                 <circle cx="34.96" cy="36.53" r="2.5" />
@@ -274,33 +274,33 @@
             </symbol>
             <symbol id="num10" data-name="num10" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(5.61 28.89) scale(1.06 1)">10</text>
+                <text class="font32px" transform="translate(5.61 28.89) scale(1.06 1)">10</text>
                 <circle cx="23" cy="36.53" r="2.5" />
                 <circle cx="15.03" cy="36.53" r="2.5" />
                 <circle cx="30.97" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num11" data-name="num11" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(5.61 28.89) scale(1.06 1)">11</text>
+                <text class="font32px" transform="translate(5.61 28.89) scale(1.06 1)">11</text>
                 <circle cx="26.99" cy="36.53" r="2.5" />
                 <circle cx="19.01" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num12" data-name="num12" viewBox="0 0 46 46">
                 <rect class="whiteFill blckStrk" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-2" transform="translate(5.61 28.89) scale(1.06 1)">12</text>
+                <text class="font32px" transform="translate(5.61 28.89) scale(1.06 1)">12</text>
                 <circle cx="23" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="num8" data-name="num8" viewBox="0 0 46 46">
-                <rect class="cls-16 whiteFill" x="0.5" y="0.5" width="45" height="45" rx="10" />
-                <text class="cls-17" transform="translate(14.3 28.89) scale(1.06 1)">8</text>
-                <circle class="cls-18" cx="15.03" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="7.05" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="23" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="38.95" cy="36.53" r="2.5" />
-                <circle class="cls-18" cx="30.97" cy="36.53" r="2.5" />
+                <rect class="redStrk whiteFill" x="0.5" y="0.5" width="45" height="45" rx="10" />
+                <text class="font32px redFill" transform="translate(14.3 28.89) scale(1.06 1)">8</text>
+                <circle class="redFill" cx="15.03" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="7.05" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="23" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="38.95" cy="36.53" r="2.5" />
+                <circle class="redFill" cx="30.97" cy="36.53" r="2.5" />
             </symbol>
             <symbol id="path" data-name="path" viewBox="0 0 10.5 74.62">
-                <polygon class="cls-19 blckStrk" points="10.25 3.18 10.25 71.44 5.25 74.33 0.25 71.44 0.25 3.18 5.25 0.29 10.25 3.18" />
+                <polygon class="redFill blckStrk" points="10.25 3.18 10.25 71.44 5.25 74.33 0.25 71.44 0.25 3.18 5.25 0.29 10.25 3.18" />
             </symbol>
             <symbol id="settle" data-name="settle" viewBox="0 0 26 27.38">
                 <path class="cls-13 blckStrk" d="M13.74.78a1.13,1.13,0,0,0-1.48,0l-11,10A2.57,2.57,0,0,0,.5,12.42V25.88a1,1,0,0,0,1,1h23a1,1,0,0,0,1-1V12.42a2.57,2.57,0,0,0-.74-1.67Z" />
