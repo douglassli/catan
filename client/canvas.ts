@@ -75,10 +75,15 @@ function draw(): void {
     const fgCanvas: HTMLCanvasElement = document.getElementById("fgCanvas") as HTMLCanvasElement;
     const fgCtx: CanvasRenderingContext2D = fgCanvas.getContext("2d");
     const tileNodes: TileNode[] = initNodes(testData.nodes, hexTiles);
+    const pathTiles: PathTile[] = initPaths(testData.paths, tileNodes);
     const settles: RoundTile[] = initSettles(tileNodes);
-    for (var settle of settles) {
-        settle.draw(fgCtx);
-    }
+    // for (var pathTile of pathTiles) {
+    //     pathTile.draw(fgCtx);
+    // }
+
+    // for (var settle of settles) {
+    //     settle.draw(fgCtx);
+    // }
 }
 
 function initPaths(paths: ModelPath[], nodes: TileNode[]): PathTile[] {
@@ -238,7 +243,7 @@ class HexagonShapeTile extends Tile {
         this.color = color;
     }
 
-    drawHexagon(ctx: CanvasRenderingContext2D): void {
+    drawHexagon(ctx: CanvasRenderingContext2D, withStroke: boolean): void {
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.moveTo(this.coords[0], this.coords[1]);
@@ -246,6 +251,9 @@ class HexagonShapeTile extends Tile {
             ctx.lineTo(this.coords[i * 2], this.coords[i * 2 + 1]);
         }
         ctx.fill();
+        if (withStroke) {
+            ctx.stroke();
+        }
     }
 }
 
@@ -264,7 +272,7 @@ class PathTile extends HexagonShapeTile {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.drawHexagon(ctx);
+        this.drawHexagon(ctx, true);
     }
 }
 
@@ -300,7 +308,7 @@ class HexTile extends HexagonShapeTile {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.drawHexagon(ctx);
+        this.drawHexagon(ctx, false);
 
         if (this.rollNum) {
             ctx.fillStyle = "#ffffff";
