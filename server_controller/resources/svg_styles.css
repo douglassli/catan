@@ -1,0 +1,45 @@
+.font15px {font-size: 15px;}
+.font17px {font-size: 17px;}
+.font32px {font-size: 32px;}
+
+.stroke2px {stroke-width: 2px;}
+.stroke7px {stroke-width: 7px;}
+.blckStrk {stroke: #000000;}
+.redStrk {stroke: #ed2024;}
+
+.cls-4 {fill: #c4a060;}
+.cls-6 {fill: #754c24;}
+.cls-7 {fill: #fbb03b;}
+.cls-10 {fill: #22a5f6;}
+.cls-11 {fill: #de5e30;}
+.cls-12 {fill: #ee4f1f;}
+.cls-14 {fill: #277138;}
+.cls-15 {fill: #c48d52;}
+.cls-20 {fill: #b97c31;}
+.cls-22 {fill: #4d4d4d;}
+.cls-25 {fill: #8eb427;}
+.cls-26 {fill: #808080;}
+.cls-28 {fill: #9c9c9c;}
+.cls-29 {fill: #2c782d;}
+.cls-30 {fill: #f2ba38;}
+.cls-31 {fill: #f4a812;}
+.cls-32 {fill: #20953d;}
+.cls-33 {fill: #0349fc;}
+.whiteFill {fill: #ffffff;}
+.redFill {fill: #ed2024;}
+
+.hidden{
+    display: none;
+}
+
+svg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vh;
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+}
