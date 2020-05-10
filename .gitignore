@@ -10,3 +10,5 @@ server_events.txt
 client/canvas.js
 client/client.js
 client/svg_control.js
+.DS_Store
+
