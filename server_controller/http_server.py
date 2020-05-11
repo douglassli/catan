@@ -4,44 +4,62 @@ from model.game_generator import generate_catan_game
 
 
 class MyHTTPRequestHandler(BaseHTTPRequestHandler):
-    def __init__(self, request, client_address, server):
-        super().__init__(request, client_address, server)
-
     def do_GET(self):
         self.protocol_version = "HTTP/1.1"
-        self.send_response(200)
-        if self.path == "/":
-            data = self.get_root()
-            self.send_header("Content-type", "text/html")
-            self.send_header("Content-Length", str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
-        elif self.path == "/svg_styles.css":
-            data = self.get_css()
-            self.send_header("Content-type", "text/css")
-            self.send_header("Content-Length", str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
+        get_handlers = {
+            "/": self.get_root,
+            "/svg_styles.css": self.get_css,
+            "/svg_view.js": self.get_js
+        }
+        get_handlers[self.path]()
+
+    def do_POST(self):
+        pass
 
     def do_HEAD(self):
         self.protocol_version = "HTTP/1.1"
+        head_handlers = {
+            "/": lambda: self.send_head("text/html"),
+            "/svg_styles.css": lambda: self.send_head("text/css"),
+            "/svg_view.js": lambda: self.send_head("text/javascript")
+        }
+        head_handlers[self.path]()
+
+    def send_head(self, mime_type):
         self.send_response(200)
-        if self.path == "/":
-            self.send_header("Content-type", "text/html")
-        elif self.path == "/svg_styles.css":
-            self.send_header("Content-type", "text/css")
+        self.send_header("Content-type", mime_type)
         self.end_headers()
+
+    def send_resource(self, data, mime_type):
+        self.send_response(200)
+        self.send_header("Content-type", mime_type)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def get_root(self):
         data = generate_catan_game().as_data()
         page = create_page(data).encode("utf-8")
-        return page
+        self.send_resource(page, "text/html")
 
     def get_css(self):
         with open("server_controller/resources/svg_styles.css", "r") as f:
-            return f.read().encode("utf-8")
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/css")
+
+    def get_js(self):
+        with open("server_controller/resources/svg_view.js", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/javascript")
 
 
 def start_server():
-    with HTTPServer(("127.0.0.1", 8080), MyHTTPRequestHandler) as httpd:
-        httpd.serve_forever()
+    host = "127.0.0.1"
+    port = 8080
+    try:
+        print("Serving at {}:{}".format(host, port))
+        with HTTPServer((host, port), MyHTTPRequestHandler) as httpd:
+            httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    print("\nServer closed.")
