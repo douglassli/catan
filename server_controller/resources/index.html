@@ -6,7 +6,7 @@
     <title></title>
     <script src="client.js"></script>
     <style>
-    #roomContainer {
+    #inputContainer {
         display: flex;
         flex-direction: column;
         width: 250px;
@@ -17,28 +17,34 @@
     </style>
 </head>
 <body>
-    <div id="roomContainer">
-        <div>
-            <label for="nameInput">Name:</label>
-            <input type="text" id="nameInput" name="nameInput">
+    <div id="container">
+        <div id="inputContainer">
+            <div>
+                <label for="nameInput">Name:</label>
+                <input type="text" id="nameInput" name="nameInput">
+            </div>
+
+            <button type="button" onclick="createRoom()" id="createRoomButton">Create room</button>
+
+            <div>
+                <label for="roomIdInput">Room ID:</label>
+                <input type="text" id="roomIdInput" name="roomIdInput">
+            </div>
+
+            <button type="button" onclick="joinRoom()" id="joinRoomButton">Join room</button>
+
+            <button type="button" onclick="markReady()" id="readyButton">Mark ready</button>
+
+            <button type="button" onclick="startGame()" id="startButton">Start game</button>
         </div>
 
-        <button type="button" onclick="createRoom()" id="createRoomButton">Create room</button>
-
-        <div>
-            <label for="roomIdInput">Room ID:</label>
-            <input type="text" id="roomIdInput" name="roomIdInput">
-        </div>
-
-        <button type="button" onclick="joinRoom()" id="joinRoomButton">Join room</button>
-
-        <button type="button" onclick="markReady()" id="readyButton">Mark ready</button>
-
-        <button type="button" onclick="startGame()" id="startButton">Start game</button>
+        <h2 id="roomHeader">Room ID: </h2>
+        <ul id="playerList">
+            <li id="p0Entry" hidden="true">Name: <span id="p0Name"></span>, Color: <span id="p0Color"></span>, Ready: <span id="p0Ready"></span></li>
+            <li id="p1Entry" hidden="true">Name: <span id="p1Name"></span>, Color: <span id="p1Color"></span>, Ready: <span id="p1Ready"></span></li>
+            <li id="p2Entry" hidden="true">Name: <span id="p2Name"></span>, Color: <span id="p2Color"></span>, Ready: <span id="p2Ready"></span></li>
+            <li id="p3Entry" hidden="true">Name: <span id="p3Name"></span>, Color: <span id="p3Color"></span>, Ready: <span id="p3Ready"></span></li>
+        </ul>
     </div>
-
-    <h2 id="roomHeader">Room ID: </h2>
-    <ul id="playerList">
-    </ul>
 </body>
 </html>

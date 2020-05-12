@@ -92,19 +92,19 @@ socket.addEventListener('message', function (event: MessageEvent) {
             playerId = obj.playerID;
             usercolor = obj.color;
             addRoomId();
-            appendPlayer(username, usercolor, false);
+            appendPlayer(username, usercolor, false, 0);
             break;
         case "JOINED_ROOM":
             playerId = obj.playerID;
             usercolor = obj.color;
             others = obj.otherPlayers;
             addRoomId();
-            appendPlayer(username, usercolor, false);
+            appendPlayer(username, usercolor, false, 0);
             addOtherPlayers();
             break;
         case "PLAYER_JOINED":
             others.push({name: obj.name, color: obj.color, isReady: false});
-            appendPlayer(obj.name, obj.color, false);
+            appendPlayer(obj.name, obj.color, false, others.length);
             break;
         case "READY_SUCCESS":
             // do nothing
@@ -114,12 +114,12 @@ socket.addEventListener('message', function (event: MessageEvent) {
                 var player = others[i];
                 if (player.name === obj.name) {
                     player.isReady = true;
+                    displayReady(i + 1);
                 }
             }
-            displayReady(obj.name);
             break;
         case "GAME_START":
-            document.getElementById("roomContainer").innerHTML = obj.boardHTML;
+            document.getElementById("container").innerHTML = obj.boardHTML;
         default:
         // code block
     }
@@ -132,43 +132,19 @@ function addRoomId(): void {
 function addOtherPlayers(): void {
     for (var i = 0; i < others.length; i++) {
         const plyr = others[i];
-        appendPlayer(plyr.name, plyr.color, plyr.isReady);
+        appendPlayer(plyr.name, plyr.color, plyr.isReady, i + 1);
     }
 }
 
-function appendPlayer(playerName: string, playerColor: string, playerReady: boolean): void {
-    var playerList: HTMLElement = document.getElementById('playerList');
-    var newPlayer: HTMLElement = document.createElement("li");
-
-    var nameText: Text = document.createTextNode("Name: ");
-    var colorText: Text = document.createTextNode(", Color: ");
-    var readyText: Text = document.createTextNode(", Ready: ");
-
-    var nameSpan: HTMLElement = document.createElement("span");
-    nameSpan.id = `${playerName}_NameSpan`;
-    nameSpan.innerHTML = playerName;
-
-    var colorSpan: HTMLElement = document.createElement("span");
-    colorSpan.id = `${playerName}_ColorSpan`;
-    colorSpan.innerHTML = playerColor;
-
-    var readySpan: HTMLElement = document.createElement("span");
-    readySpan.id = `${playerName}_ReadySpan`;
-    readySpan.innerHTML = playerReady.toString();
-
-    newPlayer.appendChild(nameText);
-    newPlayer.appendChild(nameSpan);
-    newPlayer.appendChild(colorText);
-    newPlayer.appendChild(colorSpan);
-    newPlayer.appendChild(readyText);
-    newPlayer.appendChild(readySpan);
-
-    playerList.appendChild(newPlayer);
+function appendPlayer(playerName: string, playerColor: string, playerReady: boolean, pNum: number): void {
+    document.getElementById(`p${pNum}Name`).innerHTML = playerName;
+    document.getElementById(`p${pNum}Color`).innerHTML = playerColor;
+    document.getElementById(`p${pNum}Ready`).innerHTML = playerReady.toString();
+    document.getElementById(`p${pNum}Entry`).hidden = false;
 }
 
-function displayReady(playerName: string): void {
-    var readySpan: HTMLElement = document.getElementById(`${playerName}_ReadySpan`);
-    readySpan.innerHTML = true.toString();
+function displayReady(pNum: number): void {
+    document.getElementById(`p${pNum}Ready`).innerHTML = true.toString();
 }
 
 function createRoom(): void {
@@ -185,27 +161,22 @@ function joinRoom(): void {
 }
 
 function markReady(): void {
-    displayReady(username);
+    displayReady(0);
     var out: Ready = {type: "READY", playerID: playerId, roomID: roomId};
     sendMessage(out);
 }
 
 function startGame(): void {
-    console.log("Start game");
     if (others.length < 3) {
-        console.log("Not enough players");
         return;
     }
     for (var i = 0; i < others.length; i++) {
         if (!others[i].isReady) {
-            console.log("Not all ready");
             return;
         }
     }
     var out: StartGame = {type: "START_GAME", playerID: playerId, roomID: roomId}
-    console.log("Sending message");
     sendMessage(out);
-    console.log("Sent Message");
 }
 
 function sendMessage(msg: OutputMessage): void {
