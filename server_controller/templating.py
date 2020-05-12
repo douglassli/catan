@@ -4,12 +4,12 @@ from model.resources import Resource
 
 def get_template_data(tiles_list):
     resource_map = {
-        Resource.STONE.name: "#stoneTile",
-        Resource.SHEEP.name: "#sheepTile",
-        Resource.BRICK.name: "#brickTile",
-        Resource.WOOD.name: "#woodTile",
-        Resource.WHEAT.name: "#wheatTile",
-        Resource.DESERT.name: "#desertTile"
+        Resource.STONE: "#stoneTile",
+        Resource.SHEEP: "#sheepTile",
+        Resource.BRICK: "#brickTile",
+        Resource.WOOD: "#woodTile",
+        Resource.WHEAT: "#wheatTile",
+        Resource.DESERT: "#desertTile"
     }
 
     template_data = {}
