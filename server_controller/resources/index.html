@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="client.js"></script>
+    <style>
+    #roomContainer {
+        display: flex;
+        flex-direction: column;
+        width: 250px;
+    }
+    button {
+        max-width: 100px;
+    }
+    </style>
+</head>
+<body>
+    <div id="roomContainer">
+        <div>
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" name="nameInput">
+        </div>
+
+        <button type="button" onclick="createRoom()" id="createRoomButton">Create room</button>
+
+        <div>
+            <label for="roomIdInput">Room ID:</label>
+            <input type="text" id="roomIdInput" name="roomIdInput">
+        </div>
+
+        <button type="button" onclick="joinRoom()" id="joinRoomButton">Join room</button>
+
+        <button type="button" onclick="markReady()" id="readyButton">Mark ready</button>
+
+        <button type="button" onclick="startGame()" id="startButton">Start game</button>
+    </div>
+
+    <h2 id="roomHeader">Room ID: </h2>
+    <ul id="playerList">
+    </ul>
+</body>
+</html>

@@ -8,6 +8,8 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.protocol_version = "HTTP/1.1"
         get_handlers = {
             "/": self.get_root,
+            "/room": self.get_room,
+            "/client.js": self.get_room_js,
             "/svg_styles.css": self.get_css,
             "/svg_view.js": self.get_js
         }
@@ -49,6 +51,16 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def get_js(self):
         with open("server_controller/resources/svg_view.js", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/javascript")
+
+    def get_room(self):
+        with open("server_controller/resources/index.html", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/html")
+
+    def get_room_js(self):
+        with open("server_controller/resources/client.js", "r") as f:
             data = f.read().encode("utf-8")
         self.send_resource(data, "text/javascript")
 

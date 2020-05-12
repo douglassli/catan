@@ -9,6 +9,7 @@ import random
 CREATE_ROOM = "CREATE_ROOM"
 JOIN_ROOM = "JOIN_ROOM"
 READY = "READY"
+START_GAME = "START_GAME"
 
 # Outgoing types
 CREATED_ROOM = "CREATED_ROOM"
@@ -17,6 +18,7 @@ PLAYER_JOINED = "PLAYER_JOINED"
 READY_SUCCESS = "READY_SUCCESS"
 PLAYER_READY = "PLAYER_READY"
 ERROR = "ERROR"
+GAME_START = "GAME_START"
 
 # Field names
 TYPE = "type"
@@ -27,6 +29,7 @@ COLOR = "color"
 OTHER_PLAYERS = "otherPlayers"
 MSG = "msg"
 IS_READY = "isReady"
+BOARD = "boardHTML"
 
 
 class CatanServer:
@@ -50,28 +53,46 @@ class CatanServer:
             return
 
         if msg_type == CREATE_ROOM:
-            if not self.is_valid_create_room(msg):
-                self.log("Invalid create room message: {}".format(msg))
-            else:
-                player = ServerPlayer(uuid4(), websocket, msg[NAME], "red")
-                room = self.create_room(player)
-                self.rooms[room.room_id] = room
-                await player.send_created_room(room.room_id)
+            await self.handle_create_room(msg, websocket)
         elif msg_type == JOIN_ROOM:
-            if not self.is_valid_join_room(msg):
-                self.log("Invalid join room message: {}".format(msg))
-            else:
-                room = self.rooms[msg[ROOM_ID]]
-                player = ServerPlayer(uuid4(), websocket, msg[NAME], room.get_next_color())
-                await room.add_player(player)
+            await self.handle_join_room(msg, websocket)
         elif msg_type == READY:
-            if not self.is_valid_ready(msg):
-                self.log("Invalid ready message: {}".format(msg))
-            else:
-                room = self.rooms[msg[ROOM_ID]]
-                await room.mark_ready(msg[PLAYER_ID])
+            await self.handle_ready(msg)
+        elif msg_type == START_GAME:
+            await self.handle_start_game(msg, websocket)
         else:
             self.log("Unknown type: {}".format(msg))
+
+    async def handle_create_room(self, msg, websocket):
+        if not self.is_valid_create_room(msg):
+            self.log("Invalid create room message: {}".format(msg))
+        else:
+            player = ServerPlayer(uuid4(), websocket, msg[NAME], "red")
+            room = self.create_room(player)
+            self.rooms[room.room_id] = room
+            await player.send_created_room(room.room_id)
+
+    async def handle_join_room(self, msg, websocket):
+        if not self.is_valid_join_room(msg):
+            self.log("Invalid join room message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            player = ServerPlayer(uuid4(), websocket, msg[NAME], room.get_next_color())
+            await room.add_player(player)
+
+    async def handle_ready(self, msg):
+        if not self.is_valid_ready(msg):
+            self.log("Invalid ready message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            await room.mark_ready(msg[PLAYER_ID])
+
+    async def handle_start_game(self, msg, websocket):
+        if not self.is_valid_start_game(msg):
+            self.log("Invalid start game message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            await room.start_game()
 
     def is_valid_create_room(self, msg):
         return msg[NAME].isalnum()
@@ -85,6 +106,11 @@ class CatanServer:
         room_id = msg[ROOM_ID]
         plyr_id = msg[PLAYER_ID]
         return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id)
+
+    def is_valid_start_game(self, msg):
+        room_id = msg[ROOM_ID]
+        plyr_id = msg[PLAYER_ID]
+        return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id) and self.rooms[room_id].is_room_ready()
 
     def generate_room_id(self):
         room_id = random.randint(100000, 999999)

@@ -1,6 +1,7 @@
 echo "Compiling typescript..."
 cd server_controller/resources
 tsc -t ES6 svg_view.ts
+tsc -t ES6 client.ts
 cd ../..
 echo "Starting server..."
-python3 start_server.py
+python3 start_http_server.py

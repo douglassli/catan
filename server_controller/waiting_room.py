@@ -1,4 +1,6 @@
 import uuid
+from model.game_generator import generate_catan_game
+from server_controller.templating import create_board
 
 
 class Room:
@@ -6,6 +8,8 @@ class Room:
         self.room_id = room_id
         self.players = {init_player.plyr_id: init_player}
         self.remaining_colors = ["blue", "green", "yellow"]
+        self.game_model = None
+        self.has_started = False
 
     def is_name_available(self, name):
         for player in self.players.values():
@@ -35,3 +39,13 @@ class Room:
         others = [other_plyr for other_plyr in self.players.values() if other_plyr.plyr_id != plyr_uuid]
         for other_plyr in others:
             await other_plyr.send_player_ready(player.name)
+
+    def is_room_ready(self):
+        return len(self.players) == 4 and all([plyr.is_ready for plyr in self.players.values()])
+
+    async def start_game(self):
+        self.game_model = generate_catan_game()
+        self.has_started = True
+        board_html = create_board(self.game_model.tiles.values())
+        for player in self.players.values():
+            await player.send_game_start(board_html)
