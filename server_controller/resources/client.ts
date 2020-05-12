@@ -84,45 +84,9 @@ socket.addEventListener('open', function (event: Event): void {
 
 // Listen for messages
 socket.addEventListener('message', function (event: MessageEvent) {
-    var obj: InputMessage = JSON.parse(event.data);
-
-    switch(obj.type) {
-        case "CREATED_ROOM":
-            roomId = obj.roomID;
-            playerId = obj.playerID;
-            usercolor = obj.color;
-            addRoomId();
-            appendPlayer(username, usercolor, false, 0);
-            break;
-        case "JOINED_ROOM":
-            playerId = obj.playerID;
-            usercolor = obj.color;
-            others = obj.otherPlayers;
-            addRoomId();
-            appendPlayer(username, usercolor, false, 0);
-            addOtherPlayers();
-            break;
-        case "PLAYER_JOINED":
-            others.push({name: obj.name, color: obj.color, isReady: false});
-            appendPlayer(obj.name, obj.color, false, others.length);
-            break;
-        case "READY_SUCCESS":
-            // do nothing
-            break;
-        case "PLAYER_READY":
-            for (var i = 0; i < others.length; i++) {
-                var player = others[i];
-                if (player.name === obj.name) {
-                    player.isReady = true;
-                    displayReady(i + 1);
-                }
-            }
-            break;
-        case "GAME_START":
-            document.getElementById("container").innerHTML = obj.boardHTML;
-        default:
-        // code block
-    }
+    var msg: InputMessage = JSON.parse(event.data);
+    const handler: MessageHandler = new MessageHandler();
+    handler[msg.type](msg);
 });
 
 function addRoomId(): void {
@@ -181,4 +145,46 @@ function startGame(): void {
 
 function sendMessage(msg: OutputMessage): void {
     socket.send(JSON.stringify(msg));
+}
+
+class MessageHandler {
+    CREATED_ROOM(msg: CreatedRoom): void {
+        roomId = msg.roomID;
+        playerId = msg.playerID;
+        usercolor = msg.color;
+        addRoomId();
+        appendPlayer(username, usercolor, false, 0);
+    }
+
+    JOINED_ROOM(msg: JoinedRoom): void {
+        playerId = msg.playerID;
+        usercolor = msg.color;
+        others = msg.otherPlayers;
+        addRoomId();
+        appendPlayer(username, usercolor, false, 0);
+        addOtherPlayers();
+    }
+
+    PLAYER_JOINED(msg: PlayerJoined): void {
+        others.push({name: msg.name, color: msg.color, isReady: false});
+        appendPlayer(msg.name, msg.color, false, others.length);
+    }
+
+    READY_SUCCESS(msg: ReadySuccess): void {
+        // Do nothing
+    }
+
+    PLAYER_READY(msg: PlayerReady): void {
+        for (var i = 0; i < others.length; i++) {
+            var player = others[i];
+            if (player.name === msg.name) {
+                player.isReady = true;
+                displayReady(i + 1);
+            }
+        }
+    }
+
+    GAME_START(msg: GameStart): void {
+        document.getElementById("container").innerHTML = msg.boardHTML;
+    }
 }
