@@ -16,7 +16,6 @@
 .cls-14 {fill: #277138;}
 .cls-15 {fill: #c48d52;}
 .cls-20 {fill: #b97c31;}
-.cls-22 {fill: #4d4d4d;}
 .cls-25 {fill: #8eb427;}
 .cls-26 {fill: #808080;}
 .cls-28 {fill: #9c9c9c;}
@@ -28,8 +27,27 @@
 .whiteFill {fill: #ffffff;}
 .redFill {fill: #ed2024;}
 
-.hidden{
+.hidden {
     display: none;
+}
+
+.active_robber {
+    stroke: #000000;
+    fill: #4d4d4d;
+}
+
+.active_path, .active_settle, .active_city {
+    stroke: #000000;
+}
+
+.selecting {
+    stroke: #ffffff;
+    fill: none;
+}
+
+.selecting:hover {
+    fill: #ffffff;
+    cursor: pointer;
 }
 
 svg {

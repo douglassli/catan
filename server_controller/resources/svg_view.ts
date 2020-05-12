@@ -1,21 +1,33 @@
-const HOST: string = "127.0.0.1:8080";
-
-function makeUrl(host, path) {
-    return `http://${host}/${path}`;
+const enum Items {
+    PATH = "path",
+    SETTLE = "settle",
+    CITY = "city",
+    ROBBER = "robber"
 }
 
-async function getRequest(url) {
-    const response = await fetch(url);
-    return response.json();
+function setSelecting(row: number, col: number, itemType: Items): void {
+    const item: HTMLElement = getItem(row, col, itemType);
+    const cl: DOMTokenList = item.classList;
+    item.onclick = function() {setActive(row, col, itemType);};
+    cl.add("selecting");
+    cl.remove("hidden", `active_${itemType}`);
 }
 
-async function postRequest(url: string, data: object) {
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    return response.json();
+function setActive(row: number, col: number, itemType: Items): void {
+    const item: HTMLElement = getItem(row, col, itemType);
+    const cl: DOMTokenList = item.classList;
+    item.onclick = null;
+    cl.add(`active_${itemType}`);
+    cl.remove("hidden", "selecting");
+}
+
+function getItem(row: number, col: number, itemType: Items): HTMLElement {
+    return document.getElementById(`${itemType}${row}_${col}`);
+}
+
+function testSelecting() {
+    setSelecting(0, 0, Items.PATH);
+    setSelecting(2, 2, Items.SETTLE);
+    setSelecting(3, 3, Items.CITY);
+    setSelecting(0, 0, Items.ROBBER);
 }
