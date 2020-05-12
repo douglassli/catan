@@ -71,23 +71,17 @@ type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame;
 
 // Create WebSocket connection.
 const socket: WebSocket = new WebSocket('ws://localhost:8765');
+socket.addEventListener('open', (event: Event) => {console.log("Connection open");});
+socket.addEventListener('message', (event: MessageEvent) => {
+    var msg: InputMessage = JSON.parse(event.data);
+    new MessageHandler()[msg.type](msg);
+});
+
 var playerId: string;
 var roomId: number;
 var username: string;
 var usercolor: string;
 var others: ModelPlayer[] = [];
-
-// Connection opened
-socket.addEventListener('open', function (event: Event): void {
-    console.log("Connection open");
-});
-
-// Listen for messages
-socket.addEventListener('message', function (event: MessageEvent) {
-    var msg: InputMessage = JSON.parse(event.data);
-    const handler: MessageHandler = new MessageHandler();
-    handler[msg.type](msg);
-});
 
 function addRoomId(): void {
     document.getElementById("roomHeader").innerHTML = `Room ID: ${roomId}`;
