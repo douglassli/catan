@@ -1,3 +1,5 @@
+// Type definitions ********************************************************************************
+
 interface ModelPlayer {
     name: string;
     color: string;
@@ -69,14 +71,82 @@ interface StartGame {
 
 type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame;
 
-// Create WebSocket connection.
+const enum Items {
+    PATH = "path",
+    SETTLE = "settle",
+    CITY = "city",
+    ROBBER = "robber"
+}
+
+const enum ItemState {
+    ACTIVE = "active",
+    SELECTING = "selecting",
+    HIDDEN = "hidden"
+}
+
+type Coord = [number, number];
+
+// Web socket initialization ***********************************************************************
+
 const socket: WebSocket = new WebSocket('ws://localhost:8765');
+
 socket.addEventListener('open', (event: Event) => {console.log("Connection open");});
+
 socket.addEventListener('message', (event: MessageEvent) => {
     var msg: InputMessage = JSON.parse(event.data);
     new MessageHandler()[msg.type](msg);
 });
 
+function sendMessage(msg: OutputMessage): void {
+    console.log("SENDING MESSAGE")
+    socket.send(JSON.stringify(msg));
+}
+
+// Message Handler Code ****************************************************************************
+
+class MessageHandler {
+    CREATED_ROOM(msg: CreatedRoom): void {
+        roomId = msg.roomID;
+        playerId = msg.playerID;
+        usercolor = msg.color;
+        addRoomId();
+        appendPlayer(username, usercolor, false, 0);
+    }
+
+    JOINED_ROOM(msg: JoinedRoom): void {
+        playerId = msg.playerID;
+        usercolor = msg.color;
+        others = msg.otherPlayers;
+        addRoomId();
+        appendPlayer(username, usercolor, false, 0);
+        addOtherPlayers();
+    }
+
+    PLAYER_JOINED(msg: PlayerJoined): void {
+        others.push({name: msg.name, color: msg.color, isReady: false});
+        appendPlayer(msg.name, msg.color, false, others.length);
+    }
+
+    READY_SUCCESS(msg: ReadySuccess): void {
+        // Do nothing
+    }
+
+    PLAYER_READY(msg: PlayerReady): void {
+        for (var i = 0; i < others.length; i++) {
+            var player = others[i];
+            if (player.name === msg.name) {
+                player.isReady = true;
+                displayReady(i + 1);
+            }
+        }
+    }
+
+    GAME_START(msg: GameStart): void {
+        document.getElementById("container").innerHTML = msg.boardHTML;
+    }
+}
+
+// Waiting Room Code *******************************************************************************
 var playerId: string;
 var roomId: number;
 var username: string;
@@ -137,48 +207,44 @@ function startGame(): void {
     sendMessage(out);
 }
 
-function sendMessage(msg: OutputMessage): void {
-    socket.send(JSON.stringify(msg));
+// SVG View code ***********************************************************************************
+
+function setState(coord: Coord, itemType: Items, state: ItemState, clickHandler: (coord: Coord, itemType: Items) => void): void {
+    const item: HTMLElement = getItem(coord, itemType);
+    const cl: DOMTokenList = item.classList;
+    item.onclick = () => {clickHandler(coord, itemType);};
+    cl.remove(`active_${itemType}`, ItemState.HIDDEN, ItemState.SELECTING);
+    cl.add(state === ItemState.ACTIVE ? `active_${itemType}` : state);
 }
 
-class MessageHandler {
-    CREATED_ROOM(msg: CreatedRoom): void {
-        roomId = msg.roomID;
-        playerId = msg.playerID;
-        usercolor = msg.color;
-        addRoomId();
-        appendPlayer(username, usercolor, false, 0);
-    }
+function getItem(coord: Coord, itemType: Items): HTMLElement {
+    return document.getElementById(`${itemType}${coord[0]}_${coord[1]}`);
+}
 
-    JOINED_ROOM(msg: JoinedRoom): void {
-        playerId = msg.playerID;
-        usercolor = msg.color;
-        others = msg.otherPlayers;
-        addRoomId();
-        appendPlayer(username, usercolor, false, 0);
-        addOtherPlayers();
+function startSettleSelection(available: Coord[]): void {
+    var handler = (coord, itemType) => {handleSettleSelect(coord, itemType, available);};
+    for (var availCoord of available) {
+        setState(availCoord, Items.SETTLE, ItemState.SELECTING, handler);
     }
+}
 
-    PLAYER_JOINED(msg: PlayerJoined): void {
-        others.push({name: msg.name, color: msg.color, isReady: false});
-        appendPlayer(msg.name, msg.color, false, others.length);
+function handleSettleSelect(coord: Coord, itemType: Items, available: Coord[]) {
+    for (var availCoord of available) {
+        setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
+    setState(coord, itemType, ItemState.ACTIVE, null);
+    // TODO: Send message to server
+}
 
-    READY_SUCCESS(msg: ReadySuccess): void {
-        // Do nothing
-    }
-
-    PLAYER_READY(msg: PlayerReady): void {
-        for (var i = 0; i < others.length; i++) {
-            var player = others[i];
-            if (player.name === msg.name) {
-                player.isReady = true;
-                displayReady(i + 1);
-            }
-        }
-    }
-
-    GAME_START(msg: GameStart): void {
-        document.getElementById("container").innerHTML = msg.boardHTML;
-    }
+function testSelecting() {
+    startSettleSelection([
+        [0,0],
+        [1,0],
+        [2,0],
+        [3,0],
+        [0,1],
+        [1,1],
+        [2,1],
+        [3,1],
+        [4,1]]);
 }
