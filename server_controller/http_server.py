@@ -10,8 +10,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             "/": self.get_root,
             "/room": self.get_room,
             "/client.js": self.get_room_js,
-            "/svg_styles.css": self.get_css,
-            "/svg_view.js": self.get_js
+            "/svg_styles.css": self.get_css
         }
         get_handlers[self.path]()
 
@@ -22,8 +21,9 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.protocol_version = "HTTP/1.1"
         head_handlers = {
             "/": lambda: self.send_head("text/html"),
-            "/svg_styles.css": lambda: self.send_head("text/css"),
-            "/svg_view.js": lambda: self.send_head("text/javascript")
+            "/room": lambda: self.send_head("text/html"),
+            "/client.js": lambda: self.send_head("text/javascript"),
+            "/svg_styles.css": lambda: self.send_head("text/css")
         }
         head_handlers[self.path]()
 
@@ -49,15 +49,9 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             data = f.read().encode("utf-8")
         self.send_resource(data, "text/css")
 
-    def get_js(self):
-        with open("server_controller/resources/svg_view.js", "r") as f:
-            data = f.read().encode("utf-8")
-        self.send_resource(data, "text/javascript")
-
     def get_room(self):
-        with open("server_controller/resources/index.html", "r") as f:
-            data = f.read().encode("utf-8")
-        self.send_resource(data, "text/html")
+        page = create_page().encode("utf-8")
+        self.send_resource(page, "text/html")
 
     def get_room_js(self):
         with open("server_controller/resources/client.js", "r") as f:

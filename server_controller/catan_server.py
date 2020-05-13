@@ -29,7 +29,9 @@ COLOR = "color"
 OTHER_PLAYERS = "otherPlayers"
 MSG = "msg"
 IS_READY = "isReady"
-BOARD = "boardHTML"
+PORTS_HTML = "portsHTML"
+TILES_HTML = "tilesHTML"
+NUMBERS_HTML = "numbersHTML"
 
 
 class CatanServer:

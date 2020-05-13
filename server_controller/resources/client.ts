@@ -37,7 +37,9 @@ interface PlayerReady {
 
 interface GameStart {
     type: "GAME_START";
-    boardHTML: string;
+    portsHTML: string;
+    tilesHTML: string;
+    numbersHTML: string;
 }
 
 interface Error {
@@ -142,7 +144,12 @@ class MessageHandler {
     }
 
     GAME_START(msg: GameStart): void {
-        document.getElementById("container").innerHTML = msg.boardHTML;
+        document.body.classList.add("oceanBg");
+        document.getElementById("container").remove();
+        document.getElementById("portTiles").innerHTML = msg.portsHTML;
+        document.getElementById("tiles").innerHTML = msg.tilesHTML;
+        document.getElementById("numbers").innerHTML = msg.numbersHTML;
+        document.getElementById("svgBoard").classList.remove("hidden");
     }
 }
 

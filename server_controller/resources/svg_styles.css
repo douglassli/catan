@@ -50,6 +50,10 @@
     cursor: pointer;
 }
 
+.oceanBg {
+    background-color: #0349fc;
+}
+
 svg {
     display: block;
     margin-left: auto;
@@ -60,5 +64,4 @@ svg {
 
 body {
     margin: 0;
-    background-color: #0349fc;
 }

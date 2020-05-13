@@ -44,6 +44,9 @@ class ServerPlayer:
         return_msg = {cs.TYPE: cs.ERROR, cs.MSG: msg}
         await self.web_socket.send(json.dumps(return_msg))
 
-    async def send_game_start(self, board_html):
-        return_msg = {cs.TYPE: cs.GAME_START, cs.BOARD: board_html}
+    async def send_game_start(self, ports_html, tiles_html, numbers_html):
+        return_msg = {cs.TYPE: cs.GAME_START,
+                      cs.PORTS_HTML: ports_html, 
+                      cs.TILES_HTML: tiles_html,
+                      cs.NUMBERS_HTML: numbers_html}
         await self.web_socket.send(json.dumps(return_msg))

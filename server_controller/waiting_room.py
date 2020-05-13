@@ -1,6 +1,6 @@
 import uuid
 from model.game_generator import generate_catan_game
-from server_controller.templating import create_board
+from server_controller.templating import fill_tiles
 
 
 class Room:
@@ -46,6 +46,6 @@ class Room:
     async def start_game(self):
         self.game_model = generate_catan_game()
         self.has_started = True
-        board_html = create_board(self.game_model.tiles.values())
+        ports_html, tiles_html, numbers_html = fill_tiles(self.game_model.tiles.values())
         for player in self.players.values():
-            await player.send_game_start(board_html)
+            await player.send_game_start(ports_html, tiles_html, numbers_html)
