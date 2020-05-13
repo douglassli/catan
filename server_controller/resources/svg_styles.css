@@ -54,10 +54,11 @@ svg {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 100vh;
     height: 100vh;
+    width: 100vh;
 }
 
 body {
     margin: 0;
+    background-color: #0349fc;
 }
