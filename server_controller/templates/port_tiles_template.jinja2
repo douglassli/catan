@@ -1,9 +1,5 @@
-<use width="26.42" height="29.26" transform="translate(741.28 368.26)" href="#wheatPort" />
-<use width="18.38" height="30.19" transform="translate(432.12 55.15)" href="#woodPort" />
-<use width="19.19" height="25.63" transform="translate(50.96 482.89)" href="#brickPort" />
-<use width="18.38" height="26.1" transform="translate(51.43 258.69)" href="#sheepPort" />
-<use width="18.38" height="26.61" transform="translate(419.75 714.05)" href="#stonePort" />
-<use width="18.38" height="28.55" transform="translate(629.18 170.34)" href="#anyPort" />
-<use width="18.38" height="28.55" transform="translate(615.78 598.58)" href="#anyPort" />
-<use width="18.38" height="28.55" transform="translate(181.65 713.9)" href="#anyPort" />
-<use width="18.38" height="28.55" transform="translate(164.83 56.07)" href="#anyPort" />
+{% for trans, pid in [('741.28 368.26', '#wheatPort'), ('432.12 55.15', '#woodPort'), ('50.96 482.89', '#brickPort'),
+                      ('51.43 258.69', '#sheepPort'), ('419.75 714.05', '#stonePort'), ('629.18 170.34', '#anyPort'),
+                      ('615.78 598.58', '#anyPort'), ('181.65 713.9', '#anyPort'), ('164.83 56.07', '#anyPort')] -%}
+<use width="18.38" height="28.55" transform="translate({{ trans }})" href="{{ pid }}" />
+{% endfor %}

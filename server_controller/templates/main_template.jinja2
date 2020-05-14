@@ -42,10 +42,9 @@
 
         <h2 id="roomHeader">Room ID: </h2>
         <ul id="playerList">
-            <li id="p0Entry" hidden="true">Name: <span id="p0Name"></span>, Color: <span id="p0Color"></span>, Ready: <span id="p0Ready"></span></li>
-            <li id="p1Entry" hidden="true">Name: <span id="p1Name"></span>, Color: <span id="p1Color"></span>, Ready: <span id="p1Ready"></span></li>
-            <li id="p2Entry" hidden="true">Name: <span id="p2Name"></span>, Color: <span id="p2Color"></span>, Ready: <span id="p2Ready"></span></li>
-            <li id="p3Entry" hidden="true">Name: <span id="p3Name"></span>, Color: <span id="p3Color"></span>, Ready: <span id="p3Ready"></span></li>
+            {% for num in ['0', '1', '2', '3'] -%}
+            <li id="p{{ num }}Entry" hidden="true">Name: <span id="p{{ num }}Name"></span>, Color: <span id="p{{ num }}Color"></span>, Ready: <span id="p{{ num }}Ready"></span></li>
+            {% endfor %}
         </ul>
     </div>
     {% endif %}
@@ -86,8 +85,8 @@
                         <path d="M31.83,96.24c-9.69,4.85-7,59.31,8.17,102.53,13.72,44.43,39.91,77.62,44.06,68.07,6.69-6.08-10.61-46.84-22.42-90.9C48.34,133,40.52,86.81,31.83,96.24Z" />
                     </symbol>
                     <symbol id="wheatPort" data-name="wheatPort" >
-                        <use width="281.8" height="540.02" transform="translate(0 13.79) rotate(-90) scale(0.05)" href="#wheat" />
-                        <text class="font15px" transform="translate(3.92 25.53)">2:1</text>
+                        <use width="281.8" height="540.02" transform="translate(0 13.79) rotate(-90) scale(0.045)" href="#wheat" />
+                        <text class="font15px" transform="translate(2 25.53)">2:1</text>
                     </symbol>
                     <symbol id="tree" data-name="tree" >
                         <path d="M306.8,346.15H182.17v96.23a10,10,0,0,1-10,10H144.65a10,10,0,0,1-10-10V346.15H10A10,10,0,0,1,3.08,329L67,267.44H29.41a10,10,0,0,1-7.76-16.31l61.78-76.08H52.36a10,10,0,0,1-8.25-15.64l106-155.06a10,10,0,0,1,16.51,0l106,155.06a10,10,0,0,1-8.26,15.64H233.39l61.78,76.08a10,10,0,0,1-7.76,16.31h-37.6L313.73,329A10,10,0,0,1,306.8,346.15Z"
@@ -313,15 +312,10 @@
                     <use width="58.44" height="100.32" transform="translate(269.05 690.59) rotate(120)" href="#portPair3" />
                     <use width="58.44" height="100.32" transform="matrix(0.5, 0.87, -0.87, 0.5, 436.16, 637.91)" href="#portPair3" />
                     <use width="58.44" height="100.32" transform="matrix(0.5, 0.87, -0.87, 0.5, 632.19, 525.15)" href="#portPair3" />
-                    <use width="63.53" height="52.37" transform="translate(608.05 163.7)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(725.29 363.24)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(411.17 49.46)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(143.12 49.99)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(30.69 250.34)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(30.57 475.66)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(161 708.48)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(399.14 705.5)" href="#boat5" />
-                    <use width="63.53" height="52.37" transform="translate(595.12 592.65)" href="#boat5" />
+                    {% for trans in ['608.05 163.7', '725.29 363.24', '411.17 49.46', '143.12 49.99',
+                    '30.69 250.34', '30.57 475.66', '161 708.48', '399.14 705.5', '595.12 592.65'] -%}
+                    <use width="63.53" height="52.37" transform="translate({{ trans }})" href="#boat5" />
+                    {% endfor %}
                 </g>
                 <g id="portTiles">
                 {% if includeGame %}
@@ -329,25 +323,12 @@
                 {% endif %}
                 </g>
                 <g id="bgTiles">
-                    <use width="135.1" height="152.91" transform="translate(435.45 552.11)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(307.2 552.11)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(178.96 552.11)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(499.57 441.04)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(371.32 441.04)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(243.08 441.04)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(114.84 441.04)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(50.72 329.98)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(178.96 329.98)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(307.2 329.98)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(435.45 329.98)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(563.69 329.98)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(114.84 218.92)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(243.08 218.92)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(371.32 218.92)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(499.57 218.92)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(435.45 107.86)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(307.2 107.86)" href="#bgTile" />
-                    <use width="135.1" height="152.91" transform="translate(178.96 107.86)" href="#bgTile" />
+                    {% for trans in ['435.45 552.11', '307.2 552.11', '178.96 552.11', '499.57 441.04', '371.32 441.04',
+                                     '243.08 441.04', '114.84 441.04', '50.72 329.98', '178.96 329.98', '307.2 329.98',
+                                     '435.45 329.98', '563.69 329.98', '114.84 218.92', '243.08 218.92', '371.32 218.92',
+                                     '499.57 218.92', '435.45 107.86', '307.2 107.86', '178.96 107.86'] -%}
+                    <use width="135.1" height="152.91" transform="translate({{ trans }})" href="#bgTile" />
+                    {% endfor %}
                 </g>
                 <g id="tiles">
                 {% if includeGame %}
@@ -360,211 +341,73 @@
                 {% endif %}
                 </g>
                 <g id="paths">
-                    <use id="path0_0" class="hidden" width="10.5" height="74.62" transform="translate(244.13 105.58) rotate(60)" href="#path" />
-                    <use id="path0_1" class="hidden" width="10.5" height="74.62" transform="translate(243.64 114.67) rotate(-60)" href="#path" />
-                    <use id="path0_2" class="hidden" width="10.5" height="74.62" transform="translate(372.38 105.58) rotate(60)" href="#path" />
-                    <use id="path0_3" class="hidden" width="10.5" height="74.62" transform="translate(371.88 114.67) rotate(-60)" href="#path" />
-                    <use id="path0_4" class="hidden" width="10.5" height="74.62" transform="translate(500.62 105.58) rotate(60)" href="#path" />
-                    <use id="path0_5" class="hidden" width="10.5" height="74.62" transform="translate(500.12 114.67) rotate(-60)" href="#path" />
-                    <use id="path1_0" class="hidden" width="10.5" height="74.62" transform="translate(177.14 147)" href="#path" />
-                    <use id="path1_1" class="hidden" width="10.5" height="74.62" transform="translate(305.38 147)" href="#path" />
-                    <use id="path1_2" class="hidden" width="10.5" height="74.62" transform="translate(433.62 147)" href="#path" />
-                    <use id="path1_3" class="hidden" width="10.5" height="74.62" transform="translate(561.87 147)" href="#path" />
-                    <use id="path2_0" class="hidden" width="10.5" height="74.62" transform="translate(180.01 216.64) rotate(60)" href="#path" />
-                    <use id="path2_1" class="hidden" width="10.5" height="74.62" transform="translate(179.51 225.74) rotate(-60)" href="#path" />
-                    <use id="path2_2" class="hidden" width="10.5" height="74.62" transform="translate(308.25 216.64) rotate(60)" href="#path" />
-                    <use id="path2_3" class="hidden" width="10.5" height="74.62" transform="translate(307.75 225.74) rotate(-60)" href="#path" />
-                    <use id="path2_4" class="hidden" width="10.5" height="74.62" transform="translate(436.5 216.64) rotate(60)" href="#path" />
-                    <use id="path2_5" class="hidden" width="10.5" height="74.62" transform="translate(435.99 225.73) rotate(-60)" href="#path" />
-                    <use id="path2_6" class="hidden" width="10.5" height="74.62" transform="translate(564.74 216.64) rotate(60)" href="#path" />
-                    <use id="path2_7" class="hidden" width="10.5" height="74.62" transform="translate(564.24 225.73) rotate(-60)" href="#path" />
-                    <use id="path3_0" class="hidden" width="10.5" height="74.62" transform="translate(113.01 258.07)" href="#path" />
-                    <use id="path3_1" class="hidden" width="10.5" height="74.62" transform="translate(241.25 258.07)" href="#path" />
-                    <use id="path3_2" class="hidden" width="10.5" height="74.62" transform="translate(369.5 258.07)" href="#path" />
-                    <use id="path3_3" class="hidden" width="10.5" height="74.62" transform="translate(497.74 258.06)" href="#path" />
-                    <use id="path3_4" class="hidden" width="10.5" height="74.62" transform="translate(625.99 258.06)" href="#path" />
-                    <use id="path4_0" class="hidden" width="10.5" height="74.62" transform="translate(115.89 327.7) rotate(60)" href="#path" />
-                    <use id="path4_1" class="hidden" width="10.5" height="74.62" transform="translate(115.39 336.8) rotate(-60)" href="#path" />
-                    <use id="path4_2" class="hidden" width="10.5" height="74.62" transform="translate(244.13 327.7) rotate(60)" href="#path" />
-                    <use id="path4_3" class="hidden" width="10.5" height="74.62" transform="translate(243.63 336.8) rotate(-60)" href="#path" />
-                    <use id="path4_4" class="hidden" width="10.5" height="74.62" transform="translate(372.38 327.7) rotate(60)" href="#path" />
-                    <use id="path4_5" class="hidden" width="10.5" height="74.62" transform="translate(371.88 336.8) rotate(-60)" href="#path" />
-                    <use id="path4_6" class="hidden" width="10.5" height="74.62" transform="translate(500.62 327.7) rotate(60)" href="#path" />
-                    <use id="path4_7" class="hidden" width="10.5" height="74.62" transform="translate(500.12 336.8) rotate(-60)" href="#path" />
-                    <use id="path4_8" class="hidden" width="10.5" height="74.62" transform="translate(628.86 327.7) rotate(60)" href="#path" />
-                    <use id="path4_9" class="hidden" width="10.5" height="74.62" transform="translate(628.37 336.8) rotate(-60)" href="#path" />
-                    <use id="path5_0" class="hidden" width="10.5" height="74.62" transform="translate(48.89 369.13)" href="#path" />
-                    <use id="path5_1" class="hidden" width="10.5" height="74.62" transform="translate(177.14 369.13)" href="#path" />
-                    <use id="path5_2" class="hidden" width="10.5" height="74.62" transform="translate(305.38 369.13)" href="#path" />
-                    <use id="path5_3" class="hidden" width="10.5" height="74.62" transform="translate(433.62 369.13)" href="#path" />
-                    <use id="path5_4" class="hidden" width="10.5" height="74.62" transform="translate(561.87 369.13)" href="#path" />
-                    <use id="path5_5" class="hidden" width="10.5" height="74.62" transform="translate(690.11 369.13)" href="#path" />
-                    <use id="path6_0" class="hidden" width="10.5" height="74.62" transform="translate(51.27 447.86) rotate(-60)" href="#path" />
-                    <use id="path6_1" class="hidden" width="10.5" height="74.62" transform="translate(180.01 438.77) rotate(60)" href="#path" />
-                    <use id="path6_2" class="hidden" width="10.5" height="74.62" transform="translate(179.51 447.86) rotate(-60)" href="#path" />
-                    <use id="path6_3" class="hidden" width="10.5" height="74.62" transform="translate(308.25 438.76) rotate(60)" href="#path" />
-                    <use id="path6_4" class="hidden" width="10.5" height="74.62" transform="translate(307.75 447.86) rotate(-60)" href="#path" />
-                    <use id="path6_5" class="hidden" width="10.5" height="74.62" transform="translate(436.5 438.76) rotate(60)" href="#path" />
-                    <use id="path6_6" class="hidden" width="10.5" height="74.62" transform="translate(436 447.86) rotate(-60)" href="#path" />
-                    <use id="path6_7" class="hidden" width="10.5" height="74.62" transform="translate(564.74 438.77) rotate(60)" href="#path" />
-                    <use id="path6_8" class="hidden" width="10.5" height="74.62" transform="translate(564.24 447.86) rotate(-60)" href="#path" />
-                    <use id="path6_9" class="hidden" width="10.5" height="74.62" transform="translate(692.99 438.77) rotate(60)" href="#path" />
-                    <use id="path7_0" class="hidden" width="10.5" height="74.62" transform="translate(113.02 480.19)" href="#path" />
-                    <use id="path7_1" class="hidden" width="10.5" height="74.62" transform="translate(241.26 480.19)" href="#path" />
-                    <use id="path7_2" class="hidden" width="10.5" height="74.62" transform="translate(369.5 480.19)" href="#path" />
-                    <use id="path7_3" class="hidden" width="10.5" height="74.62" transform="translate(497.74 480.19)" href="#path" />
-                    <use id="path7_4" class="hidden" width="10.5" height="74.62" transform="translate(625.99 480.19)" href="#path" />
-                    <use id="path8_0" class="hidden" width="10.5" height="74.62" transform="translate(115.39 558.92) rotate(-60)" href="#path" />
-                    <use id="path8_1" class="hidden" width="10.5" height="74.62" transform="translate(244.13 549.83) rotate(60)" href="#path" />
-                    <use id="path8_2" class="hidden" width="10.5" height="74.62" transform="translate(243.63 558.92) rotate(-60)" href="#path" />
-                    <use id="path8_3" class="hidden" width="10.5" height="74.62" transform="translate(372.37 549.83) rotate(60)" href="#path" />
-                    <use id="path8_4" class="hidden" width="10.5" height="74.62" transform="translate(371.87 558.92) rotate(-60)" href="#path" />
-                    <use id="path8_5" class="hidden" width="10.5" height="74.62" transform="translate(500.62 549.83) rotate(60)" href="#path" />
-                    <use id="path8_6" class="hidden" width="10.5" height="74.62" transform="translate(500.12 558.92) rotate(-60)" href="#path" />
-                    <use id="path8_7" class="hidden" width="10.5" height="74.62" transform="translate(628.86 549.83) rotate(60)" href="#path" />
-                    <use id="path9_0" class="hidden" width="10.5" height="74.62" transform="translate(177.14 591.25)" href="#path" />
-                    <use id="path9_1" class="hidden" width="10.5" height="74.62" transform="translate(305.37 591.25)" href="#path" />
-                    <use id="path9_2" class="hidden" width="10.5" height="74.62" transform="translate(433.62 591.25)" href="#path" />
-                    <use id="path9_3" class="hidden" width="10.5" height="74.62" transform="translate(561.87 591.25)" href="#path" />
-                    <use id="path10_0" class="hidden" width="10.5" height="74.62" transform="translate(179.51 669.99) rotate(-60)" href="#path" />
-                    <use id="path10_1" class="hidden" width="10.5" height="74.62" transform="translate(308.26 660.89) rotate(60)" href="#path" />
-                    <use id="path10_2" class="hidden" width="10.5" height="74.62" transform="translate(307.76 669.99) rotate(-60)" href="#path" />
-                    <use id="path10_3" class="hidden" width="10.5" height="74.62" transform="translate(436.5 660.89) rotate(60)" href="#path" />
-                    <use id="path10_4" class="hidden" width="10.5" height="74.62" transform="translate(436 669.99) rotate(-60)" href="#path" />
-                    <use id="path10_5" class="hidden" width="10.5" height="74.62" transform="translate(564.74 660.89) rotate(60)" href="#path" />
+                    {% for crd, trans, rotate in [('0_0', '244.13 105.58', '60'), ('0_1', '243.64 114.67', '-60'), ('0_2', '372.38 105.58', '60'),
+                    ('0_3', '371.88 114.67', '-60'), ('0_4', '500.62 105.58', '60'), ('0_5', '500.12 114.67', '-60'), ('1_0', '177.14 147', '0'),
+                    ('1_1', '305.38 147', '0'), ('1_2', '433.62 147', '0'), ('1_3', '561.87 147', '0'), ('2_0', '180.01 216.64', '60'),
+                    ('2_1', '179.51 225.74', '-60'), ('2_2', '308.25 216.64', '60'), ('2_3', '307.75 225.74', '-60'), ('2_4', '436.5 216.64', '60'),
+                    ('2_5', '435.99 225.73', '-60'), ('2_6', '564.74 216.64', '60'), ('2_7', '564.24 225.73', '-60'), ('3_0', '113.01 258.07', '0'),
+                    ('3_1', '241.25 258.07', '0'), ('3_2', '369.5 258.07', '0'), ('3_3', '497.74 258.06', '0'), ('3_4', '625.99 258.06', '0'),
+                    ('4_0', '115.89 327.7', '60'), ('4_1', '115.39 336.8', '-60'), ('4_2', '244.13 327.7', '60'), ('4_3', '243.63 336.8', '-60'),
+                    ('4_4', '372.38 327.7', '60'), ('4_5', '371.88 336.8', '-60'), ('4_6', '500.62 327.7', '60'), ('4_7', '500.12 336.8', '-60'),
+                    ('4_8', '628.86 327.7', '60'), ('4_9', '628.37 336.8', '-60'), ('5_0', '48.89 369.13', '0'), ('5_1', '177.14 369.13', '0'),
+                    ('5_2', '305.38 369.13', '0'), ('5_3', '433.62 369.13', '0'), ('5_4', '561.87 369.13', '0'), ('5_5', '690.11 369.13', '0'),
+                    ('6_0', '51.27 447.86', '-60'), ('6_1', '180.01 438.77', '60'), ('6_2', '179.51 447.86', '-60'), ('6_3', '308.25 438.76', '60'),
+                    ('6_4', '307.75 447.86', '-60'), ('6_5', '436.5 438.76', '60'), ('6_6', '436 447.86', '-60'), ('6_7', '564.74 438.77', '60'),
+                    ('6_8', '564.24 447.86', '-60'), ('6_9', '692.99 438.77', '60'), ('7_0', '113.02 480.19', '0'), ('7_1', '241.26 480.19', '0'),
+                    ('7_2', '369.5 480.19', '0'), ('7_3', '497.74 480.19', '0'), ('7_4', '625.99 480.19', '0'), ('8_0', '115.39 558.92', '-60'),
+                    ('8_1', '244.13 549.83', '60'), ('8_2', '243.63 558.92', '-60'), ('8_3', '372.37 549.83', '60'), ('8_4', '371.87 558.92', '-60'),
+                    ('8_5', '500.62 549.83', '60'), ('8_6', '500.12 558.92', '-60'), ('8_7', '628.86 549.83', '60'), ('9_0', '177.14 591.25', '0'),
+                    ('9_1', '305.37 591.25', '0'), ('9_2', '433.62 591.25', '0'), ('9_3', '561.87 591.25', '0'), ('10_0', '179.51 669.99', '-60'),
+                    ('10_1', '308.26 660.89', '60'), ('10_2', '307.76 669.99', '-60'), ('10_3', '436.5 660.89', '60'), ('10_4', '436 669.99', '-60'),
+                    ('10_5', '564.74 660.89', '60')] -%}
+                    <use id="path{{ crd }}" class="hidden" width="10.5" height="74.62" transform="translate({{ trans }}) rotate({{ rotate }})" href="#path" />
+                    {% endfor %}
                 </g>
                 <g id="settles">
-                    <use id="settle0_0" class="hidden" width="26" height="27.38" transform="translate(169.62 131.61)" href="#settle" />
-                    <use id="settle0_1" class="hidden" width="26" height="27.38" transform="translate(233.51 94.15)" href="#settle" />
-                    <use id="settle0_2" class="hidden" width="26" height="27.38" transform="translate(297.63 131.61)" href="#settle" />
-                    <use id="settle0_3" class="hidden" width="26" height="27.38" transform="translate(361.75 94.59)" href="#settle" />
-                    <use id="settle0_4" class="hidden" width="26" height="27.38" transform="translate(426.62 131.17)" href="#settle" />
-                    <use id="settle0_5" class="hidden" width="26" height="27.38" transform="translate(490.36 94.59)" href="#settle" />
-                    <use id="settle0_6" class="hidden" width="26" height="27.38" transform="translate(554.12 130.42)" href="#settle" />
-                    <use id="settle1_0" class="hidden" width="26" height="27.38" transform="translate(105.03 241.21)" href="#settle" />
-                    <use id="settle1_1" class="hidden" width="26" height="27.38" transform="translate(169.62 204.94)" href="#settle" />
-                    <use id="settle1_2" class="hidden" width="26" height="27.38" transform="translate(233.51 242.39)" href="#settle" />
-                    <use id="settle1_3" class="hidden" width="26" height="27.38" transform="translate(297.63 204.94)" href="#settle" />
-                    <use id="settle1_4" class="hidden" width="26" height="27.38" transform="translate(361.75 242.39)" href="#settle" />
-                    <use id="settle1_5" class="hidden" width="26" height="27.38" transform="translate(426.62 204.94)" href="#settle" />
-                    <use id="settle1_6" class="hidden" width="26" height="27.38" transform="translate(490.36 242.19)" href="#settle" />
-                    <use id="settle1_7" class="hidden" width="26" height="27.38" transform="translate(554.12 204.94)" href="#settle" />
-                    <use id="settle1_8" class="hidden" width="26" height="27.38" transform="translate(618.24 241.21)" href="#settle" />
-                    <use id="settle2_0" class="hidden" width="26" height="27.38" transform="translate(41.8 353.08)" href="#settle" />
-                    <use id="settle2_1" class="hidden" width="26" height="27.38" transform="translate(105.03 315.62)" href="#settle" />
-                    <use id="settle2_2" class="hidden" width="26" height="27.38" transform="translate(169.62 353.08)" href="#settle" />
-                    <use id="settle2_3" class="hidden" width="26" height="27.38" transform="translate(233.51 315.62)" href="#settle" />
-                    <use id="settle2_4" class="hidden" width="26" height="27.38" transform="translate(297.63 353.08)" href="#settle" />
-                    <use id="settle2_5" class="hidden" width="26" height="27.38" transform="translate(361.75 315.62)" href="#settle" />
-                    <use id="settle2_6" class="hidden" width="26" height="27.38" transform="translate(426.62 352.63)" href="#settle" />
-                    <use id="settle2_7" class="hidden" width="26" height="27.38" transform="translate(490.36 315.62)" href="#settle" />
-                    <use id="settle2_8" class="hidden" width="26" height="27.38" transform="translate(554.12 353.08)" href="#settle" />
-                    <use id="settle2_9" class="hidden" width="26" height="27.38" transform="translate(618.24 315.62)" href="#settle" />
-                    <use id="settle2_10" class="hidden" width="26" height="27.38" transform="translate(683.02 353.08)" href="#settle" />
-                    <use id="settle3_0" class="hidden" width="26" height="27.38" transform="translate(41.8 427.66)" href="#settle" />
-                    <use id="settle3_1" class="hidden" width="26" height="27.38" transform="translate(105.03 461.94)" href="#settle" />
-                    <use id="settle3_2" class="hidden" width="26" height="27.38" transform="translate(169.62 427.66)" href="#settle" />
-                    <use id="settle3_3" class="hidden" width="26" height="27.38" transform="translate(233.51 461.94)" href="#settle" />
-                    <use id="settle3_4" class="hidden" width="26" height="27.38" transform="translate(297.63 427.66)" href="#settle" />
-                    <use id="settle3_5" class="hidden" width="26" height="27.38" transform="translate(361.75 461.94)" href="#settle" />
-                    <use id="settle3_6" class="hidden" width="26" height="27.38" transform="translate(426.62 427.66)" href="#settle" />
-                    <use id="settle3_7" class="hidden" width="26" height="27.38" transform="translate(490.36 461.94)" href="#settle" />
-                    <use id="settle3_8" class="hidden" width="26" height="27.38" transform="translate(554.12 427.66)" href="#settle" />
-                    <use id="settle3_9" class="hidden" width="26" height="27.38" transform="translate(618.24 461.94)" href="#settle" />
-                    <use id="settle3_10" class="hidden" width="26" height="27.38" transform="translate(682.69 427.66)" href="#settle" />
-                    <use id="settle4_0" class="hidden" width="26" height="27.38" transform="translate(105.03 538.23)" href="#settle" />
-                    <use id="settle4_1" class="hidden" width="26" height="27.38" transform="translate(169.62 574.09)" href="#settle" />
-                    <use id="settle4_2" class="hidden" width="26" height="27.38" transform="translate(233.51 538.23)" href="#settle" />
-                    <use id="settle4_3" class="hidden" width="26" height="27.38" transform="translate(297.63 574.09)" href="#settle" />
-                    <use id="settle4_4" class="hidden" width="26" height="27.38" transform="translate(361.75 538.23)" href="#settle" />
-                    <use id="settle4_5" class="hidden" width="26" height="27.38" transform="translate(426.62 574.09)" href="#settle" />
-                    <use id="settle4_6" class="hidden" width="26" height="27.38" transform="translate(490.36 538.23)" href="#settle" />
-                    <use id="settle4_7" class="hidden" width="26" height="27.38" transform="translate(554.12 574.09)" href="#settle" />
-                    <use id="settle4_8" class="hidden" width="26" height="27.38" transform="translate(618.24 538.23)" href="#settle" />
-                    <use id="settle5_0" class="hidden" width="26" height="27.38" transform="translate(169.62 649.69)" href="#settle" />
-                    <use id="settle5_1" class="hidden" width="26" height="27.38" transform="translate(233.51 685.56)" href="#settle" />
-                    <use id="settle5_2" class="hidden" width="26" height="27.38" transform="translate(297.63 649.69)" href="#settle" />
-                    <use id="settle5_3" class="hidden" width="26" height="27.38" transform="translate(361.75 685.56)" href="#settle" />
-                    <use id="settle5_4" class="hidden" width="26" height="27.38" transform="translate(426.62 649.69)" href="#settle" />
-                    <use id="settle5_5" class="hidden" width="26" height="27.38" transform="translate(490.36 685.56)" href="#settle" />
-                    <use id="settle5_6" class="hidden" width="26" height="27.38" transform="translate(554.12 649.69)" href="#settle" />
+                    {% for crd, trans in [('0_0', '169.62 131.61'), ('0_1', '233.51 94.15'), ('0_2', '297.63 131.61'),
+                    ('0_3', '361.75 94.59'), ('0_4', '426.62 131.17'), ('0_5', '490.36 94.59'), ('0_6', '554.12 130.42'),
+                    ('1_0', '105.03 241.21'), ('1_1', '169.62 204.94'), ('1_2', '233.51 242.39'), ('1_3', '297.63 204.94'),
+                    ('1_4', '361.75 242.39'), ('1_5', '426.62 204.94'), ('1_6', '490.36 242.19'), ('1_7', '554.12 204.94'),
+                    ('1_8', '618.24 241.21'), ('2_0', '41.8 353.08'), ('2_1', '105.03 315.62'), ('2_2', '169.62 353.08'),
+                    ('2_3', '233.51 315.62'), ('2_4', '297.63 353.08'), ('2_5', '361.75 315.62'), ('2_6', '426.62 352.63'),
+                    ('2_7', '490.36 315.62'), ('2_8', '554.12 353.08'), ('2_9', '618.24 315.62'), ('2_10', '683.02 353.08'),
+                    ('3_0', '41.8 427.66'), ('3_1', '105.03 461.94'), ('3_2', '169.62 427.66'), ('3_3', '233.51 461.94'),
+                    ('3_4', '297.63 427.66'), ('3_5', '361.75 461.94'), ('3_6', '426.62 427.66'), ('3_7', '490.36 461.94'),
+                    ('3_8', '554.12 427.66'), ('3_9', '618.24 461.94'), ('3_10', '682.69 427.66'), ('4_0', '105.03 538.23'),
+                    ('4_1', '169.62 574.09'), ('4_2', '233.51 538.23'), ('4_3', '297.63 574.09'), ('4_4', '361.75 538.23'),
+                    ('4_5', '426.62 574.09'), ('4_6', '490.36 538.23'), ('4_7', '554.12 574.09'), ('4_8', '618.24 538.23'),
+                    ('5_0', '169.62 649.69'), ('5_1', '233.51 685.56'), ('5_2', '297.63 649.69'), ('5_3', '361.75 685.56'),
+                    ('5_4', '426.62 649.69'), ('5_5', '490.36 685.56'), ('5_6', '554.12 649.69')]
+                     -%}
+                    <use id="settle{{ crd }}" class="hidden" width="26" height="27.38" transform="translate({{ trans }})" href="#settle" />
+                    {% endfor %}
                 </g>
                 <g id="cities">
-                    <use id="city0_0" class="hidden" width="35.52" height="35.84" transform="translate(164.86 126.15)" href="#city-2" />
-                    <use id="city0_1" class="hidden" width="35.52" height="35.84" transform="translate(228.75 88.69)" href="#city-2" />
-                    <use id="city0_2" class="hidden" width="35.52" height="35.84" transform="translate(292.87 126.15)" href="#city-2" />
-                    <use id="city0_3" class="hidden" width="35.52" height="35.84" transform="translate(356.99 89.13)" href="#city-2" />
-                    <use id="city0_4" class="hidden" width="35.52" height="35.84" transform="translate(421.87 125.71)" href="#city-2" />
-                    <use id="city0_5" class="hidden" width="35.52" height="35.84" transform="translate(485.6 89.13)" href="#city-2" />
-                    <use id="city0_6" class="hidden" width="35.52" height="35.84" transform="translate(549.36 124.96)" href="#city-2" />
-                    <use id="city1_0" class="hidden" width="35.52" height="35.84" transform="translate(100.27 235.75)" href="#city-2" />
-                    <use id="city1_1" class="hidden" width="35.52" height="35.84" transform="translate(164.86 199.48)" href="#city-2" />
-                    <use id="city1_2" class="hidden" width="35.52" height="35.84" transform="translate(228.75 236.93)" href="#city-2" />
-                    <use id="city1_3" class="hidden" width="35.52" height="35.84" transform="translate(292.87 199.48)" href="#city-2" />
-                    <use id="city1_4" class="hidden" width="35.52" height="35.84" transform="translate(356.99 236.93)" href="#city-2" />
-                    <use id="city1_5" class="hidden" width="35.52" height="35.84" transform="translate(421.87 199.48)" href="#city-2" />
-                    <use id="city1_6" class="hidden" width="35.52" height="35.84" transform="translate(485.6 236.72)" href="#city-2" />
-                    <use id="city1_7" class="hidden" width="35.52" height="35.84" transform="translate(549.36 199.48)" href="#city-2" />
-                    <use id="city1_8" class="hidden" width="35.52" height="35.84" transform="translate(613.48 235.75)" href="#city-2" />
-                    <use id="city2_0" class="hidden" width="35.52" height="35.84" transform="translate(37.04 347.61)" href="#city-2" />
-                    <use id="city2_1" class="hidden" width="35.52" height="35.84" transform="translate(100.27 310.16)" href="#city-2" />
-                    <use id="city2_2" class="hidden" width="35.52" height="35.84" transform="translate(164.86 347.61)" href="#city-2" />
-                    <use id="city2_3" class="hidden" width="35.52" height="35.84" transform="translate(228.75 310.16)" href="#city-2" />
-                    <use id="city2_4" class="hidden" width="35.52" height="35.84" transform="translate(292.87 347.61)" href="#city-2" />
-                    <use id="city2_5" class="hidden" width="35.52" height="35.84" transform="translate(356.99 310.16)" href="#city-2" />
-                    <use id="city2_6" class="hidden" width="35.52" height="35.84" transform="translate(421.87 347.17)" href="#city-2" />
-                    <use id="city2_7" class="hidden" width="35.52" height="35.84" transform="translate(485.6 310.16)" href="#city-2" />
-                    <use id="city2_8" class="hidden" width="35.52" height="35.84" transform="translate(549.36 347.61)" href="#city-2" />
-                    <use id="city2_9" class="hidden" width="35.52" height="35.84" transform="translate(613.48 310.16)" href="#city-2" />
-                    <use id="city2_10" class="hidden" width="35.52" height="35.84" transform="translate(678.26 347.61)" href="#city-2" />
-                    <use id="city3_0" class="hidden" width="35.52" height="35.84" transform="translate(37.04 422.2)" href="#city-2" />
-                    <use id="city3_1" class="hidden" width="35.52" height="35.84" transform="translate(100.27 456.48)" href="#city-2" />
-                    <use id="city3_2" class="hidden" width="35.52" height="35.84" transform="translate(164.86 422.2)" href="#city-2" />
-                    <use id="city3_3" class="hidden" width="35.52" height="35.84" transform="translate(228.75 456.48)" href="#city-2" />
-                    <use id="city3_4" class="hidden" width="35.52" height="35.84" transform="translate(292.87 422.2)" href="#city-2" />
-                    <use id="city3_5" class="hidden" width="35.52" height="35.84" transform="translate(356.99 456.48)" href="#city-2" />
-                    <use id="city3_6" class="hidden" width="35.52" height="35.84" transform="translate(421.87 422.2)" href="#city-2" />
-                    <use id="city3_7" class="hidden" width="35.52" height="35.84" transform="translate(485.6 456.48)" href="#city-2" />
-                    <use id="city3_8" class="hidden" width="35.52" height="35.84" transform="translate(549.36 422.2)" href="#city-2" />
-                    <use id="city3_9" class="hidden" width="35.52" height="35.84" transform="translate(613.48 456.48)" href="#city-2" />
-                    <use id="city3_10" class="hidden" width="35.52" height="35.84" transform="translate(677.93 422.2)" href="#city-2" />
-                    <use id="city4_0" class="hidden" width="35.52" height="35.84" transform="translate(100.27 532.76)" href="#city-2" />
-                    <use id="city4_1" class="hidden" width="35.52" height="35.84" transform="translate(164.86 568.63)" href="#city-2" />
-                    <use id="city4_2" class="hidden" width="35.52" height="35.84" transform="translate(228.75 532.76)" href="#city-2" />
-                    <use id="city4_3" class="hidden" width="35.52" height="35.84" transform="translate(292.87 568.63)" href="#city-2" />
-                    <use id="city4_4" class="hidden" width="35.52" height="35.84" transform="translate(356.99 532.76)" href="#city-2" />
-                    <use id="city4_5" class="hidden" width="35.52" height="35.84" transform="translate(421.87 568.63)" href="#city-2" />
-                    <use id="city4_6" class="hidden" width="35.52" height="35.84" transform="translate(485.6 532.76)" href="#city-2" />
-                    <use id="city4_7" class="hidden" width="35.52" height="35.84" transform="translate(549.36 568.63)" href="#city-2" />
-                    <use id="city4_8" class="hidden" width="35.52" height="35.84" transform="translate(613.48 532.76)" href="#city-2" />
-                    <use id="city5_0" class="hidden" width="35.52" height="35.84" transform="translate(164.86 644.23)" href="#city-2" />
-                    <use id="city5_1" class="hidden" width="35.52" height="35.84" transform="translate(228.75 680.09)" href="#city-2" />
-                    <use id="city5_2" class="hidden" width="35.52" height="35.84" transform="translate(292.87 644.23)" href="#city-2" />
-                    <use id="city5_3" class="hidden" width="35.52" height="35.84" transform="translate(356.99 680.09)" href="#city-2" />
-                    <use id="city5_4" class="hidden" width="35.52" height="35.84" transform="translate(421.87 644.23)" href="#city-2" />
-                    <use id="city5_5" class="hidden" width="35.52" height="35.84" transform="translate(485.6 680.09)" href="#city-2" />
-                    <use id="city5_6" class="hidden" width="35.52" height="35.84" transform="translate(549.36 644.23)" href="#city-2" />
+                    {% for crd, trans in [('0_0', '164.86 126.15'), ('0_1', '228.75 88.69'), ('0_2', '292.87 126.15'),
+                    ('0_3', '356.99 89.13'), ('0_4', '421.87 125.71'), ('0_5', '485.6 89.13'), ('0_6', '549.36 124.96'),
+                    ('1_0', '100.27 235.75'), ('1_1', '164.86 199.48'), ('1_2', '228.75 236.93'), ('1_3', '292.87 199.48'),
+                    ('1_4', '356.99 236.93'), ('1_5', '421.87 199.48'), ('1_6', '485.6 236.72'), ('1_7', '549.36 199.48'),
+                    ('1_8', '613.48 235.75'), ('2_0', '37.04 347.61'), ('2_1', '100.27 310.16'), ('2_2', '164.86 347.61'),
+                    ('2_3', '228.75 310.16'), ('2_4', '292.87 347.61'), ('2_5', '356.99 310.16'), ('2_6', '421.87 347.17'),
+                    ('2_7', '485.6 310.16'), ('2_8', '549.36 347.61'), ('2_9', '613.48 310.16'), ('2_10', '678.26 347.61'),
+                    ('3_0', '37.04 422.2'), ('3_1', '100.27 456.48'), ('3_2', '164.86 422.2'), ('3_3', '228.75 456.48'),
+                    ('3_4', '292.87 422.2'), ('3_5', '356.99 456.48'), ('3_6', '421.87 422.2'), ('3_7', '485.6 456.48'),
+                    ('3_8', '549.36 422.2'), ('3_9', '613.48 456.48'), ('3_10', '677.93 422.2'), ('4_0', '100.27 532.76'),
+                    ('4_1', '164.86 568.63'), ('4_2', '228.75 532.76'), ('4_3', '292.87 568.63'), ('4_4', '356.99 532.76'),
+                    ('4_5', '421.87 568.63'), ('4_6', '485.6 532.76'), ('4_7', '549.36 568.63'), ('4_8', '613.48 532.76'),
+                    ('5_0', '164.86 644.23'), ('5_1', '228.75 680.09'), ('5_2', '292.87 644.23'), ('5_3', '356.99 680.09'),
+                    ('5_4', '421.87 644.23'), ('5_5', '485.6 680.09'), ('5_6', '549.36 644.23')] -%}
+                    <use id="city{{ crd }}" class="hidden" width="35.52" height="35.84" transform="translate({{ trans }})" href="#city-2" />
+                    {% endfor %}
                 </g>
                 <g id="robbers">
-                    <use id="robber0_0" class="hidden" width="25.19" height="54.45" transform="translate(194.91 160.52)" href="#robber" />
-                    <use id="robber0_1" class="hidden" width="25.19" height="54.45" transform="translate(323.16 160.52)" href="#robber" />
-                    <use id="robber0_2" class="hidden" width="25.19" height="54.45" transform="translate(451.76 160.42)" href="#robber" />
-                    <use id="robber1_0" class="hidden" width="25.19" height="54.45" transform="translate(131.03 271.39)" href="#robber" />
-                    <use id="robber1_1" class="hidden" width="25.19" height="54.45" transform="translate(259.04 271.39)" href="#robber" />
-                    <use id="robber1_2" class="hidden" width="25.19" height="54.45" transform="translate(388.03 271.39)" href="#robber" />
-                    <use id="robber1_3" class="hidden" width="25.19" height="54.45" transform="translate(515.52 271.39)" href="#robber" />
-                    <use id="robber2_0" class="hidden" width="25.19" height="54.45" transform="translate(66.44 379.35)" href="#robber" />
-                    <use id="robber2_1" class="hidden" width="25.19" height="54.45" transform="translate(194.91 381.35)" href="#robber" />
-                    <use id="robber2_2" class="hidden" width="25.19" height="54.45" transform="translate(323.16 381.35)" href="#robber" />
-                    <use id="robber2_3" class="hidden" width="25.19" height="54.45" transform="translate(451.76 381.35)" href="#robber" />
-                    <use id="robber2_4" class="hidden" width="25.19" height="54.45" transform="translate(580.63 381.35)" href="#robber" />
-                    <use id="robber3_0" class="hidden" width="25.19" height="54.45" transform="translate(131.03 492.76)" href="#robber" />
-                    <use id="robber3_1" class="hidden" width="25.19" height="54.45" transform="translate(259.04 492.96)" href="#robber" />
-                    <use id="robber3_2" class="hidden" width="25.19" height="54.45" transform="translate(388.03 492.96)" href="#robber" />
-                    <use id="robber3_3" class="hidden" width="25.19" height="54.45" transform="translate(515.52 492.96)" href="#robber" />
-                    <use id="robber4_0" class="hidden" width="25.19" height="54.45" transform="translate(194.91 604.22)" href="#robber" />
-                    <use id="robber4_1" class="hidden" width="25.19" height="54.45" transform="translate(323.16 604.22)" href="#robber" />
-                    <use id="robber4_2" class="hidden" width="25.19" height="54.45" transform="translate(451.76 604.22)" href="#robber" />
+                    {% for crd, trans in [('0_0', '194.91 160.52'), ('0_1', '323.16 160.52'), ('0_2', '451.76 160.42'),
+                    ('1_0', '131.03 271.39'), ('1_1', '259.04 271.39'), ('1_2', '388.03 271.39'), ('1_3', '515.52 271.39'),
+                    ('2_0', '66.44 379.35'), ('2_1', '194.91 381.35'), ('2_2', '323.16 381.35'), ('2_3', '451.76 381.35'),
+                    ('2_4', '580.63 381.35'), ('3_0', '131.03 492.76'), ('3_1', '259.04 492.96'), ('3_2', '388.03 492.96'),
+                    ('3_3', '515.52 492.96'), ('4_0', '194.91 604.22'), ('4_1', '323.16 604.22'), ('4_2', '451.76 604.22')] -%}
+                    <use id="robber{{ crd }}" class="hidden" width="25.19" height="54.45" transform="translate({{ trans }})" href="#robber" />
+                    {% endfor %}
                 </g>
             </svg>
             <div id="buttonBar" {{ 'class="hidden"' if not includeGame }}>

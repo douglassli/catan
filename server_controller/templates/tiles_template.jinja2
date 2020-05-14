@@ -1,19 +1,9 @@
-<use width="121.24" height="136.91" transform="translate(185.89 115.86)" href="{{ tile0_0 }}" />
-<use width="121.24" height="136.91" transform="translate(314.13 115.86)" href="{{ tile0_1 }}" />
-<use width="121.24" height="136.91" transform="translate(442.37 115.86)" href="{{ tile0_2 }}" />
-<use width="121.24" height="136.91" transform="translate(121.77 226.92)" href="{{ tile1_0 }}" />
-<use width="121.24" height="136.91" transform="translate(250.01 226.92)" href="{{ tile1_1 }}" />
-<use width="121.24" height="136.91" transform="translate(378.25 226.92)" href="{{ tile1_2 }}" />
-<use width="121.24" height="136.91" transform="translate(506.5 226.92)" href="{{ tile1_3 }}" />
-<use width="121.24" height="136.91" transform="translate(57.64 337.98)" href="{{ tile2_0 }}" />
-<use width="121.24" height="136.91" transform="translate(185.89 337.98)" href="{{ tile2_1 }}" />
-<use width="121.24" height="136.91" transform="translate(314.13 337.98)" href="{{ tile2_2 }}" />
-<use width="121.24" height="136.91" transform="translate(442.37 337.98)" href="{{ tile2_3 }}" />
-<use width="121.24" height="136.91" transform="translate(570.62 337.98)" href="{{ tile2_4 }}" />
-<use width="121.24" height="136.91" transform="translate(121.77 449.04)" href="{{ tile3_0 }}" />
-<use width="121.24" height="136.91" transform="translate(250.01 449.04)" href="{{ tile3_1 }}" />
-<use width="121.24" height="136.91" transform="translate(378.25 449.04)" href="{{ tile3_2 }}" />
-<use width="121.24" height="136.91" transform="translate(506.5 449.04)" href="{{ tile3_3 }}" />
-<use width="121.24" height="136.91" transform="translate(185.89 560.11)" href="{{ tile4_0 }}" />
-<use width="121.24" height="136.91" transform="translate(314.13 560.11)" href="{{ tile4_1 }}" />
-<use width="121.24" height="136.91" transform="translate(442.37 560.11)" href="{{ tile4_2 }}" />
+{% for trans, tid in [('185.89 115.86', tile0_0), ('314.13 115.86', tile0_1), ('442.37 115.86', tile0_2),
+                      ('121.77 226.92', tile1_0), ('250.01 226.92', tile1_1), ('378.25 226.92', tile1_2),
+                      ('506.5 226.92', tile1_3), ('57.64 337.98', tile2_0), ('185.89 337.98', tile2_1),
+                      ('314.13 337.98', tile2_2), ('442.37 337.98', tile2_3), ('570.62 337.98', tile2_4),
+                      ('121.77 449.04', tile3_0), ('250.01 449.04', tile3_1), ('378.25 449.04', tile3_2),
+                      ('506.5 449.04', tile3_3), ('185.89 560.11', tile4_0), ('314.13 560.11', tile4_1),
+                      ('442.37 560.11', tile4_2)] -%}
+<use width="121.24" height="136.91" transform="translate({{ trans }})" href="{{ tid }}" />
+{% endfor %}
