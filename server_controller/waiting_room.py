@@ -1,13 +1,14 @@
 import uuid
 from model.game_generator import generate_catan_game
 from server_controller.templating import fill_tiles
+from server_controller.server_player import ServerPlayer
 
 
 class Room:
-    def __init__(self, room_id, init_player):
+    def __init__(self, room_id):
         self.room_id = room_id
-        self.players = {init_player.plyr_id: init_player}
-        self.remaining_colors = ["blue", "green", "yellow"]
+        self.players = {}
+        self.remaining_colors = ["red", "blue", "green", "yellow"]
         self.game_model = None
         self.has_started = False
 
@@ -24,13 +25,17 @@ class Room:
     def get_next_color(self):
         return self.remaining_colors.pop()
 
-    async def add_player(self, new_player):
+    async def add_player(self, websocket, name):
+        new_player = ServerPlayer(uuid.uuid4(), websocket, name, self.get_next_color())
         self.players[new_player.plyr_id] = new_player
         other_players = [plyr for plyr in self.players.values() if plyr.plyr_id != new_player.plyr_id]
-        await new_player.send_joined_room([other_plyr.get_summary_data() for other_plyr in other_players])
 
-        for other_plyr in other_players:
-            await other_plyr.send_player_joined(new_player.name, new_player.color)
+        if len(self.players) == 1:
+            await new_player.send_created_room(self.room_id)
+        else:
+            await new_player.send_joined_room([other_plyr.get_summary_data() for other_plyr in other_players])
+            for other_plyr in other_players:
+                await other_plyr.send_player_joined(new_player.name, new_player.color)
 
     def has_plyr_id(self, plyr_id):
         return uuid.UUID(plyr_id) in self.players
