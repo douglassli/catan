@@ -44,6 +44,11 @@ interface GameStart {
     startingPlayer: string;
 }
 
+interface AvailSettles {
+    type: "AVAIL_SETTLES";
+    avail: Coord[];
+}
+
 interface SettleBuilt {
     type: "SETTLE_BUILT";
     row: number;
@@ -85,6 +90,12 @@ interface StartGame {
     roomID: number;
 }
 
+interface SettleSelectStart {
+    type: "START_SETTLE_SELECT";
+    playerID: string;
+    roomID: number;
+}
+
 interface ChoseSettle {
     type: "CHOSE_SETTLE";
     playerID: string;
@@ -99,7 +110,7 @@ interface EndTurn {
     roomID: number;
 }
 
-type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | ChoseSettle | EndTurn;
+type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | ChoseSettle | EndTurn;
 
 const enum Items {
     PATH = "path",
@@ -181,6 +192,10 @@ class MessageHandler {
         document.getElementById("svgBoard").classList.remove("hidden");
         document.getElementById("buttonBar").classList.remove("hidden");
         this.TURN_START({type: "TURN_START", name: msg.startingPlayer});
+    }
+
+    AVAIL_SETTLES(msg: AvailSettles): void {
+        displaySettleSelection(msg.avail);
     }
 
     SETTLE_BUILT(msg: SettleBuilt): void {
@@ -282,7 +297,12 @@ function setButtonsDisabled(isDisabled: boolean): void {
     }
 }
 
-function startSettleSelection(available: Coord[]): void {
+function startSettleSelection() {
+    var out: SettleSelectStart = {type: "START_SETTLE_SELECT", playerID: playerId, roomID: roomId};
+    sendMessage(out);
+}
+
+function displaySettleSelection(available: Coord[]): void {
     var handler = (coord, itemType) => {handleSettleSelect(coord, itemType, available);};
     for (var availCoord of available) {
         setState(availCoord, Items.SETTLE, ItemState.SELECTING, handler);

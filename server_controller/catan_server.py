@@ -10,6 +10,7 @@ CREATE_ROOM = "CREATE_ROOM"
 JOIN_ROOM = "JOIN_ROOM"
 READY = "READY"
 START_GAME = "START_GAME"
+START_SETTLE_SELECT = "START_SETTLE_SELECT"
 CHOSE_SETTLE = "CHOSE_SETTLE"
 END_TURN = "END_TURN"
 
@@ -21,6 +22,7 @@ READY_SUCCESS = "READY_SUCCESS"
 PLAYER_READY = "PLAYER_READY"
 ERROR = "ERROR"
 GAME_START = "GAME_START"
+AVAIL_SETTLES = "AVAIL_SETTLES"
 SETTLE_BUILT = "SETTLE_BUILT"
 TURN_START = "TURN_START"
 
@@ -40,6 +42,7 @@ PLAYERS_HTML = "playersHTML"
 ROW = "row"
 COL = "col"
 STARTING_PLAYER = "startingPlayer"
+AVAIL = "avail"
 
 
 class CatanServer:
@@ -70,6 +73,8 @@ class CatanServer:
             await self.handle_ready(msg)
         elif msg_type == START_GAME:
             await self.handle_start_game(msg, websocket)
+        elif msg_type == START_SETTLE_SELECT:
+            await self.handle_start_settle_select(msg, websocket)
         elif msg_type == CHOSE_SETTLE:
             await self.handle_settle_built(msg, websocket)
         elif msg_type == END_TURN:
@@ -108,6 +113,13 @@ class CatanServer:
             room = self.rooms[msg[ROOM_ID]]
             await room.start_game()
 
+    async def handle_start_settle_select(self, msg, websocket):
+        if not self.is_valid_start_settle_select(msg):
+            self.log("Invalid settle built message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            await room.start_settle_select(msg[PLAYER_ID])
+
     async def handle_settle_built(self, msg, websocket):
         if not self.is_valid_settle_built(msg):
             self.log("Invalid settle built message: {}".format(msg))
@@ -140,6 +152,9 @@ class CatanServer:
 
     def is_valid_start_game(self, msg):
         return self.check_ids(msg) and self.rooms[msg[ROOM_ID]].is_room_ready()
+
+    def is_valid_start_settle_select(self, msg):
+        return self.check_ids(msg)
 
     def is_valid_settle_built(self, msg):
         return self.check_ids(msg)

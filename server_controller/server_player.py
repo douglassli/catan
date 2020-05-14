@@ -53,6 +53,10 @@ class ServerPlayer:
                       cs.STARTING_PLAYER: starting_name}
         await self.web_socket.send(json.dumps(return_msg))
 
+    async def display_settle_options(self, avail):
+        return_msg = {cs.TYPE: cs.AVAIL_SETTLES, cs.AVAIL: avail}
+        await self.web_socket.send(json.dumps(return_msg))
+
     async def send_settle_built(self, row, col, color):
         return_msg = {cs.TYPE: cs.SETTLE_BUILT, cs.ROW: row, cs.COL: col, cs.COLOR: color}
         await self.web_socket.send(json.dumps(return_msg))

@@ -56,15 +56,20 @@ class Room:
         for player in self.players.values():
             await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
 
+    async def start_settle_select(self, plyr_id):
+        cur_player = self.game_model.cur_player()
+        can_build = self.game_model.can_build_settle()
+        avail = self.game_model.get_available_settle_nodes(self.is_setup)
+        if cur_player.pid == uuid.UUID(plyr_id) and (can_build or self.is_setup) and len(avail) > 0:
+            await self.players[uuid.UUID(plyr_id)].display_settle_options(avail)
+
     async def settle_built(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()
         can_build = self.game_model.can_build_settle()
-        # if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
-        color = self.game_model.build_settle((row, col), self.is_setup)
-        for player in self.players.values():
-            await player.send_settle_built(row, col, color)
-        # else:
-        #     raise ValueError("PLAYER CANT BUILD")
+        if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
+            color = self.game_model.build_settle((row, col), self.is_setup)
+            for player in self.players.values():
+                await player.send_settle_built(row, col, color)
 
     async def end_turn(self, plyr_id):
         self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)
