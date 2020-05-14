@@ -12,7 +12,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             "/client.js": self.get_room_js,
             "/svg_styles.css": self.get_css
         }
-        get_handlers[self.path]()
+        get_handlers.get(self.path, self.not_found)()
 
     def do_POST(self):
         pass
@@ -25,7 +25,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             "/client.js": lambda: self.send_head("text/javascript"),
             "/svg_styles.css": lambda: self.send_head("text/css")
         }
-        head_handlers[self.path]()
+        head_handlers.get(self.path, self.not_found)()
 
     def send_head(self, mime_type):
         self.send_response(200)
@@ -38,6 +38,9 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
+
+    def not_found(self):
+        self.send_error(404)
 
     def get_root(self):
         player_data = [{"pid": 1, "name": "a", "color": "red"},

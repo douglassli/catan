@@ -196,12 +196,7 @@ class MessageHandler {
         }
         document.getElementById(`${msg.name}Table`).classList.add("active");
 
-        if (msg.name === username) {
-            const buttons: HTMLCollection = document.getElementById("buttonBar").children;
-            for (var button of buttons) {
-                button.disabled = false;
-            }
-        }
+        setButtonsDisabled(msg.name !== username);
     }
 }
 
@@ -280,6 +275,13 @@ function getItem(coord: Coord, itemType: Items): HTMLElement {
     return document.getElementById(`${itemType}${coord[0]}_${coord[1]}`);
 }
 
+function setButtonsDisabled(isDisabled: boolean): void {
+    const buttons: HTMLCollection = document.getElementById("buttonBar").children;
+    for (var button of buttons) {
+        button.disabled = isDisabled;
+    }
+}
+
 function startSettleSelection(available: Coord[]): void {
     var handler = (coord, itemType) => {handleSettleSelect(coord, itemType, available);};
     for (var availCoord of available) {
@@ -299,9 +301,6 @@ function handleSettleSelect(coord: Coord, itemType: Items, available: Coord[]) {
 
 function endTurn() {
     var out: EndTurn = {type: "END_TURN", roomID: roomId, playerID: playerId};
-    const buttons: HTMLCollection = document.getElementById("buttonBar").children;
-    for (var button of buttons) {
-        button.disabled = true;
-    }
+    setButtonsDisabled(true);
     sendMessage(out);
 }
