@@ -1,0 +1,27 @@
+{% for plyr in players %}
+<table id="{{ plyr.name }}Table">
+    <thead>
+        <tr>
+            <th colspan="2" style="background-color:{{ plyr.color }};">{{ plyr.name }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>VPs: <span id="{{ plyr.name }}VPSpan">0</span></td>
+            <td>Roads: <span id="{{ plyr.name }}RoadSpan">15</span></td>
+        </tr>
+        <tr>
+            <td>Hand Size: <span id="{{ plyr.name }}HandSpan">0</span></td>
+            <td>Settles: <span id="{{ plyr.name }}SettleSpan">5</span></td>
+        </tr>
+        <tr>
+            <td>Dev Cards: <span id="{{ plyr.name }}DevSpan">0</span></td>
+            <td>Cities: <span id="{{ plyr.name }}CitySpan">4</span></td>
+        </tr>
+        <tr>
+            <td>Road Length: <span id="{{ plyr.name }}RoadLengthSpan">0</span></td>
+            <td>Army Size: <span id="{{ plyr.name }}ArmySpan">0</span></td>
+        </tr>
+    </tbody>
+</table>
+{% endfor %}

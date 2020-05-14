@@ -40,13 +40,27 @@ interface GameStart {
     portsHTML: string;
     tilesHTML: string;
     numbersHTML: string;
+    playersHTML: string;
+    startingPlayer: string;
+}
+
+interface SettleBuilt {
+    type: "SETTLE_BUILT";
+    row: number;
+    col: number;
+    color: string;
+}
+
+interface TurnStart {
+    type: "TURN_START";
+    name: string;
 }
 
 interface Error {
     type: "ERROR";
 }
 
-type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady | GameStart | Error;
+type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady | GameStart | SettleBuilt | TurnStart | Error;
 
 interface CreateRoom {
     type: "CREATE_ROOM";
@@ -71,7 +85,21 @@ interface StartGame {
     roomID: number;
 }
 
-type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame;
+interface ChoseSettle {
+    type: "CHOSE_SETTLE";
+    playerID: string;
+    roomID: number;
+    row: number;
+    col: number;
+}
+
+interface EndTurn {
+    type: "END_TURN";
+    playerID: string;
+    roomID: number;
+}
+
+type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | ChoseSettle | EndTurn;
 
 const enum Items {
     PATH = "path",
@@ -149,7 +177,31 @@ class MessageHandler {
         document.getElementById("portTiles").innerHTML = msg.portsHTML;
         document.getElementById("tiles").innerHTML = msg.tilesHTML;
         document.getElementById("numbers").innerHTML = msg.numbersHTML;
+        document.getElementById("playerBar").innerHTML = msg.playersHTML;
         document.getElementById("svgBoard").classList.remove("hidden");
+        document.getElementById("buttonBar").classList.remove("hidden");
+        this.TURN_START({type: "TURN_START", name: msg.startingPlayer});
+    }
+
+    SETTLE_BUILT(msg: SettleBuilt): void {
+        console.log("RECIEVED SETTLE_BUILT");
+        setState([msg.row, msg.col], Items.SETTLE, ItemState.ACTIVE, null);
+        getItem([msg.row, msg.col], Items.SETTLE).style.fill = msg.color;
+    }
+
+    TURN_START(msg: TurnStart): void {
+        document.getElementById(`${username}Table`).classList.remove("active");
+        for (var plyr of others) {
+            document.getElementById(`${plyr.name}Table`).classList.remove("active");
+        }
+        document.getElementById(`${msg.name}Table`).classList.add("active");
+
+        if (msg.name === username) {
+            const buttons: HTMLCollection = document.getElementById("buttonBar").children;
+            for (var button of buttons) {
+                button.disabled = false;
+            }
+        }
     }
 }
 
@@ -240,18 +292,16 @@ function handleSettleSelect(coord: Coord, itemType: Items, available: Coord[]) {
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
-    // TODO: Send message to server
+    var out: ChoseSettle = {type: "CHOSE_SETTLE", roomID: roomId, playerID: playerId,
+                            row: coord[0], col: coord[1]}
+    sendMessage(out);
 }
 
-function testSelecting() {
-    startSettleSelection([
-        [0,0],
-        [1,0],
-        [2,0],
-        [3,0],
-        [0,1],
-        [1,1],
-        [2,1],
-        [3,1],
-        [4,1]]);
+function endTurn() {
+    var out: EndTurn = {type: "END_TURN", roomID: roomId, playerID: playerId};
+    const buttons: HTMLCollection = document.getElementById("buttonBar").children;
+    for (var button of buttons) {
+        button.disabled = true;
+    }
+    sendMessage(out);
 }

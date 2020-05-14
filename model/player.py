@@ -3,8 +3,10 @@ from model.development_cards import DevCards
 
 
 class PlayerState:
-    def __init__(self, color, resources, dev_cards, num_roads, num_settles, num_cities,
+    def __init__(self, pid, name, color, resources, dev_cards, num_roads, num_settles, num_cities,
                  army_size, largest_army, longest_road, victory_points):
+        self.pid = pid
+        self.name = name
         self.color = color
         self.resources = resources
         self.dev_cards = dev_cards
@@ -17,7 +19,7 @@ class PlayerState:
         self.victory_points = victory_points
 
     def get_state(self):
-        return PlayerState(self.color,
+        return PlayerState(self.pid, self.name, self.color,
                            {res: num for res, num in self.resources.items()},
                            {dc: num for dc, num in self.dev_cards.items()},
                            self.num_roads, self.num_settles, self.num_cities, self.army_size,
@@ -25,10 +27,10 @@ class PlayerState:
 
 
 class Player(PlayerState):
-    def __init__(self, color, num_roads=15, num_settles=5, num_cities=4):
+    def __init__(self, pid, name, color, num_roads=15, num_settles=5, num_cities=4):
         resources = {res: 0 for res in Resource if res != Resource.DESERT}
         dev_cards = {dc: 0 for dc in DevCards}
-        super().__init__(color, resources, dev_cards, num_roads, num_settles, num_cities, 0, False, False, 0)
+        super().__init__(pid, name, color, resources, dev_cards, num_roads, num_settles, num_cities, 0, False, False, 0)
 
     def can_build_settle(self):
         has_settles = self.num_settles >= 1

@@ -10,6 +10,8 @@ CREATE_ROOM = "CREATE_ROOM"
 JOIN_ROOM = "JOIN_ROOM"
 READY = "READY"
 START_GAME = "START_GAME"
+CHOSE_SETTLE = "CHOSE_SETTLE"
+END_TURN = "END_TURN"
 
 # Outgoing types
 CREATED_ROOM = "CREATED_ROOM"
@@ -19,6 +21,8 @@ READY_SUCCESS = "READY_SUCCESS"
 PLAYER_READY = "PLAYER_READY"
 ERROR = "ERROR"
 GAME_START = "GAME_START"
+SETTLE_BUILT = "SETTLE_BUILT"
+TURN_START = "TURN_START"
 
 # Field names
 TYPE = "type"
@@ -32,6 +36,10 @@ IS_READY = "isReady"
 PORTS_HTML = "portsHTML"
 TILES_HTML = "tilesHTML"
 NUMBERS_HTML = "numbersHTML"
+PLAYERS_HTML = "playersHTML"
+ROW = "row"
+COL = "col"
+STARTING_PLAYER = "startingPlayer"
 
 
 class CatanServer:
@@ -62,6 +70,10 @@ class CatanServer:
             await self.handle_ready(msg)
         elif msg_type == START_GAME:
             await self.handle_start_game(msg, websocket)
+        elif msg_type == CHOSE_SETTLE:
+            await self.handle_settle_built(msg, websocket)
+        elif msg_type == END_TURN:
+            await self.handle_end_turn(msg, websocket)
         else:
             self.log("Unknown type: {}".format(msg))
 
@@ -96,6 +108,25 @@ class CatanServer:
             room = self.rooms[msg[ROOM_ID]]
             await room.start_game()
 
+    async def handle_settle_built(self, msg, websocket):
+        if not self.is_valid_settle_built(msg):
+            self.log("Invalid settle built message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            await room.settle_built(msg[PLAYER_ID], msg[ROW], msg[COL])
+
+    async def handle_end_turn(self, msg, websocket):
+        if not self.is_valid_end_turn(msg):
+            self.log("Invalid end turn message: {}".format(msg))
+        else:
+            room = self.rooms[msg[ROOM_ID]]
+            await room.end_turn(msg[PLAYER_ID])
+
+    def check_ids(self, msg):
+        room_id = msg[ROOM_ID]
+        plyr_id = msg[PLAYER_ID]
+        return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id)
+
     def is_valid_create_room(self, msg):
         return msg[NAME].isalnum()
 
@@ -105,14 +136,16 @@ class CatanServer:
         return room_id in self.rooms and name.isalnum() and self.rooms[room_id].is_name_available(name)
 
     def is_valid_ready(self, msg):
-        room_id = msg[ROOM_ID]
-        plyr_id = msg[PLAYER_ID]
-        return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id)
+        return self.check_ids(msg)
 
     def is_valid_start_game(self, msg):
-        room_id = msg[ROOM_ID]
-        plyr_id = msg[PLAYER_ID]
-        return room_id in self.rooms and self.rooms[room_id].has_plyr_id(plyr_id) and self.rooms[room_id].is_room_ready()
+        return self.check_ids(msg) and self.rooms[msg[ROOM_ID]].is_room_ready()
+
+    def is_valid_settle_built(self, msg):
+        return self.check_ids(msg)
+
+    def is_valid_end_turn(self, msg):
+        return self.check_ids(msg)
 
     def generate_room_id(self):
         room_id = random.randint(100000, 999999)

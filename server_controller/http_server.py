@@ -40,8 +40,12 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def get_root(self):
-        game = generate_catan_game({1: "red", 2: "green", 3: "blue", 4: "yellow"})
-        page = create_page(game.tiles.values()).encode("utf-8")
+        player_data = [{"pid": 1, "name": "a", "color": "red"},
+                       {"pid": 2, "name": "b", "color": "green"},
+                       {"pid": 3, "name": "c", "color": "blue"},
+                       {"pid": 4, "name": "d", "color": "yellow"}]
+        game = generate_catan_game(player_data)
+        page = create_page(game).encode("utf-8")
         self.send_resource(page, "text/html")
 
     def get_css(self):

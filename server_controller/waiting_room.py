@@ -11,6 +11,10 @@ class Room:
         self.game_model = None
         self.has_started = False
 
+        self.is_setup = True
+        self.is_reverse = False
+        self.is_selecting = True
+
     def is_name_available(self, name):
         for player in self.players.values():
             if name == player.name:
@@ -44,8 +48,26 @@ class Room:
         return len(self.players) == 4 and all([plyr.is_ready for plyr in self.players.values()])
 
     async def start_game(self):
-        self.game_model = generate_catan_game()
+        player_data = [{"pid": plyr.plyr_id, "name": plyr.name, "color": plyr.color} for plyr in self.players.values()]
+        self.game_model = generate_catan_game(player_data)
         self.has_started = True
-        ports_html, tiles_html, numbers_html = fill_tiles(self.game_model.tiles.values())
+        ports_html, tiles_html, numbers_html, player_bar = fill_tiles(self.game_model)
+        starting_name = player_data[0]["name"]
         for player in self.players.values():
-            await player.send_game_start(ports_html, tiles_html, numbers_html)
+            await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
+
+    async def settle_built(self, plyr_id, row, col):
+        cur_player = self.game_model.cur_player()
+        can_build = self.game_model.can_build_settle()
+        # if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
+        color = self.game_model.build_settle((row, col), self.is_setup)
+        for player in self.players.values():
+            await player.send_settle_built(row, col, color)
+        # else:
+        #     raise ValueError("PLAYER CANT BUILD")
+
+    async def end_turn(self, plyr_id):
+        self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)
+        cur_plyr = self.game_model.cur_player()
+        for player in self.players.values():
+            await player.send_start_turn(cur_plyr.name)

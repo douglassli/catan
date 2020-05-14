@@ -54,12 +54,27 @@
     background-color: #0349fc;
 }
 
+#controlDiv {
+    display: flex;
+    justify-content: center;
+}
+
+#buttonBar {
+    width: 90vh;
+}
+
+table {
+    border: 1px solid black;
+    margin: 5px;
+    background-color: #999999;
+}
+.active {
+    background-color: #ffffff;
+}
+
 svg {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 100vh;
-    width: 100vh;
+    height: 90vh;
+    width: 90vh;
 }
 
 body {

@@ -8,8 +8,8 @@ from model.catan_game import CatanGame
 from model.player import Player
 
 
-def generate_catan_game(num_rows=5, num_players=4):
-    players = generate_players(num_players)
+def generate_catan_game(plyrs, num_rows=5):
+    players = generate_players(plyrs)
 
     dev_cards = [DevCards.KNIGHT] * 14 + [DevCards.VP] * 5 + [DevCards.ROAD, DevCards.MONOPOLY, DevCards.PLENTY] * 2
     shuffle(dev_cards)
@@ -32,9 +32,8 @@ def generate_catan_game(num_rows=5, num_players=4):
     return CatanGame(players, 19, dev_cards, tiles, nodes, paths)
 
 
-def generate_players(num_players):
-    colors = ["red", "green", "blue", "yellow"]
-    return [Player(colors[i]) for i in range(num_players)]
+def generate_players(players):
+    return [Player(plyr["pid"], plyr["name"], plyr["color"]) for plyr in players]
 
 
 def generate_tiles(num_rows):
