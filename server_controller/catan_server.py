@@ -1,7 +1,7 @@
-import json
 from server_controller.waiting_room import Room
-import random
 import server_controller.input_messages as im
+import random
+import json
 
 
 # Incoming types
@@ -10,7 +10,9 @@ JOIN_ROOM = "JOIN_ROOM"
 READY = "READY"
 START_GAME = "START_GAME"
 START_SETTLE_SELECT = "START_SETTLE_SELECT"
+START_ROAD_SELECT = "START_ROAD_SELECT"
 CHOSE_SETTLE = "CHOSE_SETTLE"
+CHOSE_ROAD = "CHOSE_ROAD"
 END_TURN = "END_TURN"
 
 # Outgoing types
@@ -22,7 +24,9 @@ PLAYER_READY = "PLAYER_READY"
 ERROR = "ERROR"
 GAME_START = "GAME_START"
 AVAIL_SETTLES = "AVAIL_SETTLES"
+AVAIL_ROADS = "AVAIL_ROADS"
 SETTLE_BUILT = "SETTLE_BUILT"
+ROAD_BUILT = "ROAD_BUILT"
 TURN_START = "TURN_START"
 
 # Field names
@@ -61,7 +65,9 @@ class CatanServer:
             READY: im.ReadyMsg,
             START_GAME: im.StartGameMsg,
             START_SETTLE_SELECT: im.StartSettleSelectMsg,
+            START_ROAD_SELECT: im.StartRoadSelectMsg,
             CHOSE_SETTLE: im.SettleBuiltMsg,
+            CHOSE_ROAD: im.RoadBuiltMsg,
             END_TURN: im.EndTurnMsg
         }
         if TYPE not in msg or msg[TYPE] not in constructor_map:

@@ -49,8 +49,20 @@ interface AvailSettles {
     avail: Coord[];
 }
 
+interface AvailRoads {
+    type: "AVAIL_ROADS";
+    avail: Coord[];
+}
+
 interface SettleBuilt {
     type: "SETTLE_BUILT";
+    row: number;
+    col: number;
+    color: string;
+}
+
+interface RoadBuilt {
+    type: "ROAD_BUILT";
     row: number;
     col: number;
     color: string;
@@ -65,7 +77,9 @@ interface Error {
     type: "ERROR";
 }
 
-type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady | GameStart | SettleBuilt | TurnStart | Error;
+type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady
+                    | GameStart | AvailRoads | AvailSettles | RoadBuilt | SettleBuilt
+                    | TurnStart | Error;
 
 interface CreateRoom {
     type: "CREATE_ROOM";
@@ -96,8 +110,22 @@ interface SettleSelectStart {
     roomID: number;
 }
 
+interface RoadSelectStart {
+    type: "START_ROAD_SELECT";
+    playerID: string;
+    roomID: number;
+}
+
 interface ChoseSettle {
     type: "CHOSE_SETTLE";
+    playerID: string;
+    roomID: number;
+    row: number;
+    col: number;
+}
+
+interface ChoseRoad {
+    type: "CHOSE_ROAD";
     playerID: string;
     roomID: number;
     row: number;
@@ -110,7 +138,7 @@ interface EndTurn {
     roomID: number;
 }
 
-type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | ChoseSettle | EndTurn;
+type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart | ChoseSettle | ChoseRoad | EndTurn;
 
 const enum Items {
     PATH = "path",
@@ -198,10 +226,18 @@ class MessageHandler {
         displaySettleSelection(msg.avail);
     }
 
+    AVAIL_ROADS(msg: AvailRoads): void {
+        displayRoadSelection(msg.avail);
+    }
+
     SETTLE_BUILT(msg: SettleBuilt): void {
-        console.log("RECIEVED SETTLE_BUILT");
         setState([msg.row, msg.col], Items.SETTLE, ItemState.ACTIVE, null);
         getItem([msg.row, msg.col], Items.SETTLE).style.fill = msg.color;
+    }
+
+    ROAD_BUILT(msg: RoadBuilt): void {
+        setState([msg.row, msg.col], Items.PATH, ItemState.ACTIVE, null);
+        getItem([msg.row, msg.col], Items.PATH).style.fill = msg.color;
     }
 
     TURN_START(msg: TurnStart): void {
@@ -302,10 +338,22 @@ function startSettleSelection() {
     sendMessage(out);
 }
 
+function startRoadSelection() {
+    var out: RoadSelectStart = {type: "START_ROAD_SELECT", playerID: playerId, roomID: roomId};
+    sendMessage(out);
+}
+
 function displaySettleSelection(available: Coord[]): void {
     var handler = (coord, itemType) => {handleSettleSelect(coord, itemType, available);};
     for (var availCoord of available) {
         setState(availCoord, Items.SETTLE, ItemState.SELECTING, handler);
+    }
+}
+
+function displayRoadSelection(available: Coord[]): void {
+    var handler = (coord, itemType) => {handleRoadSelect(coord, itemType, available);};
+    for (var availCoord of available) {
+        setState(availCoord, Items.PATH, ItemState.SELECTING, handler);
     }
 }
 
@@ -315,6 +363,16 @@ function handleSettleSelect(coord: Coord, itemType: Items, available: Coord[]) {
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
     var out: ChoseSettle = {type: "CHOSE_SETTLE", roomID: roomId, playerID: playerId,
+                            row: coord[0], col: coord[1]}
+    sendMessage(out);
+}
+
+function handleRoadSelect(coord: Coord, itemType: Items, available: Coord[]) {
+    for (var availCoord of available) {
+        setState(availCoord, itemType, ItemState.HIDDEN, null);
+    }
+    setState(coord, itemType, ItemState.ACTIVE, null);
+    var out: ChoseRoad = {type: "CHOSE_ROAD", roomID: roomId, playerID: playerId,
                             row: coord[0], col: coord[1]}
     sendMessage(out);
 }
