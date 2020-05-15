@@ -27,7 +27,7 @@ class Room:
         return self.remaining_colors.pop()
 
     async def add_player(self, websocket, name):
-        new_player = ServerPlayer(uuid.uuid4(), websocket, name, self.get_next_color())
+        new_player = ServerPlayer(str(uuid.uuid4()), websocket, name, self.get_next_color())
         self.players[new_player.plyr_id] = new_player
         other_players = [plyr for plyr in self.players.values() if plyr.plyr_id != new_player.plyr_id]
 
@@ -39,14 +39,13 @@ class Room:
                 await other_plyr.send_player_joined(new_player.name, new_player.color)
 
     def has_plyr_id(self, plyr_id):
-        return uuid.UUID(plyr_id) in self.players
+        return plyr_id in self.players
 
     async def mark_ready(self, player_id):
-        plyr_uuid = uuid.UUID(player_id)
-        player = self.players[plyr_uuid]
+        player = self.players[player_id]
         await player.send_ready_success()
 
-        others = [other_plyr for other_plyr in self.players.values() if other_plyr.plyr_id != plyr_uuid]
+        others = [other_plyr for other_plyr in self.players.values() if other_plyr.plyr_id != player_id]
         for other_plyr in others:
             await other_plyr.send_player_ready(player.name)
 
@@ -62,7 +61,7 @@ class Room:
         for player in self.players.values():
             await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
 
-        await self.start_settle_select(str(self.game_model.cur_player().pid))
+        await self.start_settle_select(self.game_model.cur_player().pid)
 
     async def start_settle_select(self, plyr_id):
         can_build = self.game_model.can_build_settle()
@@ -76,9 +75,9 @@ class Room:
 
     async def start_select(self, plyr_id, can_build, avail, msg_type):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == uuid.UUID(plyr_id) and (can_build or self.is_setup) and len(avail) > 0:
+        if cur_player.pid == plyr_id and (can_build or self.is_setup) and len(avail) > 0:
             self.is_selecting = True
-            await self.players[uuid.UUID(plyr_id)].display_options(msg_type, avail)
+            await self.players[plyr_id].display_options(msg_type, avail)
 
     async def settle_built(self, plyr_id, row, col):
         can_build = self.game_model.can_build_settle()
@@ -96,11 +95,11 @@ class Room:
 
         if self.is_setup:
             cur_plyr = self.game_model.cur_player()
-            await self.start_settle_select(str(cur_plyr.pid))
+            await self.start_settle_select(cur_plyr.pid)
 
     async def built(self, plyr_id, row, col, can_build, builder, msg_type):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
+        if cur_player.pid == plyr_id and self.is_selecting and (can_build or self.is_setup):
             self.is_selecting = False
             color = builder((row, col), self.is_setup)
             for player in self.players.values():

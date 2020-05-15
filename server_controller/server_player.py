@@ -19,7 +19,7 @@ class ServerPlayer:
         print("{}: Sent created room".format(self.plyr_id))
         return_msg = {mv.TYPE: mv.CREATED_ROOM,
                       mv.ROOM_ID: room_id,
-                      mv.PLAYER_ID: str(self.plyr_id),
+                      mv.PLAYER_ID: self.plyr_id,
                       mv.COLOR: self.color}
         await self.web_socket.send(json.dumps(return_msg))
 
@@ -33,7 +33,7 @@ class ServerPlayer:
     async def send_joined_room(self, other_plyrs_data):
         print("{}: Sent joined room".format(self.plyr_id))
         return_msg = {mv.TYPE: mv.JOINED_ROOM,
-                      mv.PLAYER_ID: str(self.plyr_id),
+                      mv.PLAYER_ID: self.plyr_id,
                       mv.COLOR: self.color,
                       mv.OTHER_PLAYERS: other_plyrs_data}
         await self.web_socket.send(json.dumps(return_msg))
