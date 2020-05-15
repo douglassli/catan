@@ -62,6 +62,8 @@ class Room:
         for player in self.players.values():
             await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
 
+        await self.start_settle_select(str(self.game_model.cur_player().pid))
+
     async def start_settle_select(self, plyr_id):
         can_build = self.game_model.can_build_settle()
         avail = self.game_model.get_available_settle_nodes(self.is_setup)
@@ -82,9 +84,19 @@ class Room:
         can_build = self.game_model.can_build_settle()
         await self.built(plyr_id, row, col, can_build, self.game_model.build_settle, mv.SETTLE_BUILT)
 
+        if self.is_setup:
+            await self.start_road_select(plyr_id)
+
     async def road_built(self, plyr_id, row, col):
         can_build = self.game_model.can_build_road()
         await self.built(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT)
+
+        if self.is_setup:
+            await self.end_turn()
+
+        if self.is_setup:
+            cur_plyr = self.game_model.cur_player()
+            await self.start_settle_select(str(cur_plyr.pid))
 
     async def built(self, plyr_id, row, col, can_build, builder, msg_type):
         cur_player = self.game_model.cur_player()
