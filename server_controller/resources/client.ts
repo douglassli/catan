@@ -223,11 +223,11 @@ class MessageHandler {
     }
 
     AVAIL_SETTLES(msg: AvailSettles): void {
-        displaySettleSelection(msg.avail);
+        displaySelection(msg.avail, Items.SETTLE, "CHOSE_SETTLE");
     }
 
     AVAIL_ROADS(msg: AvailRoads): void {
-        displayRoadSelection(msg.avail);
+        displaySelection(msg.avail, Items.PATH, "CHOSE_ROAD");
     }
 
     SETTLE_BUILT(msg: SettleBuilt): void {
@@ -327,53 +327,33 @@ function getItem(coord: Coord, itemType: Items): HTMLElement {
 }
 
 function setButtonsDisabled(isDisabled: boolean): void {
-    const buttons: HTMLCollection = document.getElementById("buttonBar").children;
+    const buttons: HTMLCollectionOf<HTMLButtonElement> = document.getElementById("buttonBar").children as HTMLCollectionOf<HTMLButtonElement>;
     for (var button of buttons) {
         button.disabled = isDisabled;
     }
 }
 
-function startSettleSelection() {
-    var out: SettleSelectStart = {type: "START_SETTLE_SELECT", playerID: playerId, roomID: roomId};
+function startSelection(msg_type: "START_SETTLE_SELECT" | "START_ROAD_SELECT"): void {
+    var out: SettleSelectStart | RoadSelectStart = {type: msg_type, playerID: playerId, roomID: roomId};
     sendMessage(out);
 }
+function startSettleSelection(): void { startSelection("START_SETTLE_SELECT"); };
+function startRoadSelection(): void { startSelection("START_ROAD_SELECT"); };
 
-function startRoadSelection() {
-    var out: RoadSelectStart = {type: "START_ROAD_SELECT", playerID: playerId, roomID: roomId};
-    sendMessage(out);
-}
-
-function displaySettleSelection(available: Coord[]): void {
-    var handler = (coord, itemType) => {handleSettleSelect(coord, itemType, available);};
+function displaySelection(available: Coord[], itemType: Items, msgType: "CHOSE_SETTLE" | "CHOSE_ROAD"): void {
+    var handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
     for (var availCoord of available) {
-        setState(availCoord, Items.SETTLE, ItemState.SELECTING, handler);
+        setState(availCoord, itemType, ItemState.SELECTING, handler);
     }
 }
 
-function displayRoadSelection(available: Coord[]): void {
-    var handler = (coord, itemType) => {handleRoadSelect(coord, itemType, available);};
-    for (var availCoord of available) {
-        setState(availCoord, Items.PATH, ItemState.SELECTING, handler);
-    }
-}
-
-function handleSettleSelect(coord: Coord, itemType: Items, available: Coord[]) {
+function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: "CHOSE_ROAD" | "CHOSE_SETTLE") {
     for (var availCoord of available) {
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
-    var out: ChoseSettle = {type: "CHOSE_SETTLE", roomID: roomId, playerID: playerId,
-                            row: coord[0], col: coord[1]}
-    sendMessage(out);
-}
-
-function handleRoadSelect(coord: Coord, itemType: Items, available: Coord[]) {
-    for (var availCoord of available) {
-        setState(availCoord, itemType, ItemState.HIDDEN, null);
-    }
-    setState(coord, itemType, ItemState.ACTIVE, null);
-    var out: ChoseRoad = {type: "CHOSE_ROAD", roomID: roomId, playerID: playerId,
-                            row: coord[0], col: coord[1]}
+    var out: ChoseSettle | ChoseRoad = {type: msgType, roomID: roomId, playerID: playerId,
+                                        row: coord[0], col: coord[1]}
     sendMessage(out);
 }
 
