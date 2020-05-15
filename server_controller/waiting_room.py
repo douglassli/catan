@@ -2,7 +2,7 @@ import uuid
 from model.game_generator import generate_catan_game
 from server_controller.templating import fill_tiles
 from server_controller.server_player import ServerPlayer
-import server_controller.catan_server as cs
+from server_controller.message_values import FieldNames
 
 
 class Room:
@@ -65,12 +65,12 @@ class Room:
     async def start_settle_select(self, plyr_id):
         can_build = self.game_model.can_build_settle()
         avail = self.game_model.get_available_settle_nodes(self.is_setup)
-        await self.start_select(plyr_id, can_build, avail, cs.AVAIL_SETTLES)
+        await self.start_select(plyr_id, can_build, avail, FieldNames.AVAIL_SETTLES)
 
     async def start_road_select(self, plyr_id):
         can_build = self.game_model.can_build_road()
         avail = self.game_model.get_avail_paths(self.is_setup)
-        await self.start_select(plyr_id, can_build, avail, cs.AVAIL_ROADS)
+        await self.start_select(plyr_id, can_build, avail, FieldNames.AVAIL_ROADS)
 
     async def start_select(self, plyr_id, can_build, avail, msg_type):
         cur_player = self.game_model.cur_player()
@@ -80,11 +80,11 @@ class Room:
 
     async def settle_built(self, plyr_id, row, col):
         can_build = self.game_model.can_build_settle()
-        await self.built(plyr_id, row, col, can_build, self.game_model.build_settle, cs.SETTLE_BUILT)
+        await self.built(plyr_id, row, col, can_build, self.game_model.build_settle, FieldNames.SETTLE_BUILT)
 
     async def road_built(self, plyr_id, row, col):
         can_build = self.game_model.can_build_road()
-        await self.built(plyr_id, row, col, can_build, self.game_model.build_road, cs.ROAD_BUILT)
+        await self.built(plyr_id, row, col, can_build, self.game_model.build_road, FieldNames.ROAD_BUILT)
 
     async def built(self, plyr_id, row, col, can_build, builder, msg_type):
         cur_player = self.game_model.cur_player()
@@ -94,7 +94,7 @@ class Room:
             for player in self.players.values():
                 await player.send_built(msg_type, row, col, color)
 
-    async def end_turn(self, plyr_id):
+    async def end_turn(self):
         self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)
         cur_plyr = self.game_model.cur_player()
         for player in self.players.values():
