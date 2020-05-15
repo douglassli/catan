@@ -2,6 +2,7 @@ import uuid
 from model.game_generator import generate_catan_game
 from server_controller.templating import fill_tiles
 from server_controller.server_player import ServerPlayer
+import server_controller.catan_server as cs
 
 
 class Room:
@@ -62,38 +63,36 @@ class Room:
             await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
 
     async def start_settle_select(self, plyr_id):
-        cur_player = self.game_model.cur_player()
         can_build = self.game_model.can_build_settle()
         avail = self.game_model.get_available_settle_nodes(self.is_setup)
-        if cur_player.pid == uuid.UUID(plyr_id) and (can_build or self.is_setup) and len(avail) > 0:
-            self.is_selecting = True
-            await self.players[uuid.UUID(plyr_id)].display_settle_options(avail)
+        await self.start_select(plyr_id, can_build, avail, cs.AVAIL_SETTLES)
 
     async def start_road_select(self, plyr_id):
-        cur_player = self.game_model.cur_player()
         can_build = self.game_model.can_build_road()
-        avail = self.game_model.get_avail_paths()
+        avail = self.game_model.get_avail_paths(self.is_setup)
+        await self.start_select(plyr_id, can_build, avail, cs.AVAIL_ROADS)
+
+    async def start_select(self, plyr_id, can_build, avail, msg_type):
+        cur_player = self.game_model.cur_player()
         if cur_player.pid == uuid.UUID(plyr_id) and (can_build or self.is_setup) and len(avail) > 0:
             self.is_selecting = True
-            await self.players[uuid.UUID(plyr_id)].display_road_options(avail)
+            await self.players[uuid.UUID(plyr_id)].display_options(msg_type, avail)
 
     async def settle_built(self, plyr_id, row, col):
-        cur_player = self.game_model.cur_player()
         can_build = self.game_model.can_build_settle()
-        if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
-            self.is_selecting = False
-            color = self.game_model.build_settle((row, col), self.is_setup)
-            for player in self.players.values():
-                await player.send_settle_built(row, col, color)
+        await self.built(plyr_id, row, col, can_build, self.game_model.build_settle, cs.SETTLE_BUILT)
 
     async def road_built(self, plyr_id, row, col):
-        cur_player = self.game_model.cur_player()
         can_build = self.game_model.can_build_road()
+        await self.built(plyr_id, row, col, can_build, self.game_model.build_road, cs.ROAD_BUILT)
+
+    async def built(self, plyr_id, row, col, can_build, builder, msg_type):
+        cur_player = self.game_model.cur_player()
         if cur_player.pid == uuid.UUID(plyr_id) and self.is_selecting and (can_build or self.is_setup):
             self.is_selecting = False
-            color = self.game_model.build_road((row, col), self.is_setup)
+            color = builder((row, col), self.is_setup)
             for player in self.players.values():
-                await player.send_road_built(row, col, color)
+                await player.send_built(msg_type, row, col, color)
 
     async def end_turn(self, plyr_id):
         self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)

@@ -65,7 +65,10 @@ class CatanGame:
     def can_build_road(self):
         return self.cur_player().can_build_road()
 
-    def get_avail_paths(self):
+    def get_avail_paths(self, is_setup):
+        if is_setup:
+            return self.get_setup_avail_paths()
+
         out = []
         for coord, path in self.paths.items():
             own_ngbr_node = path.owns_any_ngbr_node(self.cur_player())
