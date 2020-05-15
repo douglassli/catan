@@ -1,5 +1,5 @@
 from server_controller.waiting_room import Room
-from server_controller.message_values import InTypes, FieldNames
+import server_controller.message_values as mv
 import random
 import json
 
@@ -15,18 +15,18 @@ class CatanServer:
             await self.consumer(websocket, json.loads(message))
 
     async def consumer(self, websocket, msg):
-        if FieldNames.TYPE not in msg or not InTypes.is_member(msg[FieldNames.TYPE]):
+        if mv.TYPE not in msg or not mv.InTypes.is_member(msg[mv.TYPE]):
             print("Malformed message: {}".format(msg))
             return
 
-        msg_object = InTypes(msg[FieldNames.TYPE]).create_msg_object(msg, websocket)
+        msg_object = mv.InTypes(msg[mv.TYPE]).create_msg_object(msg, websocket)
         await self.handle_message(msg_object)
 
     async def handle_message(self, msg_obj):
         if not msg_obj.is_valid(self.rooms):
             print("Invalid message: {}".format(msg_obj.msg))
         else:
-            room = self.create_room() if msg_obj.msg_type == InTypes.CREATE_ROOM else self.rooms[msg_obj.msg[FieldNames.ROOM_ID]]
+            room = self.create_room() if msg_obj.msg_type == mv.InTypes.CREATE_ROOM else self.rooms[msg_obj.msg[mv.ROOM_ID]]
             await msg_obj.handler(room)
 
     def generate_room_id(self):
