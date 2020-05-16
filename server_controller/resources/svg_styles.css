@@ -5,27 +5,93 @@
 .stroke2px {stroke-width: 2px;}
 .stroke7px {stroke-width: 7px;}
 .blckStrk {stroke: #000000;}
-.redStrk {stroke: #ed2024;}
 
-.cls-4 {fill: #c4a060;}
-.cls-6 {fill: #754c24;}
-.cls-7 {fill: #fbb03b;}
-.cls-10 {fill: #22a5f6;}
-.cls-11 {fill: #de5e30;}
-.cls-12 {fill: #ee4f1f;}
-.cls-14 {fill: #277138;}
-.cls-15 {fill: #c48d52;}
-.cls-20 {fill: #b97c31;}
-.cls-25 {fill: #8eb427;}
-.cls-26 {fill: #808080;}
-.cls-28 {fill: #9c9c9c;}
-.cls-29 {fill: #2c782d;}
-.cls-30 {fill: #f2ba38;}
-.cls-31 {fill: #f4a812;}
-.cls-32 {fill: #20953d;}
-.cls-33 {fill: #0349fc;}
+.bgColor {
+    /*fill: #c4a060; /* Option 1 */
+    /*fill: #C4A060; /* Option 2 */
+    fill: #C48D2E; /* Option 3 */
+}
+.brickColor {
+    /*fill: #de5e30; /* Option 1 */
+    /*fill: #BC5D2E; /* Option 2 */
+    fill: #BC4D15; /* Option 3 */
+}
+.desertColor {
+    /*fill: #c48d52; /* Option 1 */
+    /*fill: #BC7739; /* Option 2 */
+    fill: #BC7739; /* Option 3 */
+}
+.sheepColor {
+    /*fill: #8eb427; /* Option 1 */
+    /*fill: #98AF10; /* Option 2 */
+    fill: #81AF07; /* Option 3 */
+}
+.wheatColor {
+    /*fill: #f2ba38; /* Option 1 */
+    /*fill: #F5BB00; /* Option 2 */
+    fill: #F4BB00; /* Option 3 */
+}
+.treeColor {
+    /*fill: #20953d; /* Option 1 */
+    /*fill: #3C5B31; /* Option 2 */
+    fill: #357924; /* Option 3 */
+}
+.stoneColor {
+    /*fill: #9c9c9c; /* Option 1 */
+    /*fill: #A6A191; /* Option 2 */
+    fill: #939393; /* Option 3 */
+}
+.oceanColor {
+    /*fill: #0349fc; /*Option 1*/
+    fill: #0E46E6; /*Option 2*/
+}
+
+
+.wheatIcon {
+    /*fill: #f4a812; /* Option 1 */
+    fill: #e1a800; /* Option 1 */
+}
+.brickIcon {
+    /*fill: #ee4f1f; /* Option 1 */
+    fill: #c35b23; /* Option 1 */
+}
+.cactusIcon {
+    /*fill: #277138; /* Option 1 */
+    fill: #357924; /* Option 1 */
+}
+.treeIcon {
+    /*fill: #2c782d; /* Option 1 */
+    fill: #3b8428; /* Option 1 */
+}
+.stoneIcon {
+    /*fill: #808080; /* Option 1 */
+    fill: #848484; /* Option 1 */
+}
+
+
+
+.bridgeColor {
+    /* fill: #b97c31 */
+    fill: #C48D2E;
+}
+.mastColor {
+    /* fill: #754c24; */
+    fill: #000000;
+}
+.boatColor {
+    /*fill: #fbb03b;*/
+    /* fill: #e1a800; */
+    fill: #C48D2E;
+}
+.wavesColor {
+    fill: #0692EF;
+}
+
 .whiteFill {fill: #ffffff;}
-.redFill {fill: #ed2024;}
+.redFill {
+    /*fill: #ed2024; /* Option 1 */
+    fill: #e00000;
+}
 
 .hidden {
     display: none;
@@ -51,7 +117,7 @@
 }
 
 .oceanBg {
-    background-color: #0349fc;
+    background-color: #0E46E6;
 }
 
 #controlDiv {
@@ -79,4 +145,5 @@ svg {
 
 body {
     margin: 0;
+    background-color: #0E46E6;
 }

@@ -138,7 +138,8 @@ interface EndTurn {
     roomID: number;
 }
 
-type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart | ChoseSettle | ChoseRoad | EndTurn;
+type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart
+                     | ChoseSettle | ChoseRoad | EndTurn;
 
 const enum Items {
     PATH = "path",
