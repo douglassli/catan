@@ -16,41 +16,44 @@ class ServerPlayer:
                 mv.IS_READY: self.is_ready}
 
     async def send_created_room(self, room_id):
-        print("{}: Sent created room".format(self.plyr_id))
         return_msg = {mv.TYPE: mv.CREATED_ROOM,
                       mv.ROOM_ID: room_id,
                       mv.PLAYER_ID: self.plyr_id,
                       mv.COLOR: self.color}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_player_joined(self, plyr_name, plyr_color):
-        print("{}: Sent player joined".format(self.plyr_id))
         return_msg = {mv.TYPE: mv.PLAYER_JOINED,
                       mv.NAME: plyr_name,
                       mv.COLOR: plyr_color}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_joined_room(self, other_plyrs_data):
-        print("{}: Sent joined room".format(self.plyr_id))
         return_msg = {mv.TYPE: mv.JOINED_ROOM,
                       mv.PLAYER_ID: self.plyr_id,
                       mv.COLOR: self.color,
                       mv.OTHER_PLAYERS: other_plyrs_data}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_ready_success(self):
         self.is_ready = True
         return_msg = {mv.TYPE: mv.READY_SUCCESS}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_player_ready(self, plyr_name):
         return_msg = {mv.TYPE: mv.PLAYER_READY,
                       mv.NAME: plyr_name}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_error(self, msg):
         return_msg = {mv.TYPE: mv.ERROR,
                       mv.MSG: msg}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_game_start(self, ports_html, tiles_html, numbers_html, players_html, starting_name):
@@ -60,11 +63,13 @@ class ServerPlayer:
                       mv.NUMBERS_HTML: numbers_html,
                       mv.PLAYERS_HTML: players_html,
                       mv.STARTING_PLAYER: starting_name}
+        print("OUT: {}".format({mv.TYPE: mv.GAME_START}))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def display_options(self, msg_type, avail):
         return_msg = {mv.TYPE: msg_type,
                       mv.AVAIL: avail}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_built(self, msg_type, row, col, color):
@@ -72,9 +77,11 @@ class ServerPlayer:
                       mv.ROW: row,
                       mv.COL: col,
                       mv.COLOR: color}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))
 
     async def send_start_turn(self, cur_name):
         return_msg = {mv.TYPE: mv.TURN_START,
                       mv.NAME: cur_name}
+        print("OUT: {}".format(return_msg))
         await self.web_socket.send(json.dumps(return_msg))

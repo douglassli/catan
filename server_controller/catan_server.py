@@ -1,5 +1,6 @@
 from server_controller.waiting_room import Room
 import server_controller.message_values as mv
+import websockets
 import random
 import json
 
@@ -11,10 +12,16 @@ class CatanServer:
         self.rooms = {}
 
     async def consumer_handler(self, websocket, path):
-        async for message in websocket:
-            await self.consumer(websocket, json.loads(message))
+        try:
+            async for message in websocket:
+                await self.consumer(websocket, json.loads(message))
+        except websockets.ConnectionClosedError:
+            print("Connection Closed:")
+            print("    Local addr: {}".format(websocket.local_address))
+            print("    Remote addr: {}".format(websocket.remote_address))
 
     async def consumer(self, websocket, msg):
+        print("IN: {}".format(msg))
         if mv.TYPE not in msg or not mv.InTypes.is_member(msg[mv.TYPE]):
             print("Malformed message: {}".format(msg))
             return
