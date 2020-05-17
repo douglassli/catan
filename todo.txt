@@ -1,4 +1,3 @@
- - building cities
  - buying dev cards
  - determining longest road
  - using dev cards
@@ -7,9 +6,10 @@
  - turn flow, roll dice then trade and build then end turn
  - ports
  - additional UI elements
-   - current player
    - deck status
+   - last dice roll
  - make UI prettier
+   - current player
    - player status
    - action buttons
  - determining end of game
@@ -18,3 +18,7 @@
  - subtracting cards from available bank resources when distributing resources
  - return resources when items are bought
  - steal from player of choice where robber is when robber is moved
+ - Distribute initial resources from second settle in setup phase
+ - use enum in controller to track game state
+ - make city selecting prettier
+ - update player status for resource counts when buying items
