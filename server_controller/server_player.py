@@ -85,3 +85,11 @@ class ServerPlayer:
                       mv.ROLL_NUM: roll_num,
                       mv.STATUS_UPDATES: updates}
         await self.send_msg(return_msg)
+
+    async def send_robber_moved(self, row, col, prev_row, prev_col):
+        return_msg = {mv.TYPE: mv.ROBBER_MOVED,
+                      mv.ROW: row,
+                      mv.COL: col,
+                      mv.PREV_ROW: prev_row,
+                      mv.PREV_COL: prev_col}
+        await self.send_msg(return_msg)

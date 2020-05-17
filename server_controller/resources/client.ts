@@ -103,9 +103,22 @@ interface DiceRolled extends IncomingMessage {
     rollNum: number;
 }
 
+interface AvailRobbers extends IncomingMessage {
+    type: "AVAIL_ROBBERS";
+    avail: Coord[];
+}
+
+interface RobberMoved extends IncomingMessage {
+    type: "ROBBER_MOVED";
+    row: number;
+    col: number;
+    prevRow: number;
+    prevCol: number;
+}
+
 type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady
                     | GameStart | AvailRoads | AvailSettles | RoadBuilt | SettleBuilt
-                    | TurnStart | Error | DiceRolled;
+                    | TurnStart | Error | DiceRolled | AvailRobbers | RobberMoved;
 
 interface CreateRoom {
     type: "CREATE_ROOM";
@@ -170,8 +183,16 @@ interface RollDice {
     roomID: number;
 }
 
+interface ChoseRobber {
+    type: "CHOSE_ROBBER";
+    playerID: string;
+    roomID: number;
+    row: number;
+    col: number;
+}
+
 type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart
-                     | ChoseSettle | ChoseRoad | EndTurn | RollDice;
+                     | ChoseSettle | ChoseRoad | EndTurn | RollDice | ChoseRobber;
 
 const enum Items {
     PATH = "path",
@@ -308,6 +329,15 @@ class MessageHandler {
     DICE_ROLLED(msg: DiceRolled): void {
         console.log(msg.rollNum);
     }
+
+    AVAIL_ROBBERS(msg: AvailRobbers): void {
+        displaySelection(msg.avail, Items.ROBBER, "CHOSE_ROBBER");
+    }
+
+    ROBBER_MOVED(msg: RobberMoved): void {
+        setState([msg.row, msg.col], Items.ROBBER, ItemState.ACTIVE, null);
+        setState([msg.prevRow, msg.prevCol], Items.ROBBER, ItemState.HIDDEN, null);
+    }
 }
 
 // Waiting Room Code *******************************************************************************
@@ -399,20 +429,20 @@ function startSelection(msg_type: "START_SETTLE_SELECT" | "START_ROAD_SELECT"): 
 function startSettleSelection(): void { startSelection("START_SETTLE_SELECT"); };
 function startRoadSelection(): void { startSelection("START_ROAD_SELECT"); };
 
-function displaySelection(available: Coord[], itemType: Items, msgType: "CHOSE_SETTLE" | "CHOSE_ROAD"): void {
+function displaySelection(available: Coord[], itemType: Items, msgType: "CHOSE_SETTLE" | "CHOSE_ROAD" | "CHOSE_ROBBER"): void {
     var handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
     for (var availCoord of available) {
         setState(availCoord, itemType, ItemState.SELECTING, handler);
     }
 }
 
-function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: "CHOSE_ROAD" | "CHOSE_SETTLE") {
+function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: "CHOSE_ROAD" | "CHOSE_SETTLE" | "CHOSE_ROBBER") {
     for (var availCoord of available) {
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
-    var out: ChoseSettle | ChoseRoad = {type: msgType, roomID: roomId, playerID: playerId,
-                                        row: coord[0], col: coord[1]}
+    var out: ChoseSettle | ChoseRoad | ChoseRobber = {type: msgType, roomID: roomId, playerID: playerId,
+                                                      row: coord[0], col: coord[1]}
     sendMessage(out);
 }
 

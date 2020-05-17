@@ -120,8 +120,9 @@ class Room:
         if plyr_id == cur_plyr.pid and not self.is_selecting and not self.is_setup:
             roll_num = self.game_model.roll_dice()
             if roll_num == 7:
-                # TODO move robber
-                pass
+                self.is_selecting = True
+                avail = self.game_model.get_avail_robber_coords()
+                await self.players[cur_plyr.pid].display_options(mv.AVAIL_ROBBERS, avail)
             else:
                 self.game_model.distribute_resources(roll_num)
                 for plyr in self.game_model.players:
@@ -134,3 +135,12 @@ class Room:
                                     mv.WHEAT: plyr.resources[Resource.WHEAT],
                                     mv.STONE: plyr.resources[Resource.STONE]})
                     await self.players[plyr.pid].send_dice_rolled(roll_num, updates)
+
+    async def robber_moved(self, plyr_id, row, col):
+        cur_player = self.game_model.cur_player()
+        if cur_player.pid == plyr_id and self.is_selecting:
+            self.is_selecting = False
+            prev_coord = self.game_model.get_robber_coord()
+            self.game_model.move_robber((row, col))
+            for player in self.players.values():
+                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1])

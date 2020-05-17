@@ -13,6 +13,7 @@ class InTypes(Enum):
     CHOSE_ROAD = "CHOSE_ROAD"
     END_TURN = "END_TURN"
     ROLL_DICE = "ROLL_DICE"
+    CHOSE_ROBBER = "CHOSE_ROBBER"
 
     @classmethod
     def is_member(cls, value):
@@ -29,7 +30,8 @@ class InTypes(Enum):
             self.CHOSE_SETTLE: im.SettleBuiltMsg,
             self.CHOSE_ROAD: im.RoadBuiltMsg,
             self.END_TURN: im.EndTurnMsg,
-            self.ROLL_DICE: im.RollDiceMsg
+            self.ROLL_DICE: im.RollDiceMsg,
+            self.CHOSE_ROBBER: im.ChoseRobberMsg
         }
         return constructor_map[self](msg, websocket)
 
@@ -48,7 +50,8 @@ SETTLE_BUILT = "SETTLE_BUILT"
 ROAD_BUILT = "ROAD_BUILT"
 TURN_START = "TURN_START"
 DICE_ROLLED = "DICE_ROLLED"
-
+AVAIL_ROBBERS = "AVAIL_ROBBERS"
+ROBBER_MOVED = "ROBBER_MOVED"
 
 # Message field names
 TYPE = "type"
@@ -65,6 +68,8 @@ NUMBERS_HTML = "numbersHTML"
 PLAYERS_HTML = "playersHTML"
 ROW = "row"
 COL = "col"
+PREV_ROW = "prevRow"
+PREV_COL = "prevCol"
 STARTING_PLAYER = "startingPlayer"
 AVAIL = "avail"
 ROLL_NUM = "rollNum"
