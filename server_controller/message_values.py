@@ -9,8 +9,10 @@ class InTypes(Enum):
     START_GAME = "START_GAME"
     START_SETTLE_SELECT = "START_SETTLE_SELECT"
     START_ROAD_SELECT = "START_ROAD_SELECT"
+    START_CITY_SELECT = "START_CITY_SELECT"
     CHOSE_SETTLE = "CHOSE_SETTLE"
     CHOSE_ROAD = "CHOSE_ROAD"
+    CHOSE_CITY = "CHOSE_CITY"
     END_TURN = "END_TURN"
     ROLL_DICE = "ROLL_DICE"
     CHOSE_ROBBER = "CHOSE_ROBBER"
@@ -27,8 +29,10 @@ class InTypes(Enum):
             self.START_GAME: im.StartGameMsg,
             self.START_SETTLE_SELECT: im.StartSettleSelectMsg,
             self.START_ROAD_SELECT: im.StartRoadSelectMsg,
-            self.CHOSE_SETTLE: im.SettleBuiltMsg,
-            self.CHOSE_ROAD: im.RoadBuiltMsg,
+            self.START_CITY_SELECT: im.StartCitySelectMsg,
+            self.CHOSE_SETTLE: im.ChoseSettleMsg,
+            self.CHOSE_ROAD: im.ChoseRoadMsg,
+            self.CHOSE_CITY: im.ChoseCityMsg,
             self.END_TURN: im.EndTurnMsg,
             self.ROLL_DICE: im.RollDiceMsg,
             self.CHOSE_ROBBER: im.ChoseRobberMsg
@@ -46,8 +50,10 @@ ERROR = "ERROR"
 GAME_START = "GAME_START"
 AVAIL_SETTLES = "AVAIL_SETTLES"
 AVAIL_ROADS = "AVAIL_ROADS"
+AVAIL_CITIES = "AVAIL_CITIES"
 SETTLE_BUILT = "SETTLE_BUILT"
 ROAD_BUILT = "ROAD_BUILT"
+CITY_BUILT = "CITY_BUILT"
 TURN_START = "TURN_START"
 DICE_ROLLED = "DICE_ROLLED"
 AVAIL_ROBBERS = "AVAIL_ROBBERS"

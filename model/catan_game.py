@@ -1,5 +1,6 @@
 from random import randint
 from model.resources import Resource
+from model.buildings import Buildings
 
 
 class CatanGame:
@@ -60,6 +61,25 @@ class CatanGame:
         if not is_setup:
             cur_player.buy_settle()
         self.nodes[coord].build_settle(cur_player)
+        return cur_player.color
+
+    def can_build_city(self):
+        return self.cur_player().can_build_city()
+
+    def get_avail_cities(self, is_setup):
+        out = []
+        cur_player = self.cur_player()
+        for coord, node in self.nodes.items():
+            if node.owned_by(cur_player) and node.building == Buildings.SETTLE:
+                out.append(coord)
+        return out
+
+    def build_city(self, coord, is_setup):
+        cur_player = self.cur_player()
+        cur_player.num_cities -= 1
+        if not is_setup:
+            cur_player.buy_city()
+        self.nodes[coord].build_city(cur_player)
         return cur_player.color
 
     def can_build_road(self):

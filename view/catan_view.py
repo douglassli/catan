@@ -77,7 +77,7 @@ class Application(tk.Frame):
 
     def move_robber(self, coord):
         for robber in self.robbers.values():
-            if robber.built:
+            if robber.chose:
                 robber.hide(self.can)
         self.robbers[coord].build(self.can, "black")
 

@@ -27,6 +27,10 @@ class Node:
         self.building = Buildings.SETTLE
         self.owner = player
 
+    def build_city(self, player):
+        self.building = Buildings.CITY
+        self.owner = player
+
     def owned_by(self, player):
         return self.owner is player
 

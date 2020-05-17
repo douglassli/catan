@@ -57,14 +57,24 @@ class StartRoadSelectMsg(InputMessage):
         await room.start_road_select(self.msg[mv.PLAYER_ID])
 
 
-class SettleBuiltMsg(InputMessage):
+class StartCitySelectMsg(InputMessage):
     async def handler(self, room):
-        await room.settle_built(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
+        await room.start_city_select(self.msg[mv.PLAYER_ID])
 
 
-class RoadBuiltMsg(InputMessage):
+class ChoseSettleMsg(InputMessage):
     async def handler(self, room):
-        await room.road_built(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
+        await room.chose_settle(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
+
+
+class ChoseRoadMsg(InputMessage):
+    async def handler(self, room):
+        await room.chose_road(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
+
+
+class ChoseCityMsg(InputMessage):
+    async def handler(self, room):
+        await room.chose_city(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
 
 
 class EndTurnMsg(InputMessage):

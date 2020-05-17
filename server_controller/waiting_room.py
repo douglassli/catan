@@ -66,31 +66,36 @@ class Room:
         await self.start_settle_select(self.game_model.cur_player().pid)
 
     async def start_settle_select(self, plyr_id):
-        can_build = self.game_model.can_build_settle()
+        can_build = self.game_model.can_build_settle() or self.is_setup
         avail = self.game_model.get_available_settle_nodes(self.is_setup)
         await self.start_select(plyr_id, can_build, avail, mv.AVAIL_SETTLES)
 
     async def start_road_select(self, plyr_id):
-        can_build = self.game_model.can_build_road()
+        can_build = self.game_model.can_build_road() or self.is_setup
         avail = self.game_model.get_avail_paths(self.is_setup)
         await self.start_select(plyr_id, can_build, avail, mv.AVAIL_ROADS)
 
+    async def start_city_select(self, plyr_id):
+        can_build = self.game_model.can_build_city()
+        avail = self.game_model.get_avail_cities(self.is_setup)
+        await self.start_select(plyr_id, can_build, avail, mv.AVAIL_CITIES)
+
     async def start_select(self, plyr_id, can_build, avail, msg_type):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == plyr_id and (can_build or self.is_setup) and len(avail) > 0:
+        if cur_player.pid == plyr_id and can_build and len(avail) > 0:
             self.is_selecting = True
             await self.players[plyr_id].display_options(msg_type, avail)
 
-    async def settle_built(self, plyr_id, row, col):
+    async def chose_settle(self, plyr_id, row, col):
         can_build = self.game_model.can_build_settle()
-        await self.built(plyr_id, row, col, can_build, self.game_model.build_settle, mv.SETTLE_BUILT)
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_settle, mv.SETTLE_BUILT)
 
         if self.is_setup:
             await self.start_road_select(plyr_id)
 
-    async def road_built(self, plyr_id, row, col):
+    async def chose_road(self, plyr_id, row, col):
         can_build = self.game_model.can_build_road()
-        await self.built(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT)
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT)
 
         if self.is_setup:
             await self.end_turn(plyr_id)
@@ -99,7 +104,11 @@ class Room:
             cur_plyr = self.game_model.cur_player()
             await self.start_settle_select(cur_plyr.pid)
 
-    async def built(self, plyr_id, row, col, can_build, builder, msg_type):
+    async def chose_city(self, plyr_id, row, col):
+        can_build = self.game_model.can_build_city()
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_city, mv.CITY_BUILT)
+
+    async def chose(self, plyr_id, row, col, can_build, builder, msg_type):
         cur_player = self.game_model.cur_player()
         if cur_player.pid == plyr_id and self.is_selecting and (can_build or self.is_setup):
             self.is_selecting = False
