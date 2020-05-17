@@ -2,10 +2,6 @@
 *.png
 .idea
 __pycache__
-build
-dist
-setup.py
 server_controller/room_events.txt
-server_events.txt
 .DS_Store
 *.js
