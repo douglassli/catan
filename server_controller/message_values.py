@@ -12,6 +12,7 @@ class InTypes(Enum):
     CHOSE_SETTLE = "CHOSE_SETTLE"
     CHOSE_ROAD = "CHOSE_ROAD"
     END_TURN = "END_TURN"
+    ROLL_DICE = "ROLL_DICE"
 
     @classmethod
     def is_member(cls, value):
@@ -27,7 +28,8 @@ class InTypes(Enum):
             self.START_ROAD_SELECT: im.StartRoadSelectMsg,
             self.CHOSE_SETTLE: im.SettleBuiltMsg,
             self.CHOSE_ROAD: im.RoadBuiltMsg,
-            self.END_TURN: im.EndTurnMsg
+            self.END_TURN: im.EndTurnMsg,
+            self.ROLL_DICE: im.RollDiceMsg
         }
         return constructor_map[self](msg, websocket)
 
@@ -45,6 +47,7 @@ AVAIL_ROADS = "AVAIL_ROADS"
 SETTLE_BUILT = "SETTLE_BUILT"
 ROAD_BUILT = "ROAD_BUILT"
 TURN_START = "TURN_START"
+DICE_ROLLED = "DICE_ROLLED"
 
 
 # Message field names
@@ -64,3 +67,18 @@ ROW = "row"
 COL = "col"
 STARTING_PLAYER = "startingPlayer"
 AVAIL = "avail"
+ROLL_NUM = "rollNum"
+STATUS_UPDATES = "statusUpdates"
+VPS = "vps"
+ROADS = "roads"
+HAND_SIZE = "handSize"
+SETTLES = "settles"
+DEV_CARDS = "devCards"
+CITIES = "cities"
+ROAD_LENGTH = "roadLength"
+ARMY_SIZE = "armySize"
+WOOD = "wood"
+BRICK = "brick"
+SHEEP = "sheep"
+WHEAT = "wheat"
+STONE = "stone"

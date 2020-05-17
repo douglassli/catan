@@ -1,8 +1,9 @@
 import uuid
 from model.game_generator import generate_catan_game
-from server_controller.templating import fill_tiles
+from server_controller.templating import fill_tiles, player_bar
 from server_controller.server_player import ServerPlayer
 import server_controller.message_values as mv
+from model.resources import Resource
 
 
 class Room:
@@ -56,10 +57,11 @@ class Room:
         player_data = [{"pid": plyr.plyr_id, "name": plyr.name, "color": plyr.color} for plyr in self.players.values()]
         self.game_model = generate_catan_game(player_data)
         self.has_started = True
-        ports_html, tiles_html, numbers_html, player_bar = fill_tiles(self.game_model)
+        ports_html, tiles_html, numbers_html = fill_tiles(self.game_model)
         starting_name = player_data[0]["name"]
         for player in self.players.values():
-            await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar, starting_name)
+            player_bar_html = player_bar(self.game_model, player.name)
+            await player.send_game_start(ports_html, tiles_html, numbers_html, player_bar_html, starting_name)
 
         await self.start_settle_select(self.game_model.cur_player().pid)
 
@@ -91,7 +93,7 @@ class Room:
         await self.built(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT)
 
         if self.is_setup:
-            await self.end_turn()
+            await self.end_turn(plyr_id)
 
         if self.is_setup:
             cur_plyr = self.game_model.cur_player()
@@ -105,8 +107,30 @@ class Room:
             for player in self.players.values():
                 await player.send_built(msg_type, row, col, color)
 
-    async def end_turn(self):
-        self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)
+    async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
-        for player in self.players.values():
-            await player.send_start_turn(cur_plyr.name)
+        if plyr_id == cur_plyr.pid and not self.is_selecting:
+            self.is_setup, self.is_reverse = self.game_model.change_turn(self.is_setup, self.is_reverse)
+            new_cur_plyr = self.game_model.cur_player()
+            for player in self.players.values():
+                await player.send_start_turn(new_cur_plyr.name)
+
+    async def roll_dice(self, plyr_id):
+        cur_plyr = self.game_model.cur_player()
+        if plyr_id == cur_plyr.pid and not self.is_selecting and not self.is_setup:
+            roll_num = self.game_model.roll_dice()
+            if roll_num == 7:
+                # TODO move robber
+                pass
+            else:
+                self.game_model.distribute_resources(roll_num)
+                for plyr in self.game_model.players:
+                    updates = [{mv.NAME: p.name, mv.HAND_SIZE: p.get_hand_size()} for p in self.game_model.players if p.pid != plyr.pid]
+                    updates.append({mv.NAME: plyr.name,
+                                    mv.HAND_SIZE: plyr.get_hand_size(),
+                                    mv.WOOD: plyr.resources[Resource.WOOD],
+                                    mv.BRICK: plyr.resources[Resource.BRICK],
+                                    mv.SHEEP: plyr.resources[Resource.SHEEP],
+                                    mv.WHEAT: plyr.resources[Resource.WHEAT],
+                                    mv.STONE: plyr.resources[Resource.STONE]})
+                    await self.players[plyr.pid].send_dice_rolled(roll_num, updates)

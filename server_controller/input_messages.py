@@ -69,4 +69,9 @@ class RoadBuiltMsg(InputMessage):
 
 class EndTurnMsg(InputMessage):
     async def handler(self, room):
-        await room.end_turn()
+        await room.end_turn(self.msg[mv.PLAYER_ID])
+
+
+class RollDiceMsg(InputMessage):
+    async def handler(self, room):
+        await room.roll_dice(self.msg[mv.PLAYER_ID])

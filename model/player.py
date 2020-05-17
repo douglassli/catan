@@ -74,3 +74,6 @@ class Player(PlayerState):
 
     def gain_resource(self, resource, count):
         self.resources[resource] += count
+
+    def get_hand_size(self):
+        return sum([v for v in self.resources.values()])

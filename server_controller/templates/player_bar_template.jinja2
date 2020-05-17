@@ -22,6 +22,19 @@
             <td>Road Length: <span id="{{ plyr.name }}RoadLengthSpan">0</span></td>
             <td>Army Size: <span id="{{ plyr.name }}ArmySpan">0</span></td>
         </tr>
+        {% if plyr.name == cur_plyr_name %}
+        <tr>
+            <td>Wood: <span id="{{ plyr.name }}WoodSpan">0</span></td>
+            <td>Brick: <span id="{{ plyr.name }}BrickSpan">0</span></td>
+        </tr>
+        <tr>
+            <td>Sheep: <span id="{{ plyr.name }}SheepSpan">0</span></td>
+            <td>Wheat: <span id="{{ plyr.name }}WheatSpan">0</span></td>
+        </tr>
+        <tr>
+            <td>Stone: <span id="{{ plyr.name }}StoneSpan">0</span></td>
+        </tr>
+        {% endif %}
     </tbody>
 </table>
 {% endfor %}

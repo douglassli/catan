@@ -1,41 +1,62 @@
 // Type definitions ********************************************************************************
 
-interface ModelPlayer {
+interface StatusUpdate {
+    name: string;
+    vps?: number;
+    roads?: number;
+    handSize?: number;
+    settles?: number;
+    devCards?: number;
+    cities?: number;
+    roadLength?: number;
+    armySize?: number;
+    wood?: number;
+    brick?: number;
+    sheep?: number;
+    wheat?: number;
+    stone?: number;
+}
+
+interface IncomingMessage {
+    statusUpdates?: StatusUpdate[];
+}
+
+interface ModelPlayer extends IncomingMessage {
     name: string;
     color: string;
     isReady: boolean;
 }
 
-interface CreatedRoom {
+interface CreatedRoom extends IncomingMessage {
     type: "CREATED_ROOM";
     roomID: number;
     playerID: string;
     color: string;
 }
 
-interface JoinedRoom {
+interface JoinedRoom extends IncomingMessage {
     type: "JOINED_ROOM";
     playerID: string;
     color: string;
     otherPlayers: ModelPlayer[];
 }
 
-interface PlayerJoined {
+interface PlayerJoined extends IncomingMessage {
     type: "PLAYER_JOINED";
     name: string;
     color: string;
 }
 
-interface ReadySuccess {
+interface ReadySuccess extends IncomingMessage {
     type: "READY_SUCCESS";
 }
 
-interface PlayerReady {
+interface PlayerReady extends IncomingMessage {
     type: "PLAYER_READY";
     name: string;
 }
 
-interface GameStart {
+interface GameStart extends IncomingMessage {
     type: "GAME_START";
     portsHTML: string;
     tilesHTML: string;
@@ -44,42 +65,47 @@ interface GameStart {
     startingPlayer: string;
 }
 
-interface AvailSettles {
+interface AvailSettles extends IncomingMessage {
     type: "AVAIL_SETTLES";
     avail: Coord[];
 }
 
-interface AvailRoads {
+interface AvailRoads extends IncomingMessage {
     type: "AVAIL_ROADS";
     avail: Coord[];
 }
 
-interface SettleBuilt {
+interface SettleBuilt extends IncomingMessage {
     type: "SETTLE_BUILT";
     row: number;
     col: number;
     color: string;
 }
 
-interface RoadBuilt {
+interface RoadBuilt extends IncomingMessage {
     type: "ROAD_BUILT";
     row: number;
     col: number;
     color: string;
 }
 
-interface TurnStart {
+interface TurnStart extends IncomingMessage {
     type: "TURN_START";
     name: string;
 }
 
-interface Error {
+interface Error extends IncomingMessage {
     type: "ERROR";
+}
+
+interface DiceRolled extends IncomingMessage {
+    type: "DICE_ROLLED";
+    rollNum: number;
 }
 
 type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady
                     | GameStart | AvailRoads | AvailSettles | RoadBuilt | SettleBuilt
-                    | TurnStart | Error;
+                    | TurnStart | Error | DiceRolled;
 
 interface CreateRoom {
     type: "CREATE_ROOM";
@@ -138,8 +164,14 @@ interface EndTurn {
     roomID: number;
 }
 
+interface RollDice {
+    type: "ROLL_DICE";
+    playerID: string;
+    roomID: number;
+}
+
 type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart
-                     | ChoseSettle | ChoseRoad | EndTurn;
+                     | ChoseSettle | ChoseRoad | EndTurn | RollDice;
 
 const enum Items {
     PATH = "path",
@@ -163,8 +195,12 @@ const socket: WebSocket = new WebSocket('ws://localhost:8765');
 socket.addEventListener('open', (event: Event) => {console.log("Connection open");});
 
 socket.addEventListener('message', (event: MessageEvent) => {
+    const msgHandler: MessageHandler = new MessageHandler();
     var msg: InputMessage = JSON.parse(event.data);
-    new MessageHandler()[msg.type](msg);
+    if (msg.statusUpdates) {
+        msgHandler.updateStatuses(msg.statusUpdates);
+    }
+    msgHandler[msg.type](msg);
 });
 
 function sendMessage(msg: OutputMessage): void {
@@ -175,6 +211,24 @@ function sendMessage(msg: OutputMessage): void {
 // Message Handler Code ****************************************************************************
 
 class MessageHandler {
+    updateStatuses(statuses: StatusUpdate[]): void {
+        for (var status of statuses) {
+            updateStatVal(`${status.name}VPSpan`, 'vps', status);
+            updateStatVal(`${status.name}RoadSpan`, 'roads', status);
+            updateStatVal(`${status.name}HandSpan`, 'handSize', status);
+            updateStatVal(`${status.name}SettleSpan`, 'settles', status);
+            updateStatVal(`${status.name}DevSpan`, 'devCards', status);
+            updateStatVal(`${status.name}CitySpan`, 'cities', status);
+            updateStatVal(`${status.name}RoadLengthSpan`, 'roadLength', status);
+            updateStatVal(`${status.name}ArmySpan`, 'armySize', status);
+            updateStatVal(`${status.name}WoodSpan`, 'wood', status);
+            updateStatVal(`${status.name}BrickSpan`, 'brick', status);
+            updateStatVal(`${status.name}SheepSpan`, 'sheep', status);
+            updateStatVal(`${status.name}WheatSpan`, 'wheat', status);
+            updateStatVal(`${status.name}StoneSpan`, 'stone', status);
+        }
+    }
+
     CREATED_ROOM(msg: CreatedRoom): void {
         roomId = msg.roomID;
         playerId = msg.playerID;
@@ -249,6 +303,10 @@ class MessageHandler {
         document.getElementById(`${msg.name}Table`).classList.add("active");
 
         setButtonsDisabled(msg.name !== username);
+    }
+
+    DICE_ROLLED(msg: DiceRolled): void {
+        console.log(msg.rollNum);
     }
 }
 
@@ -362,4 +420,15 @@ function endTurn() {
     var out: EndTurn = {type: "END_TURN", roomID: roomId, playerID: playerId};
     setButtonsDisabled(true);
     sendMessage(out);
+}
+
+function rollDice() {
+    var out: RollDice = {type: "ROLL_DICE", roomID: roomId, playerID: playerId};
+    sendMessage(out);
+}
+
+function updateStatVal(id: string, fieldName: string, status: StatusUpdate): void {
+    if (status[fieldName]) {
+        document.getElementById(id).innerHTML = status[fieldName].toString();
+    }
 }
