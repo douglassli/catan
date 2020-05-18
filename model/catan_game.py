@@ -1,6 +1,7 @@
 from random import randint
 from model.resources import Resource
 from model.buildings import Buildings
+from server_controller.game_state import GameState
 
 
 class CatanGame:
@@ -31,17 +32,17 @@ class CatanGame:
     def cur_player(self):
         return self.players[self.cur_plyr_ind]
 
-    def change_turn(self, is_setup, reverse_turns):
-        if is_setup and self.cur_plyr_ind == len(self.players) - 1 and not reverse_turns:
-            return True, True
-        elif reverse_turns and self.cur_plyr_ind == 0:
-            return False, False
-        elif reverse_turns:
+    def change_turn(self, game_state):
+        if game_state == GameState.SETUP and self.cur_plyr_ind == len(self.players) - 1:
+            return GameState.SETUP_REV
+        elif game_state == GameState.SETUP_REV and self.cur_plyr_ind == 0:
+            return GameState.PRE_ROLL
+        elif game_state == GameState.SETUP_REV:
             self.cur_plyr_ind -= 1
-            return True, True
+            return GameState.SETUP_REV
         else:
             self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
-            return is_setup, False
+            return GameState.SETUP if game_state == GameState.SETUP else GameState.PRE_ROLL
 
     def can_build_settle(self):
         return self.cur_player().can_build_settle()
