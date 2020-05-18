@@ -58,9 +58,7 @@ class CatanGame:
 
     def build_settle(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.num_settles -= 1
-        if not is_setup:
-            cur_player.buy_settle()
+        cur_player.buy_settle(is_setup)
         self.nodes[coord].build_settle(cur_player)
         return cur_player.color
 
@@ -77,9 +75,7 @@ class CatanGame:
 
     def build_city(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.num_cities -= 1
-        if not is_setup:
-            cur_player.buy_city()
+        cur_player.buy_city(is_setup)
         self.nodes[coord].build_city(cur_player)
         return cur_player.color
 
@@ -105,9 +101,7 @@ class CatanGame:
 
     def build_road(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.num_roads -= 1
-        if not is_setup:
-            cur_player.buy_road()
+        cur_player.buy_road(is_setup)
         self.paths[coord].build_road(cur_player)
         # TODO check longest road
         return cur_player.color

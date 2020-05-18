@@ -26,8 +26,8 @@ class Room:
 
     async def add_player(self, websocket, name):
         new_player = ServerPlayer(str(uuid.uuid4()), websocket, name, self.get_next_color())
-        self.players[new_player.plyr_id] = new_player
-        other_players = [plyr for plyr in self.players.values() if plyr.plyr_id != new_player.plyr_id]
+        self.players[new_player.pid] = new_player
+        other_players = [plyr for plyr in self.players.values() if plyr.pid != new_player.pid]
 
         if len(self.players) == 1:
             await new_player.send_created_room(self.room_id)
@@ -43,7 +43,7 @@ class Room:
         player = self.players[player_id]
         await player.send_ready_success()
 
-        others = [other_plyr for other_plyr in self.players.values() if other_plyr.plyr_id != player_id]
+        others = [other_plyr for other_plyr in self.players.values() if other_plyr.pid != player_id]
         for other_plyr in others:
             await other_plyr.send_player_ready(player.name)
 
@@ -51,7 +51,7 @@ class Room:
         return len(self.players) == 4 and all([plyr.is_ready for plyr in self.players.values()])
 
     async def start_game(self):
-        player_data = [{"pid": plyr.plyr_id, "name": plyr.name, "color": plyr.color} for plyr in self.players.values()]
+        player_data = [{"pid": plyr.pid, "name": plyr.name, "color": plyr.color} for plyr in self.players.values()]
         self.game_model = generate_catan_game(player_data)
         self.game_state = self.game_state.get_next_state(Transitions.START_GAME)
         ports_html, tiles_html, numbers_html = fill_tiles(self.game_model)
@@ -111,8 +111,9 @@ class Room:
         if cur_player.pid == plyr_id and self.game_state.is_valid_transition(transition) and can_build:
             self.game_state = self.game_state.get_next_state(transition)
             color = builder((row, col), self.game_state.is_setup())
-            for player in self.players.values():
-                await player.send_built(msg_type, row, col, color)
+            for plyr in self.players.values():
+                updates = self.get_updates(plyr)
+                await plyr.send_built(msg_type, row, col, color, updates)
 
     async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
@@ -133,16 +134,9 @@ class Room:
             else:
                 self.game_state = self.game_state.get_next_state(Transitions.ROLL_DICE)
                 self.game_model.distribute_resources(roll_num)
-                for plyr in self.game_model.players:
-                    updates = [{mv.NAME: p.name, mv.HAND_SIZE: p.get_hand_size()} for p in self.game_model.players if p.pid != plyr.pid]
-                    updates.append({mv.NAME: plyr.name,
-                                    mv.HAND_SIZE: plyr.get_hand_size(),
-                                    mv.WOOD: plyr.resources[Resource.WOOD],
-                                    mv.BRICK: plyr.resources[Resource.BRICK],
-                                    mv.SHEEP: plyr.resources[Resource.SHEEP],
-                                    mv.WHEAT: plyr.resources[Resource.WHEAT],
-                                    mv.STONE: plyr.resources[Resource.STONE]})
-                    await self.players[plyr.pid].send_dice_rolled(roll_num, updates)
+                for plyr in self.players.values():
+                    updates = self.get_updates(plyr)
+                    await plyr.send_dice_rolled(roll_num, updates)
 
     async def robber_moved(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()
@@ -152,3 +146,28 @@ class Room:
             self.game_model.move_robber((row, col))
             for player in self.players.values():
                 await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1])
+
+    def get_public_state(self, player):
+        return {
+            mv.NAME: player.name,
+            mv.VPS: player.victory_points,
+            mv.ROADS: player.num_roads,
+            mv.SETTLES: player.num_settles,
+            mv.CITIES: player.num_cities,
+            mv.HAND_SIZE: player.get_hand_size(),
+            mv.DEV_CARDS: player.get_dev_card_hand_size(),
+            mv.ROAD_LENGTH: player.road_length,
+            mv.ARMY_SIZE: player.army_size
+        }
+
+    def get_private_state(self, player):
+        public = self.get_public_state(player)
+        public[mv.WOOD] = player.resources[Resource.WOOD]
+        public[mv.BRICK] = player.resources[Resource.BRICK]
+        public[mv.SHEEP] = player.resources[Resource.SHEEP]
+        public[mv.WHEAT] = player.resources[Resource.WHEAT]
+        public[mv.STONE] = player.resources[Resource.STONE]
+        return public
+
+    def get_updates(self, cur_plyr):
+        return [self.get_public_state(p) if p.pid != cur_plyr.pid else self.get_private_state(p) for p in self.game_model.players]

@@ -4,7 +4,7 @@ import json
 
 class ServerPlayer:
     def __init__(self, plyr_id, socket, name, color):
-        self.plyr_id = plyr_id
+        self.pid = plyr_id
         self.web_socket = socket
         self.name = name
         self.color = color
@@ -22,7 +22,7 @@ class ServerPlayer:
     async def send_created_room(self, room_id):
         return_msg = {mv.TYPE: mv.CREATED_ROOM,
                       mv.ROOM_ID: room_id,
-                      mv.PLAYER_ID: self.plyr_id,
+                      mv.PLAYER_ID: self.pid,
                       mv.COLOR: self.color}
         await self.send_msg(return_msg)
 
@@ -34,7 +34,7 @@ class ServerPlayer:
 
     async def send_joined_room(self, other_plyrs_data):
         return_msg = {mv.TYPE: mv.JOINED_ROOM,
-                      mv.PLAYER_ID: self.plyr_id,
+                      mv.PLAYER_ID: self.pid,
                       mv.COLOR: self.color,
                       mv.OTHER_PLAYERS: other_plyrs_data}
         await self.send_msg(return_msg)
@@ -68,11 +68,12 @@ class ServerPlayer:
                       mv.AVAIL: avail}
         await self.send_msg(return_msg)
 
-    async def send_built(self, msg_type, row, col, color):
+    async def send_built(self, msg_type, row, col, color, updates):
         return_msg = {mv.TYPE: msg_type,
                       mv.ROW: row,
                       mv.COL: col,
-                      mv.COLOR: color}
+                      mv.COLOR: color,
+                      mv.STATUS_UPDATES: updates}
         await self.send_msg(return_msg)
 
     async def send_start_turn(self, cur_name):
