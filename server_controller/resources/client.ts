@@ -192,7 +192,6 @@ socket.addEventListener('message', (event: MessageEvent) => {
 });
 
 function sendMessage(msg: OutputMessage): void {
-    console.log("SENDING MESSAGE")
     socket.send(JSON.stringify(msg));
 }
 
@@ -348,21 +347,18 @@ function displayReady(pNum: number): void {
 
 function createRoom(): void {
     username = (document.getElementById('nameInput') as HTMLInputElement).value;
-    var out: CreateRoom = {type: "CREATE_ROOM", name: username};
-    sendMessage(out);
+    sendMessage({type: "CREATE_ROOM", name: username});
 }
 
 function joinRoom(): void {
     username = (document.getElementById('nameInput') as HTMLInputElement).value;
     roomId = parseInt((document.getElementById('roomIdInput') as HTMLInputElement).value, 10);
-    var out: JoinRoom = {type: "JOIN_ROOM", name: username, roomID: roomId};
-    sendMessage(out);
+    sendMessage({type: "JOIN_ROOM", name: username, roomID: roomId});
 }
 
 function markReady(): void {
     displayReady(0);
-    var out: Ready = {type: "READY", playerID: playerId, roomID: roomId};
-    sendMessage(out);
+    sendMessage({type: "READY", playerID: playerId, roomID: roomId});
 }
 
 function startGame(): void {
@@ -374,8 +370,7 @@ function startGame(): void {
             return;
         }
     }
-    var out: StartGame = {type: "START_GAME", playerID: playerId, roomID: roomId}
-    sendMessage(out);
+    sendMessage({type: "START_GAME", playerID: playerId, roomID: roomId});
 }
 
 // SVG View code ***********************************************************************************
@@ -399,13 +394,10 @@ function setButtonsDisabled(isDisabled: boolean): void {
     }
 }
 
-function startSelection(msg_type: SelectTypes): void {
-    var out: SettleSelectStart | RoadSelectStart | CitySelectStart = {type: msg_type, playerID: playerId, roomID: roomId};
-    sendMessage(out);
-}
-function startSettleSelection(): void { startSelection(SelectTypes.SETTLE); };
-function startCitySelection(): void { startSelection(SelectTypes.CITY); };
-function startRoadSelection(): void { startSelection(SelectTypes.ROAD); };
+function startSelection(msg_type: SelectTypes): void { sendMessage({type: msg_type, playerID: playerId, roomID: roomId}); }
+function startSettleSelection(): void { startSelection(SelectTypes.SETTLE); }
+function startCitySelection(): void { startSelection(SelectTypes.CITY); }
+function startRoadSelection(): void { startSelection(SelectTypes.ROAD); }
 
 function displaySelection(available: Coord[], itemType: Items, msgType: ChoseTypes): void {
     var handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
@@ -419,21 +411,15 @@ function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
-    var out: ChoseMessage = {type: msgType, roomID: roomId, playerID: playerId,
-                             row: coord[0], col: coord[1]}
-    sendMessage(out);
+    sendMessage({type: msgType, roomID: roomId, playerID: playerId, row: coord[0], col: coord[1]} as OutputMessage);
 }
 
 function endTurn() {
-    var out: EndTurn = {type: "END_TURN", roomID: roomId, playerID: playerId};
     setButtonsDisabled(true);
-    sendMessage(out);
+    sendMessage({type: "END_TURN", roomID: roomId, playerID: playerId});
 }
 
-function rollDice() {
-    var out: RollDice = {type: "ROLL_DICE", roomID: roomId, playerID: playerId};
-    sendMessage(out);
-}
+function rollDice() { sendMessage({type: "ROLL_DICE", roomID: roomId, playerID: playerId}); }
 
 function updateStatVal(id: string, fieldName: string, status: StatusUpdate): void {
     if (status[fieldName]) {
