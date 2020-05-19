@@ -25,8 +25,32 @@ class Path:
     def has_owner(self):
         return self.owner is not None
 
-    def owns_any_ngbr_node(self, pid):
-        return any([ngbr_node.owned_by(pid) for ngbr_node in self.neighbor_nodes])
+    def owns_any_ngbr_node(self, plyr):
+        return any([ngbr_node.owned_by(plyr) for ngbr_node in self.neighbor_nodes])
 
-    def owns_any_ngbr_path(self, pid):
-        return any([ngbr_path.owned_by(pid) for ngbr_path in self.neighbor_paths])
+    def owns_any_ngbr_path(self, plyr):
+        return len(self.get_next_owned_roads(plyr)) > 0
+
+    def get_next_owned_roads(self, plyr):
+        accessible_roads = []
+        for node in self.neighbor_nodes:
+            if not node.has_owner() or node.owned_by(plyr):
+                accessible_roads += [path for path in node.neighbor_paths if path is not self and path.owned_by(plyr)]
+        return accessible_roads
+
+    def longest_road_from_start(self):
+        longest = 1
+        frontier = [(p, 1, {(self.row, self.col)}) for p in self.get_next_owned_roads(self.owner)]
+
+        while len(frontier) > 0:
+            cur_item = frontier.pop(0)
+            cpath = cur_item[0]
+            clen = cur_item[1]
+            cseen = cur_item[2]
+
+            longest = max(longest, clen + 1)
+            for p in cpath.get_next_owned_roads(cpath.owner):
+                if (p.row, p.col) not in cseen:
+                    frontier.append((p, clen + 1, cseen | {(cpath.row, cpath.col)}))
+
+        return longest

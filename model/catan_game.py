@@ -60,6 +60,7 @@ class CatanGame:
         cur_player = self.cur_player()
         cur_player.buy_settle(is_setup)
         self.nodes[coord].build_settle(cur_player)
+        self.update_longest_road()
         return cur_player.color
 
     def can_build_city(self):
@@ -103,7 +104,7 @@ class CatanGame:
         cur_player = self.cur_player()
         cur_player.buy_road(is_setup)
         self.paths[coord].build_road(cur_player)
-        # TODO check longest road
+        self.update_longest_road()
         return cur_player.color
 
     def get_robber_coord(self):
@@ -129,3 +130,26 @@ class CatanGame:
 
     def get_player_states(self):
         return [player.get_state() for player in self.players]
+
+    def update_longest_road(self):
+        longest = 0
+        prev_holder = None
+        for player in self.players:
+            owned_roads = [path for path in self.paths.values() if path.owned_by(player)]
+            if len(owned_roads) == 0:
+                continue
+
+            length = max([path.longest_road_from_start() for path in self.paths.values() if path.owned_by(player)])
+            player.road_length = length
+
+            if player.longest_road and length >= longest:
+                prev_holder = player
+                longest = length
+            elif player.longest_road and length < longest:
+                player.longest_road = False
+            elif not player.longest_road and length > longest:
+                if prev_holder is not None:
+                    prev_holder.longest_road = False
+                prev_holder = player
+                player.longest_road = True
+                longest = length
