@@ -1,4 +1,8 @@
-// Type definitions ********************************************************************************
+// Incoming message type definitions ***************************************************************
+
+interface Message {
+    type: string;
+}
 
 interface StatusUpdate {
     name: string;
@@ -17,11 +21,30 @@ interface StatusUpdate {
     stone?: number;
 }
 
-interface IncomingMessage {
+interface IncomingMessage extends Message {
     statusUpdates?: StatusUpdate[];
 }
 
-interface ModelPlayer extends IncomingMessage {
+interface AvailMessage extends IncomingMessage {
+    avail: Coord[];
+}
+
+interface AvailSettles extends AvailMessage { type: "AVAIL_SETTLES"; }
+interface AvailRoads extends AvailMessage { type: "AVAIL_ROADS"; }
+interface AvailCities extends AvailMessage { type: "AVAIL_CITIES"; }
+interface AvailRobbers extends AvailMessage { type: "AVAIL_ROBBERS"; }
+
+interface BuiltMessage extends IncomingMessage {
+    row: number;
+    col: number;
+    color: string;
+}
+
+interface SettleBuilt extends BuiltMessage { type: "SETTLE_BUILT"; }
+interface RoadBuilt extends BuiltMessage { type: "ROAD_BUILT"; }
+interface CityBuilt extends BuiltMessage { type: "CITY_BUILT"; }
+
+interface ModelPlayer {
     name: string;
     color: string;
     isReady: boolean;
@@ -65,42 +88,6 @@ interface GameStart extends IncomingMessage {
     startingPlayer: string;
 }
 
-interface AvailSettles extends IncomingMessage {
-    type: "AVAIL_SETTLES";
-    avail: Coord[];
-}
-
-interface AvailRoads extends IncomingMessage {
-    type: "AVAIL_ROADS";
-    avail: Coord[];
-}
-
-interface AvailCities extends IncomingMessage {
-    type: "AVAIL_CITIES";
-    avail: Coord[];
-}
-
-interface SettleBuilt extends IncomingMessage {
-    type: "SETTLE_BUILT";
-    row: number;
-    col: number;
-    color: string;
-}
-
-interface RoadBuilt extends IncomingMessage {
-    type: "ROAD_BUILT";
-    row: number;
-    col: number;
-    color: string;
-}
-
-interface CityBuilt extends IncomingMessage {
-    type: "CITY_BUILT";
-    row: number;
-    col: number;
-    color: string;
-}
-
 interface TurnStart extends IncomingMessage {
     type: "TURN_START";
     name: string;
@@ -115,11 +102,6 @@ interface DiceRolled extends IncomingMessage {
     rollNum: number;
 }
 
-interface AvailRobbers extends IncomingMessage {
-    type: "AVAIL_ROBBERS";
-    avail: Coord[];
-}
-
 interface RobberMoved extends IncomingMessage {
     type: "ROBBER_MOVED";
     row: number;
@@ -128,99 +110,56 @@ interface RobberMoved extends IncomingMessage {
     prevCol: number;
 }
 
-type InputMessage = CreatedRoom | JoinedRoom | PlayerJoined | ReadySuccess | PlayerReady
-                    | GameStart | AvailRoads | AvailSettles | RoadBuilt | SettleBuilt
-                    | TurnStart | Error | DiceRolled | AvailRobbers | RobberMoved | CityBuilt
-                    | AvailCities;
+// Outgoing Messsage type definitions **************************************************************
 
-interface CreateRoom {
+interface IDMessage extends Message {
+    playerID: string;
+    roomID: number;
+}
+
+const enum SelectTypes {
+    ROAD = "START_ROAD_SELECT",
+    SETTLE = "START_SETTLE_SELECT",
+    CITY = "START_CITY_SELECT"
+}
+
+interface Ready extends IDMessage { type: "READY"; }
+interface StartGame extends IDMessage { type: "START_GAME"; }
+interface SettleSelectStart extends IDMessage { type: SelectTypes.SETTLE; }
+interface CitySelectStart extends IDMessage { type: SelectTypes.CITY; }
+interface RoadSelectStart extends IDMessage { type: SelectTypes.ROAD; }
+interface EndTurn extends IDMessage { type: "END_TURN"; }
+interface RollDice extends IDMessage { type: "ROLL_DICE"; }
+
+interface ChoseMessage extends IDMessage {
+    row: number;
+    col: number;
+}
+
+const enum ChoseTypes {
+    ROAD = "CHOSE_ROAD",
+    SETTLE = "CHOSE_SETTLE",
+    CITY = "CHOSE_CITY",
+    ROBBER = "CHOSE_ROBBER"
+}
+
+interface ChoseSettle extends ChoseMessage { type: ChoseTypes.SETTLE; }
+interface ChoseCity extends ChoseMessage { type: ChoseTypes.CITY; }
+interface ChoseRoad extends ChoseMessage { type: ChoseTypes.ROAD; }
+interface ChoseRobber extends ChoseMessage { type: ChoseTypes.ROBBER; }
+
+interface CreateRoom extends Message {
     type: "CREATE_ROOM";
     name: string;
 }
 
-interface JoinRoom {
+interface JoinRoom extends Message {
     type: "JOIN_ROOM";
     name: string;
     roomID: number;
 }
 
-interface Ready {
-    type: "READY";
-    playerID: string;
-    roomID: number;
-}
-
-interface StartGame {
-    type: "START_GAME";
-    playerID: string;
-    roomID: number;
-}
-
-interface SettleSelectStart {
-    type: "START_SETTLE_SELECT";
-    playerID: string;
-    roomID: number;
-}
-
-interface CitySelectStart {
-    type: "START_CITY_SELECT";
-    playerID: string;
-    roomID: number;
-}
-
-interface RoadSelectStart {
-    type: "START_ROAD_SELECT";
-    playerID: string;
-    roomID: number;
-}
-
-interface ChoseSettle {
-    type: "CHOSE_SETTLE";
-    playerID: string;
-    roomID: number;
-    row: number;
-    col: number;
-}
-
-interface ChoseCity {
-    type: "CHOSE_CITY";
-    playerID: string;
-    roomID: number;
-    row: number;
-    col: number;
-}
-
-interface ChoseRoad {
-    type: "CHOSE_ROAD";
-    playerID: string;
-    roomID: number;
-    row: number;
-    col: number;
-}
-
-interface EndTurn {
-    type: "END_TURN";
-    playerID: string;
-    roomID: number;
-}
-
-interface RollDice {
-    type: "ROLL_DICE";
-    playerID: string;
-    roomID: number;
-}
-
-interface ChoseRobber {
-    type: "CHOSE_ROBBER";
-    playerID: string;
-    roomID: number;
-    row: number;
-    col: number;
-}
-
-type OutputMessage = CreateRoom | JoinRoom | Ready | StartGame | SettleSelectStart | RoadSelectStart
-                     | ChoseSettle | ChoseRoad | EndTurn | RollDice | ChoseRobber | CitySelectStart
-                     | ChoseCity;
+type OutputMessage = CreateRoom | JoinRoom | IDMessage;
 
 const enum Items {
     PATH = "path",
@@ -245,7 +184,7 @@ socket.addEventListener('open', (event: Event) => {console.log("Connection open"
 
 socket.addEventListener('message', (event: MessageEvent) => {
     const msgHandler: MessageHandler = new MessageHandler();
-    var msg: InputMessage = JSON.parse(event.data);
+    var msg: IncomingMessage = JSON.parse(event.data);
     if (msg.statusUpdates) {
         msgHandler.updateStatuses(msg.statusUpdates);
     }
@@ -327,15 +266,15 @@ class MessageHandler {
     }
 
     AVAIL_SETTLES(msg: AvailSettles): void {
-        displaySelection(msg.avail, Items.SETTLE, "CHOSE_SETTLE");
+        displaySelection(msg.avail, Items.SETTLE, ChoseTypes.SETTLE);
     }
 
     AVAIL_CITIES(msg: AvailCities): void {
-        displaySelection(msg.avail, Items.CITY, "CHOSE_CITY");
+        displaySelection(msg.avail, Items.CITY, ChoseTypes.CITY);
     }
 
     AVAIL_ROADS(msg: AvailRoads): void {
-        displaySelection(msg.avail, Items.PATH, "CHOSE_ROAD");
+        displaySelection(msg.avail, Items.PATH, ChoseTypes.ROAD);
     }
 
     SETTLE_BUILT(msg: SettleBuilt): void {
@@ -369,7 +308,7 @@ class MessageHandler {
     }
 
     AVAIL_ROBBERS(msg: AvailRobbers): void {
-        displaySelection(msg.avail, Items.ROBBER, "CHOSE_ROBBER");
+        displaySelection(msg.avail, Items.ROBBER, ChoseTypes.ROBBER);
     }
 
     ROBBER_MOVED(msg: RobberMoved): void {
@@ -460,29 +399,28 @@ function setButtonsDisabled(isDisabled: boolean): void {
     }
 }
 
-function startSelection(msg_type: "START_SETTLE_SELECT" | "START_ROAD_SELECT" | "START_CITY_SELECT"): void {
+function startSelection(msg_type: SelectTypes): void {
     var out: SettleSelectStart | RoadSelectStart | CitySelectStart = {type: msg_type, playerID: playerId, roomID: roomId};
     sendMessage(out);
 }
-function startSettleSelection(): void { startSelection("START_SETTLE_SELECT"); };
-function startCitySelection(): void { startSelection("START_CITY_SELECT"); };
-function startRoadSelection(): void { startSelection("START_ROAD_SELECT"); };
+function startSettleSelection(): void { startSelection(SelectTypes.SETTLE); };
+function startCitySelection(): void { startSelection(SelectTypes.CITY); };
+function startRoadSelection(): void { startSelection(SelectTypes.ROAD); };
 
-function displaySelection(available: Coord[], itemType: Items, msgType: "CHOSE_SETTLE" | "CHOSE_ROAD" | "CHOSE_ROBBER" | "CHOSE_CITY"): void {
+function displaySelection(available: Coord[], itemType: Items, msgType: ChoseTypes): void {
     var handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
     for (var availCoord of available) {
         setState(availCoord, itemType, ItemState.SELECTING, handler);
     }
 }
 
-function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: "CHOSE_ROAD" | "CHOSE_SETTLE" | "CHOSE_ROBBER" | "CHOSE_CITY") {
+function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: ChoseTypes) {
     for (var availCoord of available) {
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
-    var out: ChoseSettle | ChoseRoad | ChoseRobber | ChoseCity = {type: msgType,
-                                                                  roomID: roomId, playerID: playerId,
-                                                                  row: coord[0], col: coord[1]}
+    var out: ChoseMessage = {type: msgType, roomID: roomId, playerID: playerId,
+                             row: coord[0], col: coord[1]}
     sendMessage(out);
 }
 
