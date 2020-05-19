@@ -7,15 +7,6 @@ class Tile:
         self.nodes = nodes
         self.has_robber = has_robber
 
-    def as_data(self):
-        return {
-            "row": self.row,
-            "col": self.col,
-            "resource": self.resource.name,
-            "rollNum": self.roll_num,
-            "hasRobber": self.has_robber
-        }
-
     def give_resources(self, roll_num):
         if self.roll_num == roll_num and not self.has_robber:
             for node in self.nodes:

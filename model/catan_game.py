@@ -16,19 +16,6 @@ class CatanGame:
         self.nodes = nodes
         self.paths = paths
 
-    def __str__(self):
-        out = ""
-        for nk in sorted(self.nodes):
-            out += str(self.nodes[nk]) + "\n"
-        return out
-
-    def as_data(self):
-        return {
-            "tiles": [tile.as_data() for tile in self.tiles.values()],
-            "paths": [path.as_data() for path in self.paths.values()],
-            "nodes": [node.as_data() for node in self.nodes.values()]
-        }
-
     def cur_player(self):
         return self.players[self.cur_plyr_ind]
 
@@ -128,9 +115,6 @@ class CatanGame:
         for tile in self.tiles.values():
             tile.give_resources(roll_num)
 
-    def get_player_states(self):
-        return [player.get_state() for player in self.players]
-
     def update_longest_road(self):
         longest = 0
         prev_holder = None
@@ -147,7 +131,7 @@ class CatanGame:
                 longest = length
             elif player.longest_road and length < longest:
                 player.longest_road = False
-            elif not player.longest_road and length > longest:
+            elif not player.longest_road and length > longest and length >= 5:
                 if prev_holder is not None:
                     prev_holder.longest_road = False
                 prev_holder = player

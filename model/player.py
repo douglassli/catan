@@ -2,36 +2,20 @@ from model.resources import Resource
 from model.development_cards import DevCards
 
 
-class PlayerState:
-    def __init__(self, pid, name, color, resources, dev_cards, num_roads, num_settles, num_cities,
-                 army_size, largest_army, road_length, longest_road, victory_points):
+class Player:
+    def __init__(self, pid, name, color):
         self.pid = pid
         self.name = name
         self.color = color
-        self.resources = resources
-        self.dev_cards = dev_cards
-        self.num_roads = num_roads
-        self.num_settles = num_settles
-        self.num_cities = num_cities
-        self.army_size = army_size
-        self.largest_army = largest_army
-        self.road_length = road_length
-        self.longest_road = longest_road
-        self.victory_points = victory_points
-
-    def get_state(self):
-        return PlayerState(self.pid, self.name, self.color,
-                           {res: num for res, num in self.resources.items()},
-                           {dc: num for dc, num in self.dev_cards.items()},
-                           self.num_roads, self.num_settles, self.num_cities, self.army_size,
-                           self.largest_army, self.road_length, self.longest_road, self.victory_points)
-
-
-class Player(PlayerState):
-    def __init__(self, pid, name, color, num_roads=15, num_settles=5, num_cities=4):
-        resources = {res: 0 for res in Resource if res != Resource.DESERT}
-        dev_cards = {dc: 0 for dc in DevCards}
-        super().__init__(pid, name, color, resources, dev_cards, num_roads, num_settles, num_cities, 0, False, 0, False, 0)
+        self.resources = {res: 0 for res in Resource if res != Resource.DESERT}
+        self.dev_cards = {dc: 0 for dc in DevCards}
+        self.num_roads = 15
+        self.num_settles = 5
+        self.num_cities = 4
+        self.army_size = 0
+        self.largest_army = False
+        self.road_length = 0
+        self.longest_road = False
 
     def can_build_settle(self):
         has_settles = self.num_settles >= 1
@@ -62,7 +46,6 @@ class Player(PlayerState):
 
     def buy_settle(self, is_setup):
         self.num_settles -= 1
-        self.victory_points += 1
         if not is_setup:
             self.resources[Resource.WOOD] -= 1
             self.resources[Resource.BRICK] -= 1
