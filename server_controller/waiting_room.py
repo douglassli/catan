@@ -95,7 +95,6 @@ class Room:
         await self.chose(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT, Transitions.CHOSE_ROAD)
 
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
-            print("HERE 1")
             await self.end_turn(plyr_id)
 
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
@@ -150,7 +149,7 @@ class Room:
     def get_public_state(self, player):
         return {
             mv.NAME: player.name,
-            mv.VPS: player.victory_points,
+            mv.VPS: player.get_victory_points(),
             mv.ROADS: player.num_roads,
             mv.SETTLES: player.num_settles,
             mv.CITIES: player.num_cities,
@@ -170,4 +169,10 @@ class Room:
         return public
 
     def get_updates(self, cur_plyr):
-        return [self.get_public_state(p) if p.pid != cur_plyr.pid else self.get_private_state(p) for p in self.game_model.players]
+        updates = []
+        for plyr in self.game_model.players:
+            if plyr.pid == cur_plyr.pid:
+                updates.append(self.get_private_state(plyr))
+            else:
+                updates.append(self.get_public_state(plyr))
+        return updates

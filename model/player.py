@@ -89,3 +89,10 @@ class Player(PlayerState):
 
     def get_dev_card_hand_size(self):
         return sum([v for v in self.dev_cards.values()])
+
+    def get_victory_points(self):
+        return (5 - self.num_settles) + \
+               (2 * (4 - self.num_cities)) + \
+               (2 if self.longest_road else 0) + \
+               (2 if self.largest_army else 0) + \
+               self.dev_cards[DevCards.VP]

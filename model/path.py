@@ -43,11 +43,7 @@ class Path:
         frontier = [(p, 1, {(self.row, self.col)}) for p in self.get_next_owned_roads(self.owner)]
 
         while len(frontier) > 0:
-            cur_item = frontier.pop(0)
-            cpath = cur_item[0]
-            clen = cur_item[1]
-            cseen = cur_item[2]
-
+            cpath, clen, cseen = frontier.pop(0)
             longest = max(longest, clen + 1)
             for p in cpath.get_next_owned_roads(cpath.owner):
                 if (p.row, p.col) not in cseen:
