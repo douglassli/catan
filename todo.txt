@@ -10,7 +10,5 @@
  - make UI prettier
  - determining end of game
  - handle no more cards of certain resource
- - subtracting cards from available bank resources when distributing resources
- - return resources when items are bought
  - steal from player of choice where robber is when robber is moved
  - make city selecting prettier

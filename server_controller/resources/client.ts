@@ -103,10 +103,6 @@ interface TurnStart extends IncomingMessage {
     name: string;
 }
 
-interface Error extends IncomingMessage {
-    type: "ERROR";
-}
-
 interface DiceRolled extends IncomingMessage {
     type: "DICE_ROLLED";
     rollNum: number;
@@ -194,7 +190,7 @@ socket.addEventListener('open', (event: Event) => {console.log("Connection open"
 
 socket.addEventListener('message', (event: MessageEvent) => {
     const msgHandler: MessageHandler = new MessageHandler();
-    var msg: IncomingMessage = JSON.parse(event.data);
+    const msg: IncomingMessage = JSON.parse(event.data);
     if (msg.statusUpdates) {
         msgHandler.updateStatuses(msg.statusUpdates);
     }
@@ -212,7 +208,7 @@ function sendMessage(msg: OutputMessage): void {
 
 class MessageHandler {
     updateStatuses(statuses: StatusUpdate[]): void {
-        for (var status of statuses) {
+        for (let status of statuses) {
             updateStatVal(`${status.name}VPSpan`, 'vps', status);
             updateStatVal(`${status.name}RoadSpan`, 'roads', status);
             updateStatVal(`${status.name}HandSpan`, 'handSize', status);
@@ -265,8 +261,8 @@ class MessageHandler {
     }
 
     PLAYER_READY(msg: PlayerReady): void {
-        for (var i = 0; i < others.length; i++) {
-            var player = others[i];
+        for (let i = 0; i < others.length; i++) {
+            const player = others[i];
             if (player.name === msg.name) {
                 player.isReady = true;
                 displayReady(i + 1);
@@ -317,7 +313,7 @@ class MessageHandler {
 
     TURN_START(msg: TurnStart): void {
         document.getElementById(`${username}Table`).classList.remove("active");
-        for (var plyr of others) {
+        for (let plyr of others) {
             document.getElementById(`${plyr.name}Table`).classList.remove("active");
         }
         document.getElementById(`${msg.name}Table`).classList.add("active");
@@ -340,18 +336,18 @@ class MessageHandler {
 }
 
 // Waiting Room Code *******************************************************************************
-var playerId: string;
-var roomId: number;
-var username: string;
-var usercolor: string;
-var others: ModelPlayer[] = [];
+let playerId: string;
+let roomId: number;
+let username: string;
+let usercolor: string;
+let others: ModelPlayer[] = [];
 
 function addRoomId(): void {
     document.getElementById("roomHeader").innerHTML = `Room ID: ${roomId}`;
 }
 
 function addOtherPlayers(): void {
-    for (var i = 0; i < others.length; i++) {
+    for (let i = 0; i < others.length; i++) {
         const plyr = others[i];
         appendPlayer(plyr.name, plyr.color, plyr.isReady, i + 1);
     }
@@ -388,7 +384,7 @@ function startGame(): void {
     if (others.length < 3) {
         return;
     }
-    for (var i = 0; i < others.length; i++) {
+    for (let i = 0; i < others.length; i++) {
         if (!others[i].isReady) {
             return;
         }
@@ -412,8 +408,8 @@ function getItem(coord: Coord, itemType: Items): HTMLElement {
 
 function setButtonsDisabled(isDisabled: boolean): void {
     const buttons: HTMLCollectionOf<HTMLButtonElement> = document.getElementById("buttonBar").children as HTMLCollectionOf<HTMLButtonElement>;
-    for (var button of buttons) {
-        button.disabled = isDisabled;
+    for (let i = 0; i < buttons.length; i++) {
+        buttons.item(i).disabled = isDisabled;
     }
 }
 
@@ -423,14 +419,14 @@ function startCitySelection(): void { startSelection(SelectTypes.CITY); }
 function startRoadSelection(): void { startSelection(SelectTypes.ROAD); }
 
 function displaySelection(available: Coord[], itemType: Items, msgType: ChoseTypes): void {
-    var handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
-    for (var availCoord of available) {
+    const handler = (coord, iT) => {handleSelect(coord, iT, available, msgType);};
+    for (let availCoord of available) {
         setState(availCoord, itemType, ItemState.SELECTING, handler);
     }
 }
 
 function handleSelect(coord: Coord, itemType: Items, available: Coord[], msgType: ChoseTypes) {
-    for (var availCoord of available) {
+    for (let availCoord of available) {
         setState(availCoord, itemType, ItemState.HIDDEN, null);
     }
     setState(coord, itemType, ItemState.ACTIVE, null);
