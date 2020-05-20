@@ -137,3 +137,9 @@ class CatanGame:
                 prev_holder = player
                 player.longest_road = True
                 longest = length
+
+    def give_setup_resources(self, coord):
+        plyr = self.cur_player()
+        for tile in self.tiles.values():
+            if tile.resource != Resource.DESERT and tile.has_node(coord):
+                plyr.gain_resource(tile.resource, 1)

@@ -87,6 +87,7 @@ class Room:
         can_build = self.game_model.can_build_settle() or self.game_state.is_setup()
         await self.chose(plyr_id, row, col, can_build, self.game_model.build_settle, mv.SETTLE_BUILT, Transitions.CHOSE_SETTLE)
 
+        # TODO Check if chose was successful, if not, don't do next steps
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
             await self.start_road_select(plyr_id)
 
@@ -110,6 +111,10 @@ class Room:
         if cur_player.pid == plyr_id and self.game_state.is_valid_transition(transition) and can_build:
             self.game_state = self.game_state.get_next_state(transition)
             color = builder((row, col), self.game_state.is_setup())
+
+            if self.game_state == GameState.SETUP_REV and transition == Transitions.CHOSE_SETTLE:
+                self.game_model.give_setup_resources((row, col))
+
             for plyr in self.players.values():
                 updates = self.get_updates(plyr)
                 await plyr.send_built(msg_type, row, col, color, updates)

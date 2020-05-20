@@ -11,3 +11,9 @@ class Tile:
         if self.roll_num == roll_num and not self.has_robber:
             for node in self.nodes:
                 node.give_resource(self.resource)
+
+    def has_node(self, coord):
+        for node in self.nodes:
+            if node.row == coord[0] and node.col == coord[1]:
+                return True
+        return False

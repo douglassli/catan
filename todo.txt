@@ -13,5 +13,4 @@
  - subtracting cards from available bank resources when distributing resources
  - return resources when items are bought
  - steal from player of choice where robber is when robber is moved
- - Distribute initial resources from second settle in setup phase
  - make city selecting prettier
