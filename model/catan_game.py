@@ -45,7 +45,8 @@ class CatanGame:
 
     def build_settle(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.buy_settle(is_setup)
+        used_resources = cur_player.buy_settle(is_setup)
+        self.return_to_deck(used_resources)
         self.nodes[coord].build_settle(cur_player)
         self.update_longest_road()
         return cur_player.color
@@ -63,7 +64,8 @@ class CatanGame:
 
     def build_city(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.buy_city(is_setup)
+        used_resources = cur_player.buy_city(is_setup)
+        self.return_to_deck(used_resources)
         self.nodes[coord].build_city(cur_player)
         return cur_player.color
 
@@ -89,7 +91,8 @@ class CatanGame:
 
     def build_road(self, coord, is_setup):
         cur_player = self.cur_player()
-        cur_player.buy_road(is_setup)
+        used_resources = cur_player.buy_road(is_setup)
+        self.return_to_deck(used_resources)
         self.paths[coord].build_road(cur_player)
         self.update_longest_road()
         return cur_player.color
@@ -113,7 +116,9 @@ class CatanGame:
 
     def distribute_resources(self, roll_num):
         for tile in self.tiles.values():
-            tile.give_resources(roll_num)
+            res, num = tile.give_resources(roll_num)
+            if res != Resource.DESERT:
+                self.resources[res] -= num
 
     def update_longest_road(self):
         longest = 0
@@ -143,3 +148,8 @@ class CatanGame:
         for tile in self.tiles.values():
             if tile.resource != Resource.DESERT and tile.has_node(coord):
                 plyr.gain_resource(tile.resource, 1)
+                self.resources[tile.resource] -= 1
+
+    def return_to_deck(self, used_resources):
+        for res, num in used_resources.items():
+            self.resources[res] += num

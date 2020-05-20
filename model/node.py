@@ -37,5 +37,9 @@ class Node:
     def give_resource(self, resource):
         if self.building == Buildings.SETTLE:
             self.owner.gain_resource(resource, 1)
+            return 1
         elif self.building == Buildings.CITY:
             self.owner.gain_resource(resource, 2)
+            return 2
+        else:
+            return 0

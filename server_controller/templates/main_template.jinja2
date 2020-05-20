@@ -425,6 +425,21 @@
             {% include 'player_bar_template.jinja2' %}
         {% endif %}
         </div>
+        <div class="hidden" id="deckStatus">
+            <table id="deckTable">
+                <thead>
+                    <tr><th>Deck Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Wood: <span id="deckWoodNumSpan">19</span></td></tr>
+                    <tr><td>Brick: <span id="deckBrickNumSpan">19</span></td></tr>
+                    <tr><td>Sheep: <span id="deckSheepNumSpan">19</span></td></tr>
+                    <tr><td>Wheat: <span id="deckWheatNumSpan">19</span></td></tr>
+                    <tr><td>Stone: <span id="deckStoneNumSpan">19</span></td></tr>
+                    <tr><td>Dev Cards: <span id="deckDevNumSpan">25</span></td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

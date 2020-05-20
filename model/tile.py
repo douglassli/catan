@@ -8,9 +8,11 @@ class Tile:
         self.has_robber = has_robber
 
     def give_resources(self, roll_num):
+        num_given = 0
         if self.roll_num == roll_num and not self.has_robber:
             for node in self.nodes:
-                node.give_resource(self.resource)
+                num_given += node.give_resource(self.resource)
+        return self.resource, num_given
 
     def has_node(self, coord):
         for node in self.nodes:

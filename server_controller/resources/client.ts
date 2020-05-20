@@ -4,6 +4,15 @@ interface Message {
     type: string;
 }
 
+interface DeckUpdate {
+    wood?: number;
+    brick?: number;
+    sheep?: number;
+    wheat?: number;
+    stone?: number;
+    devCards?: number;
+}
+
 interface StatusUpdate {
     name: string;
     vps?: number;
@@ -23,6 +32,7 @@ interface StatusUpdate {
 
 interface IncomingMessage extends Message {
     statusUpdates?: StatusUpdate[];
+    deckUpdate?: DeckUpdate;
 }
 
 interface AvailMessage extends IncomingMessage {
@@ -188,6 +198,9 @@ socket.addEventListener('message', (event: MessageEvent) => {
     if (msg.statusUpdates) {
         msgHandler.updateStatuses(msg.statusUpdates);
     }
+    if (msg.deckUpdate) {
+        msgHandler.updateDeckStatus(msg.deckUpdate);
+    }
     msgHandler[msg.type](msg);
 });
 
@@ -214,6 +227,15 @@ class MessageHandler {
             updateStatVal(`${status.name}WheatSpan`, 'wheat', status);
             updateStatVal(`${status.name}StoneSpan`, 'stone', status);
         }
+    }
+
+    updateDeckStatus(status: DeckUpdate): void {
+        updateStatVal("deckDevNumSpan", 'devCards', status);
+        updateStatVal("deckWoodNumSpan", 'wood', status);
+        updateStatVal("deckBrickNumSpan", 'brick', status);
+        updateStatVal("deckSheepNumSpan", 'sheep', status);
+        updateStatVal("deckWheatNumSpan", 'wheat', status);
+        updateStatVal("deckStoneNumSpan", 'stone', status);
     }
 
     CREATED_ROOM(msg: CreatedRoom): void {
@@ -261,6 +283,7 @@ class MessageHandler {
         document.getElementById("playerBar").innerHTML = msg.playersHTML;
         document.getElementById("svgBoard").classList.remove("hidden");
         document.getElementById("buttonBar").classList.remove("hidden");
+        document.getElementById("deckStatus").classList.remove("hidden");
         this.TURN_START({type: "TURN_START", name: msg.startingPlayer});
     }
 
@@ -421,7 +444,7 @@ function endTurn() {
 
 function rollDice() { sendMessage({type: "ROLL_DICE", roomID: roomId, playerID: playerId}); }
 
-function updateStatVal(id: string, fieldName: string, status: StatusUpdate): void {
+function updateStatVal(id: string, fieldName: string, status: any): void {
     if (status[fieldName]) {
         document.getElementById(id).innerHTML = status[fieldName].toString();
     }

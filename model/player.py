@@ -43,6 +43,8 @@ class Player:
         if not is_setup:
             self.resources[Resource.WOOD] -= 1
             self.resources[Resource.BRICK] -= 1
+            return {Resource.WOOD: 1, Resource.BRICK: 1}
+        return {}
 
     def buy_settle(self, is_setup):
         self.num_settles -= 1
@@ -51,6 +53,8 @@ class Player:
             self.resources[Resource.BRICK] -= 1
             self.resources[Resource.SHEEP] -= 1
             self.resources[Resource.WHEAT] -= 1
+            return {Resource.WOOD: 1, Resource.BRICK: 1, Resource.SHEEP: 1, Resource.WHEAT: 1}
+        return {}
 
     def buy_city(self, is_setup):
         self.num_settles += 1
@@ -58,11 +62,14 @@ class Player:
         if not is_setup:
             self.resources[Resource.WHEAT] -= 2
             self.resources[Resource.STONE] -= 3
+            return {Resource.WHEAT: 2, Resource.STONE: 3}
+        return {}
 
     def buy_dev_card(self):
         self.resources[Resource.WHEAT] -= 1
         self.resources[Resource.SHEEP] -= 1
         self.resources[Resource.STONE] -= 1
+        return {Resource.WHEAT: 1, Resource.SHEEP: 1, Resource.STONE: 1}
 
     def gain_resource(self, resource, count):
         self.resources[resource] += count

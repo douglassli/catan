@@ -115,9 +115,10 @@ class Room:
             if self.game_state == GameState.SETUP_REV and transition == Transitions.CHOSE_SETTLE:
                 self.game_model.give_setup_resources((row, col))
 
+            deck_state = self.get_deck_state()
             for plyr in self.players.values():
                 updates = self.get_updates(plyr)
-                await plyr.send_built(msg_type, row, col, color, updates)
+                await plyr.send_built(msg_type, row, col, color, updates, deck_state)
 
     async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
@@ -138,9 +139,10 @@ class Room:
             else:
                 self.game_state = self.game_state.get_next_state(Transitions.ROLL_DICE)
                 self.game_model.distribute_resources(roll_num)
+                deck_state = self.get_deck_state()
                 for plyr in self.players.values():
                     updates = self.get_updates(plyr)
-                    await plyr.send_dice_rolled(roll_num, updates)
+                    await plyr.send_dice_rolled(roll_num, updates, deck_state)
 
     async def robber_moved(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()
@@ -150,6 +152,16 @@ class Room:
             self.game_model.move_robber((row, col))
             for player in self.players.values():
                 await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1])
+
+    def get_deck_state(self):
+        return {
+            mv.WOOD: self.game_model.resources[Resource.WOOD],
+            mv.BRICK: self.game_model.resources[Resource.BRICK],
+            mv.SHEEP: self.game_model.resources[Resource.SHEEP],
+            mv.WHEAT: self.game_model.resources[Resource.WHEAT],
+            mv.STONE: self.game_model.resources[Resource.STONE],
+            mv.DEV_CARDS: len(self.game_model.dev_cards)
+        }
 
     def get_public_state(self, player):
         return {

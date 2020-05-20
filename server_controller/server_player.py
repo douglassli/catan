@@ -68,12 +68,13 @@ class ServerPlayer:
                       mv.AVAIL: avail}
         await self.send_msg(return_msg)
 
-    async def send_built(self, msg_type, row, col, color, updates):
+    async def send_built(self, msg_type, row, col, color, updates, deck_state):
         return_msg = {mv.TYPE: msg_type,
                       mv.ROW: row,
                       mv.COL: col,
                       mv.COLOR: color,
-                      mv.STATUS_UPDATES: updates}
+                      mv.STATUS_UPDATES: updates,
+                      mv.DECK_UPDATE: deck_state}
         await self.send_msg(return_msg)
 
     async def send_start_turn(self, cur_name):
@@ -81,10 +82,11 @@ class ServerPlayer:
                       mv.NAME: cur_name}
         await self.send_msg(return_msg)
 
-    async def send_dice_rolled(self, roll_num, updates):
+    async def send_dice_rolled(self, roll_num, updates, deck_state):
         return_msg = {mv.TYPE: mv.DICE_ROLLED,
                       mv.ROLL_NUM: roll_num,
-                      mv.STATUS_UPDATES: updates}
+                      mv.STATUS_UPDATES: updates,
+                      mv.DECK_UPDATE: deck_state}
         await self.send_msg(return_msg)
 
     async def send_robber_moved(self, row, col, prev_row, prev_col):
