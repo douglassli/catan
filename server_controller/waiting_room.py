@@ -85,7 +85,8 @@ class Room:
 
     async def chose_settle(self, plyr_id, row, col):
         can_build = self.game_model.can_build_settle() or self.game_state.is_setup()
-        await self.chose(plyr_id, row, col, can_build, self.game_model.build_settle, mv.SETTLE_BUILT, Transitions.CHOSE_SETTLE)
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_settle,
+                         mv.SETTLE_BUILT, Transitions.CHOSE_SETTLE)
 
         # TODO Check if chose was successful, if not, don't do next steps
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
@@ -93,7 +94,8 @@ class Room:
 
     async def chose_road(self, plyr_id, row, col):
         can_build = self.game_model.can_build_road() or self.game_state.is_setup()
-        await self.chose(plyr_id, row, col, can_build, self.game_model.build_road, mv.ROAD_BUILT, Transitions.CHOSE_ROAD)
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_road,
+                         mv.ROAD_BUILT, Transitions.CHOSE_ROAD)
 
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
             await self.end_turn(plyr_id)
@@ -104,7 +106,8 @@ class Room:
 
     async def chose_city(self, plyr_id, row, col):
         can_build = self.game_model.can_build_city()
-        await self.chose(plyr_id, row, col, can_build, self.game_model.build_city, mv.CITY_BUILT, Transitions.CHOSE_CITY)
+        await self.chose(plyr_id, row, col, can_build, self.game_model.build_city,
+                         mv.CITY_BUILT, Transitions.CHOSE_CITY)
 
     async def chose(self, plyr_id, row, col, can_build, builder, msg_type, transition):
         cur_player = self.game_model.cur_player()
@@ -123,7 +126,7 @@ class Room:
 
     async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
-        if plyr_id == cur_plyr.pid and (self.game_state == GameState.NORMAL or self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV):
+        if plyr_id == cur_plyr.pid and self.game_state in [GameState.NORMAL, GameState.SETUP, GameState.SETUP_REV]:
             self.game_state = self.game_model.change_turn(self.game_state)
             new_cur_plyr = self.game_model.cur_player()
             for player in self.players.values():
