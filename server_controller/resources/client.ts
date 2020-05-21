@@ -33,6 +33,7 @@ interface StatusUpdate {
 interface IncomingMessage extends Message {
     statusUpdates?: StatusUpdate[];
     deckUpdate?: DeckUpdate;
+    activeButtons?: string[];
 }
 
 interface AvailMessage extends IncomingMessage {
@@ -197,6 +198,9 @@ socket.addEventListener('message', (event: MessageEvent) => {
     if (msg.deckUpdate) {
         msgHandler.updateDeckStatus(msg.deckUpdate);
     }
+    if (msg.activeButtons) {
+        msgHandler.updateActiveButtons(msg.activeButtons);
+    }
     msgHandler[msg.type](msg);
 });
 
@@ -232,6 +236,14 @@ class MessageHandler {
         updateStatVal("deckSheepNumSpan", 'sheep', status);
         updateStatVal("deckWheatNumSpan", 'wheat', status);
         updateStatVal("deckStoneNumSpan", 'stone', status);
+    }
+
+    updateActiveButtons(buttonIds: string[]): void {
+        setButtonsDisabled(true);
+        for (let bid of buttonIds) {
+            const button: HTMLButtonElement = document.getElementById(bid) as HTMLButtonElement;
+            button.disabled = false;
+        }
     }
 
     CREATED_ROOM(msg: CreatedRoom): void {
@@ -284,14 +296,17 @@ class MessageHandler {
     }
 
     AVAIL_SETTLES(msg: AvailSettles): void {
+        setButtonsDisabled(true);
         displaySelection(msg.avail, Items.SETTLE, ChoseTypes.SETTLE);
     }
 
     AVAIL_CITIES(msg: AvailCities): void {
+        setButtonsDisabled(true);
         displaySelection(msg.avail, Items.CITY, ChoseTypes.CITY);
     }
 
     AVAIL_ROADS(msg: AvailRoads): void {
+        setButtonsDisabled(true);
         displaySelection(msg.avail, Items.PATH, ChoseTypes.ROAD);
     }
 
@@ -317,8 +332,6 @@ class MessageHandler {
             document.getElementById(`${plyr.name}Table`).classList.remove("active");
         }
         document.getElementById(`${msg.name}Table`).classList.add("active");
-
-        setButtonsDisabled(msg.name !== username);
     }
 
     DICE_ROLLED(msg: DiceRolled): void {
@@ -326,6 +339,7 @@ class MessageHandler {
     }
 
     AVAIL_ROBBERS(msg: AvailRobbers): void {
+        setButtonsDisabled(true);
         displaySelection(msg.avail, Items.ROBBER, ChoseTypes.ROBBER);
     }
 

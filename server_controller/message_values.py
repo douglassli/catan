@@ -94,3 +94,13 @@ BRICK = "brick"
 SHEEP = "sheep"
 WHEAT = "wheat"
 STONE = "stone"
+ACTIVE_BUTTONS = "activeButtons"
+
+# Button Ids
+TRADE_BUTTON = "tradeButton"
+ROAD_BUTTON = "buyRoadButton"
+SETTLE_BUTTON = "buySettleButton"
+CITY_BUTTON = "buyCityButton"
+DEV_BUTTON = "buyDevCardButton"
+ROLL_BUTTON = "rollButton"
+END_TURN_BUTTON = "endTurnButton"

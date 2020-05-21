@@ -2,7 +2,6 @@
  - using dev cards
  - trading with bank
  - trading with other players
- - disable action buttons depending on available actions
  - ports
  - additional UI elements
    - deck status

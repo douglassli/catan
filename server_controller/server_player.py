@@ -68,31 +68,39 @@ class ServerPlayer:
                       mv.AVAIL: avail}
         await self.send_msg(return_msg)
 
-    async def send_built(self, msg_type, row, col, color, updates, deck_state):
+    async def send_built(self, msg_type, row, col, color, updates, deck_state, active_buttons):
         return_msg = {mv.TYPE: msg_type,
                       mv.ROW: row,
                       mv.COL: col,
                       mv.COLOR: color,
                       mv.STATUS_UPDATES: updates,
                       mv.DECK_UPDATE: deck_state}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_start_turn(self, cur_name):
+    async def send_start_turn(self, cur_name, active_buttons):
         return_msg = {mv.TYPE: mv.TURN_START,
                       mv.NAME: cur_name}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_dice_rolled(self, roll_num, updates, deck_state):
+    async def send_dice_rolled(self, roll_num, updates, deck_state, active_buttons):
         return_msg = {mv.TYPE: mv.DICE_ROLLED,
                       mv.ROLL_NUM: roll_num,
                       mv.STATUS_UPDATES: updates,
                       mv.DECK_UPDATE: deck_state}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_robber_moved(self, row, col, prev_row, prev_col):
+    async def send_robber_moved(self, row, col, prev_row, prev_col, active_buttons):
         return_msg = {mv.TYPE: mv.ROBBER_MOVED,
                       mv.ROW: row,
                       mv.COL: col,
                       mv.PREV_ROW: prev_row,
                       mv.PREV_COL: prev_col}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)

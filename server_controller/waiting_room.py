@@ -117,8 +117,9 @@ class Room:
 
             deck_state = self.get_deck_state()
             for plyr in self.players.values():
+                active_buttons = self.get_active_buttons() if cur_player.pid == plyr.pid else None
                 updates = self.get_updates(plyr)
-                await plyr.send_built(msg_type, row, col, color, updates, deck_state)
+                await plyr.send_built(msg_type, row, col, color, updates, deck_state, active_buttons)
 
     async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
@@ -126,7 +127,8 @@ class Room:
             self.game_state = self.game_model.change_turn(self.game_state)
             new_cur_plyr = self.game_model.cur_player()
             for player in self.players.values():
-                await player.send_start_turn(new_cur_plyr.name)
+                active_buttons = self.get_active_buttons() if new_cur_plyr.pid == player.pid else None
+                await player.send_start_turn(new_cur_plyr.name, active_buttons)
 
     async def roll_dice(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
@@ -142,7 +144,8 @@ class Room:
                 deck_state = self.get_deck_state()
                 for plyr in self.players.values():
                     updates = self.get_updates(plyr)
-                    await plyr.send_dice_rolled(roll_num, updates, deck_state)
+                    active_buttons = self.get_active_buttons() if cur_plyr.pid == plyr.pid else None
+                    await plyr.send_dice_rolled(roll_num, updates, deck_state, active_buttons)
 
     async def robber_moved(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()
@@ -151,7 +154,8 @@ class Room:
             prev_coord = self.game_model.get_robber_coord()
             self.game_model.move_robber((row, col))
             for player in self.players.values():
-                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1])
+                active_buttons = self.get_active_buttons() if cur_player.pid == player.pid else None
+                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons)
 
     def get_deck_state(self):
         return {
@@ -193,3 +197,23 @@ class Room:
             else:
                 updates.append(self.get_public_state(plyr))
         return updates
+
+    def get_active_buttons(self):
+        buttons = []
+        cur_plyr = self.game_model.cur_player()
+        is_normal = self.game_state == GameState.NORMAL
+        if self.game_state == GameState.PRE_ROLL:
+            buttons.append(mv.ROLL_BUTTON)
+        if is_normal:
+            buttons.append(mv.END_TURN_BUTTON)
+        if cur_plyr.can_buy_dev_card() and is_normal:
+            buttons.append(mv.DEV_BUTTON)
+        if cur_plyr.can_build_city() and is_normal:
+            buttons.append(mv.CITY_BUTTON)
+        if cur_plyr.can_build_settle() and is_normal:
+            buttons.append(mv.SETTLE_BUTTON)
+        if cur_plyr.can_build_road() and is_normal:
+            buttons.append(mv.ROAD_BUTTON)
+        if is_normal:
+            buttons.append(mv.TRADE_BUTTON)
+        return buttons
