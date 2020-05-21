@@ -160,6 +160,16 @@ class Room:
                 active_buttons = self.get_active_buttons() if cur_player.pid == player.pid else None
                 await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons)
 
+    async def buy_dev_card(self, plyr_id):
+        cur_plyr = self.game_model.cur_player()
+        if cur_plyr.pid == plyr_id and self.game_state == GameState.NORMAL and cur_plyr.can_buy_dev_card():
+            self.game_model.buy_dev_card()
+            deck_state = self.get_deck_state()
+            updates = self.get_updates(cur_plyr)
+            for plyr in self.players.values():
+                active_buttons = self.get_active_buttons() if cur_plyr.pid == plyr.pid else None
+                await plyr.send_bought_dev_card(cur_plyr.name, updates, deck_state, active_buttons)
+
     def get_deck_state(self):
         return {
             mv.WOOD: self.game_model.resources[Resource.WOOD],

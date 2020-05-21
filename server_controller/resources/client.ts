@@ -117,6 +117,11 @@ interface RobberMoved extends IncomingMessage {
     prevCol: number;
 }
 
+interface BoughtDevCard extends IncomingMessage {
+    type: "BOUGHT_DEV_CARD";
+    name: string;
+}
+
 // Outgoing Messsage type definitions **************************************************************
 
 interface IDMessage extends Message {
@@ -137,6 +142,7 @@ interface CitySelectStart extends IDMessage { type: SelectTypes.CITY; }
 interface RoadSelectStart extends IDMessage { type: SelectTypes.ROAD; }
 interface EndTurn extends IDMessage { type: "END_TURN"; }
 interface RollDice extends IDMessage { type: "ROLL_DICE"; }
+interface BuyDevCard extends IDMessage { type: "BUY_DEV_CARD"; }
 
 interface ChoseMessage extends IDMessage {
     row: number;
@@ -347,6 +353,10 @@ class MessageHandler {
         setState([msg.row, msg.col], Items.ROBBER, ItemState.ACTIVE, null);
         setState([msg.prevRow, msg.prevCol], Items.ROBBER, ItemState.HIDDEN, null);
     }
+
+    BOUGHT_DEV_CARD(msg: BoughtDevCard): void {
+        // Do nothing
+    }
 }
 
 // Waiting Room Code *******************************************************************************
@@ -458,4 +468,8 @@ function updateStatVal(id: string, fieldName: string, status: any): void {
     if (typeof status[fieldName] !== "undefined") {
         document.getElementById(id).innerHTML = status[fieldName].toString();
     }
+}
+
+function buyDevCard() {
+    sendMessage({type: "BUY_DEV_CARD", roomID: roomId, playerID: playerId})
 }

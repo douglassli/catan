@@ -65,7 +65,8 @@ class Player:
             return {Resource.WHEAT: 2, Resource.STONE: 3}
         return {}
 
-    def buy_dev_card(self):
+    def buy_dev_card(self, dev_card):
+        self.dev_cards[dev_card] += 1
         self.resources[Resource.WHEAT] -= 1
         self.resources[Resource.SHEEP] -= 1
         self.resources[Resource.STONE] -= 1

@@ -90,3 +90,8 @@ class RollDiceMsg(InputMessage):
 class ChoseRobberMsg(InputMessage):
     async def handler(self, room):
         await room.robber_moved(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
+
+
+class BuyDevCardMsg(InputMessage):
+    async def handler(self, room):
+        await room.buy_dev_card(self.msg[mv.PLAYER_ID])

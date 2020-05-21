@@ -153,3 +153,7 @@ class CatanGame:
     def return_to_deck(self, used_resources):
         for res, num in used_resources.items():
             self.resources[res] += num
+
+    def buy_dev_card(self):
+        used_resources = self.cur_player().buy_dev_card(self.dev_cards.pop())
+        self.return_to_deck(used_resources)

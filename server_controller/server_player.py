@@ -104,3 +104,12 @@ class ServerPlayer:
         if active_buttons is not None:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
+
+    async def send_bought_dev_card(self, name, updates, deck_state, active_buttons):
+        return_msg = {mv.TYPE: mv.BOUGHT_DEV_CARD,
+                      mv.NAME: name,
+                      mv.STATUS_UPDATES: updates,
+                      mv.DECK_UPDATE: deck_state}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
+        await self.send_msg(return_msg)
