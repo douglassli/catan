@@ -106,7 +106,8 @@ interface TurnStart extends IncomingMessage {
 
 interface DiceRolled extends IncomingMessage {
     type: "DICE_ROLLED";
-    rollNum: number;
+    rollNum1: number;
+    rollNum2: number;
 }
 
 interface RobberMoved extends IncomingMessage {
@@ -298,6 +299,7 @@ class MessageHandler {
         document.getElementById("svgBoard").classList.remove("hidden");
         document.getElementById("buttonBar").classList.remove("hidden");
         document.getElementById("deckStatus").classList.remove("hidden");
+        document.getElementById("lastRollDiv").classList.remove("hidden");
         this.TURN_START({type: "TURN_START", name: msg.startingPlayer});
     }
 
@@ -341,7 +343,8 @@ class MessageHandler {
     }
 
     DICE_ROLLED(msg: DiceRolled): void {
-        console.log(msg.rollNum);
+        document.getElementById("dice1").innerHTML = msg.rollNum1.toString(10);
+        document.getElementById("dice2").innerHTML = msg.rollNum2.toString(10);
     }
 
     AVAIL_ROBBERS(msg: AvailRobbers): void {

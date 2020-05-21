@@ -136,19 +136,21 @@ class Room:
     async def roll_dice(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
         if plyr_id == cur_plyr.pid and self.game_state.is_valid_transition(Transitions.ROLL_DICE):
-            roll_num = self.game_model.roll_dice()
-            if roll_num == 7:
+            roll_num1, roll_num2 = self.game_model.roll_dice()
+            if roll_num1 + roll_num2 == 7:
                 self.game_state = self.game_state.get_next_state(Transitions.ROLL_SEVEN)
                 avail = self.game_model.get_avail_robber_coords()
                 await self.players[cur_plyr.pid].display_options(mv.AVAIL_ROBBERS, avail)
+                for plyr in self.players.values():
+                    await plyr.send_dice_rolled(roll_num1, roll_num2, [], {}, None)
             else:
                 self.game_state = self.game_state.get_next_state(Transitions.ROLL_DICE)
-                self.game_model.distribute_resources(roll_num)
+                self.game_model.distribute_resources(roll_num1 + roll_num2)
                 deck_state = self.get_deck_state()
                 for plyr in self.players.values():
                     updates = self.get_updates(plyr)
                     active_buttons = self.get_active_buttons() if cur_plyr.pid == plyr.pid else None
-                    await plyr.send_dice_rolled(roll_num, updates, deck_state, active_buttons)
+                    await plyr.send_dice_rolled(roll_num1, roll_num2, updates, deck_state, active_buttons)
 
     async def robber_moved(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()

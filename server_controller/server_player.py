@@ -86,9 +86,10 @@ class ServerPlayer:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_dice_rolled(self, roll_num, updates, deck_state, active_buttons):
+    async def send_dice_rolled(self, roll_num1, roll_num2, updates, deck_state, active_buttons):
         return_msg = {mv.TYPE: mv.DICE_ROLLED,
-                      mv.ROLL_NUM: roll_num,
+                      mv.ROLL_NUM1: roll_num1,
+                      mv.ROLL_NUM2: roll_num2,
                       mv.STATUS_UPDATES: updates,
                       mv.DECK_UPDATE: deck_state}
         if active_buttons is not None:

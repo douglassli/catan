@@ -2,8 +2,6 @@
  - trading with bank
  - trading with other players
  - ports
- - additional UI elements
-   - last dice roll
  - make UI prettier
  - determining end of game
  - handle no more cards of certain resource

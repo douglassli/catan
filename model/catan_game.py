@@ -112,7 +112,7 @@ class CatanGame:
     def roll_dice(self):
         d1 = randint(1, 6)
         d2 = randint(1, 6)
-        return d1 + d2
+        return d1, d2
 
     def distribute_resources(self, roll_num):
         for tile in self.tiles.values():

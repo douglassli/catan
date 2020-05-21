@@ -49,6 +49,17 @@
     </div>
     {% endif %}
     <div id="controlDiv">
+        <div class="hidden" id="lastRollDiv">
+            <table id="lastRollTable">
+                <thead>
+                    <tr><th>Last Roll</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Dice 1: <span id="dice1"></span></td></tr>
+                    <tr><td>Dice 2: <span id="dice2"></span></td></tr>
+                </tbody>
+            </table>
+        </div>
         <div id="boardDiv">
             <svg id="svgBoard" viewBox="0 0 800 800" {{ 'class="hidden"' if not includeGame }}>
                 <defs>
