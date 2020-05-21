@@ -192,13 +192,13 @@ socket.addEventListener('open', (event: Event) => {console.log("Connection open"
 socket.addEventListener('message', (event: MessageEvent) => {
     const msgHandler: MessageHandler = new MessageHandler();
     const msg: IncomingMessage = JSON.parse(event.data);
-    if (msg.statusUpdates) {
+    if (typeof msg.statusUpdates !== "undefined") {
         msgHandler.updateStatuses(msg.statusUpdates);
     }
-    if (msg.deckUpdate) {
+    if (typeof msg.deckUpdate !== "undefined") {
         msgHandler.updateDeckStatus(msg.deckUpdate);
     }
-    if (msg.activeButtons) {
+    if (typeof msg.activeButtons !== "undefined") {
         msgHandler.updateActiveButtons(msg.activeButtons);
     }
     msgHandler[msg.type](msg);
@@ -455,7 +455,7 @@ function endTurn() {
 function rollDice() { sendMessage({type: "ROLL_DICE", roomID: roomId, playerID: playerId}); }
 
 function updateStatVal(id: string, fieldName: string, status: any): void {
-    if (status[fieldName]) {
+    if (typeof status[fieldName] !== "undefined") {
         document.getElementById(id).innerHTML = status[fieldName].toString();
     }
 }
