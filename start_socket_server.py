@@ -1,4 +1,4 @@
-from server_controller.catan_server import CatanServer
+from socket_server.catan_server import CatanServer
 import websockets
 import asyncio
 

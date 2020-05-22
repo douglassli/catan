@@ -1,7 +1,7 @@
 from random import randint
 from model.resources import Resource
 from model.buildings import Buildings
-from server_controller.game_state import GameState
+from socket_server.game_state import GameState
 
 
 class CatanGame:

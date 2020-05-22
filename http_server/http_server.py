@@ -1,5 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from server_controller.templating import create_page
+from socket_server.templating import create_page
 from model.game_generator import generate_catan_game
 
 
@@ -52,7 +52,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_resource(page, "text/html")
 
     def get_css(self):
-        with open("server_controller/resources/svg_styles.css", "r") as f:
+        with open("http_server/resources/svg_styles.css", "r") as f:
             data = f.read().encode("utf-8")
         self.send_resource(data, "text/css")
 
@@ -61,7 +61,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_resource(page, "text/html")
 
     def get_room_js(self):
-        with open("server_controller/resources/client.js", "r") as f:
+        with open("http_server/resources/client.js", "r") as f:
             data = f.read().encode("utf-8")
         self.send_resource(data, "text/javascript")
 

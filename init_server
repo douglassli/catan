@@ -1,5 +1,5 @@
 echo "Compiling typescript..."
-cd server_controller/resources
+cd http_server/resources
 tsc --removeComments true -t ES6 client.ts
 cd ../..
 echo "Starting server..."

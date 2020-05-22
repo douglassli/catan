@@ -1,5 +1,5 @@
-from server_controller.waiting_room import Room
-import server_controller.message_values as mv
+from socket_server.waiting_room import Room
+import socket_server.message_values as mv
 import websockets
 import random
 import json

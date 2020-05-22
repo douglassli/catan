@@ -2,6 +2,6 @@
 *.png
 .idea
 __pycache__
-server_controller/room_events.txt
+socket_server/room_events.txt
 .DS_Store
 *.js

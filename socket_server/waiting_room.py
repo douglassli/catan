@@ -1,9 +1,9 @@
 import uuid
 from model.game_generator import generate_catan_game
-from server_controller.templating import fill_tiles, player_bar
-from server_controller.server_player import ServerPlayer
-from server_controller.game_state import GameState, Transitions
-import server_controller.message_values as mv
+from socket_server.templating import fill_tiles, player_bar
+from socket_server.server_player import ServerPlayer
+from socket_server.game_state import GameState, Transitions
+import socket_server.message_values as mv
 from model.resources import Resource
 
 
