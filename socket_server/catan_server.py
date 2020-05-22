@@ -7,8 +7,6 @@ import json
 
 class CatanServer:
     def __init__(self):
-        self.games = {}
-        self.client_ids = set()
         self.rooms = {}
 
     async def consumer_handler(self, websocket, path):

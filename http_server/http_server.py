@@ -1,5 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socket_server.templating import create_page
+from http_server.templating import create_page
 from model.game_generator import generate_catan_game
 
 

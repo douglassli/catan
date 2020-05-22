@@ -23,7 +23,7 @@ def get_template_data(game):
 
 
 def create_env():
-    return Environment(loader=PackageLoader('socket_server', '../http_server/templates'),
+    return Environment(loader=PackageLoader('http_server', 'templates'),
                        autoescape=select_autoescape(['html', 'xml']))
 
 
