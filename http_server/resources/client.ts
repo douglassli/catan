@@ -116,6 +116,13 @@ interface RobberMoved extends IncomingMessage {
     col: number;
     prevRow: number;
     prevCol: number;
+    availToRob?: string[];
+}
+
+interface PlayerRobbed extends IncomingMessage {
+    type: "PLAYER_ROBBED";
+    playerRobbed: string;
+    playerGained: string;
 }
 
 interface BoughtDevCard extends IncomingMessage {
@@ -144,6 +151,7 @@ interface RoadSelectStart extends IDMessage { type: SelectTypes.ROAD; }
 interface EndTurn extends IDMessage { type: "END_TURN"; }
 interface RollDice extends IDMessage { type: "ROLL_DICE"; }
 interface BuyDevCard extends IDMessage { type: "BUY_DEV_CARD"; }
+interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB", name: string; };
 
 interface ChoseMessage extends IDMessage {
     row: number;
@@ -355,9 +363,16 @@ class MessageHandler {
     ROBBER_MOVED(msg: RobberMoved): void {
         setState([msg.row, msg.col], Items.ROBBER, ItemState.ACTIVE, null);
         setState([msg.prevRow, msg.prevCol], Items.ROBBER, ItemState.HIDDEN, null);
+        if (typeof msg.availToRob !== "undefined") {
+            startPlayerRobSelection(msg.availToRob);
+        }
     }
 
     BOUGHT_DEV_CARD(msg: BoughtDevCard): void {
+        // Do nothing
+    }
+
+    PLAYER_ROBBED(msg: PlayerRobbed): void {
         // Do nothing
     }
 }
@@ -475,4 +490,22 @@ function updateStatVal(id: string, fieldName: string, status: any): void {
 
 function buyDevCard() {
     sendMessage({type: "BUY_DEV_CARD", roomID: roomId, playerID: playerId})
+}
+
+function startPlayerRobSelection(avail: string[]): void {
+    const robDiv: HTMLElement = document.getElementById("robButtonsDiv");
+    robDiv.innerHTML = "";
+    for (let name of avail) {
+        const button: HTMLButtonElement = document.createElement("button") as HTMLButtonElement;
+        button.innerHTML = name;
+        button.onclick = () => { handlePlayerRobSelect(name); };
+        robDiv.appendChild(button);
+    }
+    document.getElementById("robWindow").classList.remove("hidden");
+}
+
+function handlePlayerRobSelect(name: string): void {
+    document.getElementById("robWindow").classList.add("hidden");
+    const msg: ChosePlayerRob = {type: "CHOSE_PLAYER_ROB", roomID: roomId, playerID: playerId, name: name};
+    sendMessage(msg);
 }

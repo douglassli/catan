@@ -92,6 +92,11 @@ class ChoseRobberMsg(InputMessage):
         await room.robber_moved(self.msg[mv.PLAYER_ID], self.msg[mv.ROW], self.msg[mv.COL])
 
 
+class ChosePlayerRobMsg(InputMessage):
+    async def handler(self, room):
+        await room.chose_player_rob(self.msg[mv.PLAYER_ID], self.msg[mv.NAME])
+
+
 class BuyDevCardMsg(InputMessage):
     async def handler(self, room):
         await room.buy_dev_card(self.msg[mv.PLAYER_ID])

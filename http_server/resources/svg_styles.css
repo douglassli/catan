@@ -83,3 +83,17 @@ body {
     margin: 0;
     background-color: #0E46E6;
 }
+
+#robWindow {
+    background-color: gray;
+    padding: 10px;
+
+    position: absolute;
+    top: 40vh;
+    left: 45vh;
+}
+
+#robButtonsDiv {
+    display: flex;
+    justify-content: center;
+}

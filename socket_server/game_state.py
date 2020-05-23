@@ -11,6 +11,7 @@ class GameState(Enum):
     SETUP_REV_ROAD_SEL = auto()
     PRE_ROLL = auto()
     ROBBER_SEL = auto()
+    PLAYER_ROB_SEL = auto()
     NORMAL = auto()
     ROAD_SEL = auto()
     SETTLE_SEL = auto()
@@ -30,7 +31,8 @@ class GameState(Enum):
             GameState.SETUP_REV_SETTLE_SEL: {Transitions.CHOSE_SETTLE: GameState.SETUP_REV},
             GameState.SETUP_REV_ROAD_SEL: {Transitions.CHOSE_ROAD: GameState.SETUP_REV},
             GameState.PRE_ROLL: {Transitions.ROLL_DICE: GameState.NORMAL, Transitions.ROLL_SEVEN: GameState.ROBBER_SEL},
-            GameState.ROBBER_SEL: {Transitions.CHOSE_ROBBER: GameState.NORMAL},
+            GameState.ROBBER_SEL: {Transitions.CHOSE_ROBBER: GameState.PLAYER_ROB_SEL},
+            GameState.PLAYER_ROB_SEL: {Transitions.CHOSE_PLAYER_ROB: GameState.NORMAL},
             GameState.NORMAL: {Transitions.START_ROAD_SEL: GameState.ROAD_SEL,
                                Transitions.START_SETTLE_SEL: GameState.SETTLE_SEL,
                                Transitions.START_CITY_SEL: GameState.CITY_SEL},
@@ -58,6 +60,7 @@ class Transitions(Enum):
     CHOSE_SETTLE = auto()
     CHOSE_CITY = auto()
     CHOSE_ROBBER = auto()
+    CHOSE_PLAYER_ROB = auto()
     START_ROAD_SEL = auto()
     START_SETTLE_SEL = auto()
     START_CITY_SEL = auto()

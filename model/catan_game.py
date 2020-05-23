@@ -19,6 +19,11 @@ class CatanGame:
     def cur_player(self):
         return self.players[self.cur_plyr_ind]
 
+    def get_player_by_name(self, name):
+        for player in self.players:
+            if player.name == name:
+                return player
+
     def change_turn(self, game_state):
         if game_state == GameState.SETUP and self.cur_plyr_ind == len(self.players) - 1:
             return GameState.SETUP_REV
@@ -108,6 +113,21 @@ class CatanGame:
     def move_robber(self, coord):
         for tcrd, tile in self.tiles.items():
             tile.has_robber = tcrd == coord
+
+    def get_avail_to_rob(self, coord):
+        cur_plyr = self.cur_player()
+        return list(set([plyr.name for plyr in self.tiles[coord].get_avail_to_rob() if plyr.name != cur_plyr.name]))
+
+    def can_rob(self, robbed_name):
+        for tile in self.tiles.values():
+            if tile.has_robber:
+                return tile.can_rob(robbed_name)
+
+    def rob_player(self, robbed_name):
+        cur_plyr = self.cur_player()
+        robbed_plyr = self.get_player_by_name(robbed_name)
+        resource = robbed_plyr.steal_random_resource()
+        cur_plyr.gain_resource(resource, 1)
 
     def roll_dice(self):
         d1 = randint(1, 6)

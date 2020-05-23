@@ -5,4 +5,3 @@
  - make UI prettier
  - determining end of game
  - handle no more cards of certain resource
- - steal from player of choice where robber is when robber is moved

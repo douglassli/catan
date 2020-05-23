@@ -1,6 +1,8 @@
 import socket_server.input_messages as im
 from enum import Enum
 
+S = ""
+
 
 class InTypes(Enum):
     CREATE_ROOM = "CREATE_ROOM"
@@ -16,6 +18,7 @@ class InTypes(Enum):
     END_TURN = "END_TURN"
     ROLL_DICE = "ROLL_DICE"
     CHOSE_ROBBER = "CHOSE_ROBBER"
+    CHOSE_PLAYER_ROB = "CHOSE_PLAYER_ROB"
     BUY_DEV_CARD = "BUY_DEV_CARD"
 
     @classmethod
@@ -37,6 +40,7 @@ class InTypes(Enum):
             self.END_TURN: im.EndTurnMsg,
             self.ROLL_DICE: im.RollDiceMsg,
             self.CHOSE_ROBBER: im.ChoseRobberMsg,
+            self.CHOSE_PLAYER_ROB: im.ChosePlayerRobMsg,
             self.BUY_DEV_CARD: im.BuyDevCardMsg
         }
         return constructor_map[self](msg, websocket)
@@ -61,6 +65,7 @@ DICE_ROLLED = "DICE_ROLLED"
 AVAIL_ROBBERS = "AVAIL_ROBBERS"
 ROBBER_MOVED = "ROBBER_MOVED"
 BOUGHT_DEV_CARD = "BOUGHT_DEV_CARD"
+PLAYER_ROBBED = "PLAYER_ROBBED"
 
 # Message field names
 TYPE = "type"
@@ -99,6 +104,9 @@ SHEEP = "sheep"
 WHEAT = "wheat"
 STONE = "stone"
 ACTIVE_BUTTONS = "activeButtons"
+AVAIL_TO_ROB = "availToRob"
+PLAYER_ROBBER = "playerRobbed"
+PLAYER_GAINED = "playerGained"
 
 # Button Ids
 TRADE_BUTTON = "tradeButton"

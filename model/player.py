@@ -1,5 +1,6 @@
 from model.resources import Resource
 from model.development_cards import DevCards
+from random import choices
 
 
 class Player:
@@ -87,3 +88,9 @@ class Player:
                (2 if self.longest_road else 0) + \
                (2 if self.largest_army else 0) + \
                self.dev_cards[DevCards.VP]
+
+    def steal_random_resource(self):
+        weights = [val for val in self.resources.values()]
+        resource = choices([res for res in self.resources], weights=weights, k=1)[0]
+        self.resources[resource] -= 1
+        return resource

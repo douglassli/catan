@@ -19,3 +19,12 @@ class Tile:
             if node.row == coord[0] and node.col == coord[1]:
                 return True
         return False
+
+    def get_avail_to_rob(self):
+        return [node.owner for node in self.nodes if node.has_owner()]
+
+    def can_rob(self, robbed_name):
+        for node in self.nodes:
+            if node.has_owner() and node.owner.name == robbed_name:
+                return True
+        return False

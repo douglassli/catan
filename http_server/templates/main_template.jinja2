@@ -421,6 +421,14 @@
                     {% endfor %}
                 </g>
             </svg>
+            <div class="hidden" id="robWindow">
+                <span id="robTitle">Select who to steal from</span>
+                <div id="robButtonsDiv">
+                    <button type="button" id="rb1">RB1</button>
+                    <button type="button" id="rb2">RB2</button>
+                    <button type="button" id="rb3">RB3</button>
+                </div>
+            </div>
             <div id="buttonBar" {{ 'class="hidden"' if not includeGame }}>
                 <button type="button" onclick="" disabled="true" id="tradeButton">Trade</button>
                 <button type="button" onclick="startRoadSelection()" disabled="true" id="buyRoadButton">Buy Road</button>

@@ -158,9 +158,31 @@ class Room:
             self.game_state = self.game_state.get_next_state(Transitions.CHOSE_ROBBER)
             prev_coord = self.game_model.get_robber_coord()
             self.game_model.move_robber((row, col))
+            avail = self.game_model.get_avail_to_rob((row, col))
+            if len(avail) == 0:
+                self.game_state = self.game_state.get_next_state(Transitions.CHOSE_PLAYER_ROB)
             for player in self.players.values():
                 active_buttons = self.get_active_buttons() if cur_player.pid == player.pid else None
-                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons)
+                avail_to_rob = avail if player.pid == cur_player.pid and len(avail) > 0 else None
+                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons, avail_to_rob)
+
+    async def chose_player_rob(self, plyr_id, robbed_name):
+        cur_player = self.game_model.cur_player()
+        if cur_player.pid == plyr_id and self.game_model.can_rob(robbed_name) and self.game_state.is_valid_transition(Transitions.CHOSE_PLAYER_ROB):
+            self.game_state = self.game_state.get_next_state(Transitions.CHOSE_PLAYER_ROB)
+            self.game_model.rob_player(robbed_name)
+            robbed_player = self.game_model.get_player_by_name(robbed_name)
+            cur_update = {mv.NAME: cur_player.name, mv.HAND_SIZE: cur_player.get_hand_size()}
+            robbed_update = {mv.NAME: robbed_player.name, mv.HAND_SIZE: robbed_player.get_hand_size()}
+            for player in self.players.values():
+                active_buttons = self.get_active_buttons() if cur_player.pid == player.pid else None
+                if player.pid == cur_player.pid:
+                    updates = [self.get_private_state(cur_player), robbed_update]
+                elif player.pid == robbed_player.pid:
+                    updates = [self.get_private_state(robbed_player), cur_update]
+                else:
+                    updates = [robbed_update, cur_update]
+                await player.send_player_robbed(cur_player.name, robbed_name, updates, active_buttons)
 
     async def buy_dev_card(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
