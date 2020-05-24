@@ -125,6 +125,7 @@ class Room:
                 await plyr.send_built(msg_type, row, col, color, updates, deck_state, active_buttons)
 
     async def end_turn(self, plyr_id):
+        # TODO empty trade cache once turn ends
         cur_plyr = self.game_model.cur_player()
         if plyr_id == cur_plyr.pid and self.game_state in [GameState.NORMAL, GameState.SETUP, GameState.SETUP_REV]:
             self.game_state = self.game_model.change_turn(self.game_state)
@@ -193,6 +194,22 @@ class Room:
             for plyr in self.players.values():
                 active_buttons = self.get_active_buttons() if cur_plyr.pid == plyr.pid else None
                 await plyr.send_bought_dev_card(cur_plyr.name, updates, deck_state, active_buttons)
+
+    async def propose_trade(self, plyr_id, trade_id, cur_resources, other_resources):
+        # TODO
+        pass
+
+    async def respond_to_trade(self, plyr_id, trade_id, accepted):
+        # TODO
+        pass
+
+    async def confirm_trade(self, plyr_id, trade_id, confirmed_name):
+        # TODO
+        pass
+
+    async def cancel_trade(self, plyr_id, trade_id):
+        # TODO
+        pass
 
     def get_deck_state(self):
         return {

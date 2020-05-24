@@ -20,6 +20,10 @@ class InTypes(Enum):
     CHOSE_ROBBER = "CHOSE_ROBBER"
     CHOSE_PLAYER_ROB = "CHOSE_PLAYER_ROB"
     BUY_DEV_CARD = "BUY_DEV_CARD"
+    PROPOSE_TRADE = "PROPOSE_TRADE"
+    TRADE_RESPONSE = "TRADE_RESPONSE"
+    CONFIRM_TRADE = "CONFIRM_TRADE"
+    CANCEL_TRADE = "CANCEL_TRADE"
 
     @classmethod
     def is_member(cls, value):
@@ -41,7 +45,11 @@ class InTypes(Enum):
             self.ROLL_DICE: im.RollDiceMsg,
             self.CHOSE_ROBBER: im.ChoseRobberMsg,
             self.CHOSE_PLAYER_ROB: im.ChosePlayerRobMsg,
-            self.BUY_DEV_CARD: im.BuyDevCardMsg
+            self.BUY_DEV_CARD: im.BuyDevCardMsg,
+            self.PROPOSE_TRADE: im.ProposeTradeMsg,
+            self.TRADE_RESPONSE: im.TradeResponseMsg,
+            self.CONFIRM_TRADE: im.ConfirmTradeMsg,
+            self.CANCEL_TRADE: im.CancelTradeMsg
         }
         return constructor_map[self](msg, websocket)
 
@@ -66,6 +74,9 @@ AVAIL_ROBBERS = "AVAIL_ROBBERS"
 ROBBER_MOVED = "ROBBER_MOVED"
 BOUGHT_DEV_CARD = "BOUGHT_DEV_CARD"
 PLAYER_ROBBED = "PLAYER_ROBBED"
+TRADE_PROPOSED = "TRADE_PROPOSED"
+TRADE_RESPONDED = "TRADE_RESPONDED"
+TRADE_CLOSED = "TRADE_CLOSED"
 
 # Message field names
 TYPE = "type"
@@ -107,6 +118,11 @@ ACTIVE_BUTTONS = "activeButtons"
 AVAIL_TO_ROB = "availToRob"
 PLAYER_ROBBER = "playerRobbed"
 PLAYER_GAINED = "playerGained"
+TRADE_ID = "tradeId"
+CURRENT_RESOURCES = "curResources"
+OTHER_RESOURCES = "otherResources"
+ACCEPTED = "accepted"
+
 
 # Button Ids
 TRADE_BUTTON = "tradeButton"

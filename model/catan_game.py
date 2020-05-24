@@ -177,3 +177,15 @@ class CatanGame:
     def buy_dev_card(self):
         used_resources = self.cur_player().buy_dev_card(self.dev_cards.pop())
         self.return_to_deck(used_resources)
+
+    def can_do_trade(self, plyr1, p1_resources, plyr2, p2_resources):
+        return plyr1.has_resources(p1_resources) and plyr2.has_resources(p2_resources)
+
+    def perform_trade(self, plyr1, p1_resources, plyr2, p2_resources):
+        for res, val in p1_resources.items():
+            plyr1.gain_resource(res, -val)
+            plyr2.gain_resource(res, val)
+
+        for res, val in p2_resources.items():
+            plyr1.gain_resource(res, val)
+            plyr2.gain_resource(res, -val)

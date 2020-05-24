@@ -30,6 +30,14 @@ interface StatusUpdate {
     stone?: number;
 }
 
+interface ResourceBlock {
+    wood?: number;
+    brick?: number;
+    sheep?: number;
+    wheat?: number;
+    stone?: number;
+}
+
 interface IncomingMessage extends Message {
     statusUpdates?: StatusUpdate[];
     deckUpdate?: DeckUpdate;
@@ -130,6 +138,25 @@ interface BoughtDevCard extends IncomingMessage {
     name: string;
 }
 
+interface TradeProposed extends IncomingMessage {
+    type: "TRADE_PROPOSED";
+    tradeId: number;
+    curResources: ResourceBlock;
+    otherResources: ResourceBlock;
+}
+
+interface TradeResponded extends IncomingMessage {
+    type: "TRADE_RESPONDED";
+    tradeId: number;
+    name: string;
+    accepted: boolean;
+}
+
+interface TradeClosed extends IncomingMessage {
+    type: "TRADE_CLOSED";
+    tradeId: number;
+}
+
 // Outgoing Messsage type definitions **************************************************************
 
 interface IDMessage extends Message {
@@ -151,11 +178,37 @@ interface RoadSelectStart extends IDMessage { type: SelectTypes.ROAD; }
 interface EndTurn extends IDMessage { type: "END_TURN"; }
 interface RollDice extends IDMessage { type: "ROLL_DICE"; }
 interface BuyDevCard extends IDMessage { type: "BUY_DEV_CARD"; }
-interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB", name: string; };
+interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB"; name: string; };
 
 interface ChoseMessage extends IDMessage {
     row: number;
     col: number;
+}
+
+interface ProposeTrade extends IDMessage {
+    type: "PROPOSE_TRADE";
+    tradeId: number;
+    curResources: ResourceBlock;
+    otherResources: ResourceBlock;
+}
+
+// This is for other players to decide whether they are willing to accept this trade
+interface TradeResponse extends IDMessage {
+    type: "TRADE_RESPONSE";
+    tradeId: number;
+    accepted: boolean;
+}
+
+// This is for the current player to choose which of the other players that accepted to trade with
+interface ConfirmTrade extends IDMessage {
+    type: "CONFIRM_TRADE";
+    tradeId: number;
+    name: string;
+}
+
+interface CancelTrade extends IDMessage {
+    type: "CANCEL_TRADE";
+    tradeId: number;
 }
 
 const enum ChoseTypes {
@@ -348,6 +401,7 @@ class MessageHandler {
             document.getElementById(`${plyr.name}Table`).classList.remove("active");
         }
         document.getElementById(`${msg.name}Table`).classList.add("active");
+        // TODO: Remove all active trades
     }
 
     DICE_ROLLED(msg: DiceRolled): void {

@@ -1,4 +1,5 @@
 import socket_server.message_values as mv
+from model.resources import Resource
 
 
 class InputMessage:
@@ -100,3 +101,27 @@ class ChosePlayerRobMsg(InputMessage):
 class BuyDevCardMsg(InputMessage):
     async def handler(self, room):
         await room.buy_dev_card(self.msg[mv.PLAYER_ID])
+
+
+class ProposeTradeMsg(InputMessage):
+    async def handler(self, room):
+        name_map = {mv.WOOD: Resource.WOOD, mv.BRICK: Resource.BRICK, mv.SHEEP: Resource.BRICK,
+                    mv.WHEAT: Resource.WHEAT, mv.STONE: Resource.STONE}
+        cur_resources = {name_map[k]: v for k, v in self.msg[mv.CURRENT_RESOURCES].items()}
+        other_resources = {name_map[k]: v for k, v in self.msg[mv.OTHER_RESOURCES].items()}
+        await room.propose_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID], cur_resources, other_resources)
+
+
+class TradeResponseMsg(InputMessage):
+    async def handler(self, room):
+        await room.respond_to_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID], self.msg[mv.ACCEPTED])
+
+
+class ConfirmTradeMsg(InputMessage):
+    async def handler(self, room):
+        await room.confirm_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID], self.msg[mv.NAME])
+
+
+class CancelTradeMsg(InputMessage):
+    async def handler(self, room):
+        await room.cancel_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID])
