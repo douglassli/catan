@@ -24,6 +24,11 @@ class CatanGame:
             if player.name == name:
                 return player
 
+    def get_player_by_id(self, pid):
+        for player in self.players:
+            if player.pid == pid:
+                return player
+
     def change_turn(self, game_state):
         if game_state == GameState.SETUP and self.cur_plyr_ind == len(self.players) - 1:
             return GameState.SETUP_REV

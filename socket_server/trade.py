@@ -19,4 +19,4 @@ class Trade:
         return len(self.responders) == num_players and all([not accepted for accepted in self.responders.values()])
 
     def has_accepted(self, plyr_id):
-        return self.responders[plyr_id]
+        return self.has_responded(plyr_id) and self.responders[plyr_id]

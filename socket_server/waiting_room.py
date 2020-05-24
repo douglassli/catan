@@ -5,6 +5,7 @@ from socket_server.server_player import ServerPlayer
 from socket_server.game_state import GameState, Transitions
 import socket_server.message_values as mv
 from model.resources import Resource
+from socket_server.trade import Trade
 
 
 class Room:
@@ -14,6 +15,7 @@ class Room:
         self.remaining_colors = ["red", "blue", "green", "yellow"]
         self.game_model = None
         self.game_state = GameState.NOT_STARTED
+        self.active_trades = {}
 
     def is_name_available(self, name):
         for player in self.players.values():
@@ -125,9 +127,9 @@ class Room:
                 await plyr.send_built(msg_type, row, col, color, updates, deck_state, active_buttons)
 
     async def end_turn(self, plyr_id):
-        # TODO empty trade cache once turn ends
         cur_plyr = self.game_model.cur_player()
         if plyr_id == cur_plyr.pid and self.game_state in [GameState.NORMAL, GameState.SETUP, GameState.SETUP_REV]:
+            self.active_trades = {}
             self.game_state = self.game_model.change_turn(self.game_state)
             new_cur_plyr = self.game_model.cur_player()
             for player in self.players.values():
@@ -196,20 +198,54 @@ class Room:
                 await plyr.send_bought_dev_card(cur_plyr.name, updates, deck_state, active_buttons)
 
     async def propose_trade(self, plyr_id, trade_id, cur_resources, other_resources):
-        # TODO
-        pass
+        cur_plyr = self.game_model.cur_player()
+        if plyr_id == cur_plyr.pid and self.game_state == GameState.NORMAL and trade_id not in self.active_trades and cur_plyr.has_resources(cur_resources):
+            new_trade = Trade(trade_id, cur_plyr.pid, cur_resources, other_resources)
+            self.active_trades[trade_id] = new_trade
+            for plyr in [p for p in self.players.values() if p.pid != cur_plyr.pid]:
+                await plyr.send_trade_proposed(cur_plyr.name, trade_id, cur_resources, other_resources)
 
     async def respond_to_trade(self, plyr_id, trade_id, accepted):
-        # TODO
-        pass
+        if plyr_id not in self.players or trade_id not in self.active_trades:
+            return
+
+        cur_plyr = self.game_model.cur_player()
+        plyr = self.game_model.get_player_by_id(plyr_id)
+        trade = self.active_trades[trade_id]
+        if trade.is_proposed_by(cur_plyr.pid) and (not accepted or self.game_model.can_do_trade(cur_plyr, trade.cur_resources, plyr, trade.other_resources)):
+            trade.respond(plyr.pid, accepted)
+
+            if trade.all_rejected(len(self.players)):
+                await self.cancel_trade(cur_plyr.pid, trade.trade_id)
+            else:
+                await self.players[cur_plyr.pid].send_trade_responded(plyr.name, trade.trade_id, accepted)
 
     async def confirm_trade(self, plyr_id, trade_id, confirmed_name):
-        # TODO
-        pass
+        cur_plyr = self.game_model.cur_player()
+        conf_plyr = self.game_model.get_player_by_name(confirmed_name)
+        if cur_plyr.pid != plyr_id or trade_id not in self.active_trades or conf_plyr is None:
+            return
+
+        trade = self.active_trades[trade_id]
+        if trade.has_accepted(conf_plyr.pid) and self.game_model.can_do_trade(cur_plyr, trade.cur_resources, conf_plyr, trade.other_resources):
+            self.game_model.perform_trade(cur_plyr, trade.cur_resources, conf_plyr, trade.other_resources)
+            cur_update = {mv.NAME: cur_plyr.name, mv.HAND_SIZE: cur_plyr.get_hand_size()}
+            confirmed_update = {mv.NAME: conf_plyr.name, mv.HAND_SIZE: conf_plyr.get_hand_size()}
+            for plyr in self.players.values():
+                if plyr.pid == cur_plyr.pid:
+                    updates = [self.get_private_state(cur_plyr), confirmed_update]
+                elif plyr.pid == conf_plyr.pid:
+                    updates = [self.get_private_state(conf_plyr), cur_update]
+                else:
+                    updates = [confirmed_update, cur_update]
+                await plyr.send_trade_closed(trade.trade_id, updates, None)
 
     async def cancel_trade(self, plyr_id, trade_id):
-        # TODO
-        pass
+        cur_plyr = self.game_model.cur_player()
+        if plyr_id == cur_plyr.pid and trade_id in self.active_trades:
+            del self.active_trades[trade_id]
+            for plyr in [p for p in self.players.values() if p.pid != cur_plyr.pid]:
+                await plyr.send_trade_closed(trade_id, None, None)
 
     def get_deck_state(self):
         return {
