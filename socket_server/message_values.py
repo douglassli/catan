@@ -1,7 +1,6 @@
 import socket_server.input_messages as im
 from enum import Enum
-
-S = ""
+from model.resources import Resource
 
 
 class InTypes(Enum):
@@ -52,6 +51,18 @@ class InTypes(Enum):
             self.CANCEL_TRADE: im.CancelTradeMsg
         }
         return constructor_map[self](msg, websocket)
+
+
+def res_to_field(resource):
+    const_map = {Resource.WOOD: WOOD, Resource.BRICK: BRICK, Resource.SHEEP: SHEEP,
+                 Resource.WHEAT: WHEAT, Resource.STONE: STONE}
+    return const_map[resource]
+
+
+def field_to_res(field):
+    const_map = {WOOD: Resource.WOOD, BRICK: Resource.BRICK, SHEEP: Resource.BRICK,
+                 WHEAT: Resource.WHEAT, STONE: Resource.STONE}
+    return const_map[field]
 
 
 # Outgoing message types

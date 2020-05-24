@@ -141,6 +141,7 @@ interface BoughtDevCard extends IncomingMessage {
 interface TradeProposed extends IncomingMessage {
     type: "TRADE_PROPOSED";
     tradeId: number;
+    name: string;
     curResources: ResourceBlock;
     otherResources: ResourceBlock;
 }

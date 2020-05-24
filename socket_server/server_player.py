@@ -125,3 +125,27 @@ class ServerPlayer:
         if active_buttons is not None:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
+
+    async def send_trade_proposed(self, proposer_name, trade_id, cur_resources, other_resources):
+        return_msg = {mv.TYPE: mv.TRADE_PROPOSED,
+                      mv.NAME: proposer_name,
+                      mv.TRADE_ID: trade_id,
+                      mv.CURRENT_RESOURCES: {mv.res_to_field(res): num for res, num in cur_resources.items()},
+                      mv.OTHER_RESOURCES: {mv.res_to_field(res): num for res, num in other_resources.items()}}
+        await self.send_msg(return_msg)
+
+    async def send_trade_responded(self, responder_name, trade_id, accepted):
+        return_msg = {mv.TYPE: mv.TRADE_RESPONDED,
+                      mv.NAME: responder_name,
+                      mv.TRADE_ID: trade_id,
+                      mv.ACCEPTED: accepted}
+        await self.send_msg(return_msg)
+
+    async def send_trade_closed(self, trade_id, updates, deck_state):
+        return_msg = {mv.TYPE: mv.TRADE_CLOSED,
+                      mv.TRADE_ID: trade_id}
+        if updates is not None:
+            return_msg[mv.STATUS_UPDATES] = updates
+        if deck_state is not None:
+            return_msg[mv.DECK_UPDATE] = deck_state
+        await self.send_msg(return_msg)

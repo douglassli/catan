@@ -1,5 +1,4 @@
 import socket_server.message_values as mv
-from model.resources import Resource
 
 
 class InputMessage:
@@ -105,10 +104,8 @@ class BuyDevCardMsg(InputMessage):
 
 class ProposeTradeMsg(InputMessage):
     async def handler(self, room):
-        name_map = {mv.WOOD: Resource.WOOD, mv.BRICK: Resource.BRICK, mv.SHEEP: Resource.BRICK,
-                    mv.WHEAT: Resource.WHEAT, mv.STONE: Resource.STONE}
-        cur_resources = {name_map[k]: v for k, v in self.msg[mv.CURRENT_RESOURCES].items()}
-        other_resources = {name_map[k]: v for k, v in self.msg[mv.OTHER_RESOURCES].items()}
+        cur_resources = {mv.field_to_res(k): v for k, v in self.msg[mv.CURRENT_RESOURCES].items()}
+        other_resources = {mv.field_to_res(k): v for k, v in self.msg[mv.OTHER_RESOURCES].items()}
         await room.propose_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID], cur_resources, other_resources)
 
 
