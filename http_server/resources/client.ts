@@ -438,7 +438,7 @@ class MessageHandler {
     }
 
     TRADE_PROPOSED(msg: TradeProposed): void {
-        appendTradeContainer(msg.tradeID, msg.curResources, msg.otherResources, msg.canAccept);
+        appendTradeContainer(msg.tradeID, msg.name, msg.curResources, msg.otherResources, msg.canAccept);
     }
 
     TRADE_RESPONDED(msg: TradeResponded): void {
@@ -585,7 +585,7 @@ function handlePlayerRobSelect(name: string): void {
     sendMessage(msg);
 }
 
-function appendTradeContainer(tradeId: number, curResources: ResourceBlock, otherResources: ResourceBlock, canAccept: boolean): void {
+function appendTradeContainer(tradeId: number, name: string, curResources: ResourceBlock, otherResources: ResourceBlock, canAccept: boolean): void {
     const tradeContainer: HTMLElement = document.createElement("div");
     tradeContainer.classList.add("tradeContainer");
 
@@ -602,17 +602,26 @@ function appendTradeContainer(tradeId: number, curResources: ResourceBlock, othe
     const responseDiv: HTMLElement = document.createElement("div");
     responseDiv.classList.add("responseDiv");
 
-    if (canAccept) {
+    if (name === username) {
+        const cancelButton: HTMLElement = document.createElement("button");
+        cancelButton.innerHTML = "Cancel";
+        cancelButton.onclick = () => cancelTrade(tradeId);
+        responseDiv.appendChild(cancelButton);
+    }
+
+    if (canAccept && name !== username) {
         const acceptButton: HTMLElement = document.createElement("button");
         acceptButton.innerHTML = "Accept";
         acceptButton.onclick = () => acceptTrade(tradeId);
         responseDiv.appendChild(acceptButton);
     }
 
-    const rejectButton: HTMLElement = document.createElement("button");
-    rejectButton.innerHTML = "Reject";
-    rejectButton.onclick = () => rejectTrade(tradeId);
-    responseDiv.appendChild(rejectButton);
+    if (name !== username) {
+        const rejectButton: HTMLElement = document.createElement("button");
+        rejectButton.innerHTML = "Reject";
+        rejectButton.onclick = () => rejectTrade(tradeId);
+        responseDiv.appendChild(rejectButton);
+    }
 
     tradeContainer.appendChild(responseDiv);
 
@@ -628,6 +637,13 @@ function acceptTrade(tradeId: number): void {
 
 function rejectTrade(tradeId: number): void {
     respondToTrade(tradeId, false);
+    activeTrades[tradeId].remove();
+}
+
+function cancelTrade(tradeId: number): void {
+    const cancelMsg: CancelTrade = {type: "CANCEL_TRADE", playerID: playerId, roomID: roomId,
+                                   tradeID: tradeId}
+    sendMessage(cancelMsg);
     activeTrades[tradeId].remove();
 }
 
@@ -663,7 +679,7 @@ function sendTrade() {
 function getResBlock(className: string): ResourceBlock {
     const resBlock: ResourceBlock = {};
     for (let input of document.getElementsByClassName(className) as HTMLCollectionOf<HTMLInputElement>) {
-        if (!isNaN(input.value) && +input.value > 0) {
+        if (!isNaN(input.value as any) && +input.value > 0) {
             resBlock[input.name] = +input.value;
         }
         input.value = "";

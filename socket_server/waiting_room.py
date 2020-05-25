@@ -202,7 +202,7 @@ class Room:
         if plyr_id == cur_plyr.pid and self.game_state == GameState.NORMAL and trade_id not in self.active_trades and cur_plyr.has_resources(cur_resources):
             new_trade = Trade(trade_id, cur_plyr.pid, cur_resources, other_resources)
             self.active_trades[trade_id] = new_trade
-            for plyr in [p for p in self.players.values() if p.pid != cur_plyr.pid]:
+            for plyr in self.players.values():
                 can_accept = self.game_model.get_player_by_id(plyr.pid).has_resources(other_resources)
                 await plyr.send_trade_proposed(cur_plyr.name, trade_id, cur_resources, other_resources, can_accept)
 
