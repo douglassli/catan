@@ -126,12 +126,13 @@ class ServerPlayer:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_trade_proposed(self, proposer_name, trade_id, cur_resources, other_resources):
+    async def send_trade_proposed(self, proposer_name, trade_id, cur_resources, other_resources, can_accept):
         return_msg = {mv.TYPE: mv.TRADE_PROPOSED,
                       mv.NAME: proposer_name,
                       mv.TRADE_ID: trade_id,
                       mv.CURRENT_RESOURCES: {mv.res_to_field(res): num for res, num in cur_resources.items()},
-                      mv.OTHER_RESOURCES: {mv.res_to_field(res): num for res, num in other_resources.items()}}
+                      mv.OTHER_RESOURCES: {mv.res_to_field(res): num for res, num in other_resources.items()},
+                      mv.CAN_ACCEPT: can_accept}
         await self.send_msg(return_msg)
 
     async def send_trade_responded(self, responder_name, trade_id, accepted):

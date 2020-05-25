@@ -60,7 +60,7 @@ def res_to_field(resource):
 
 
 def field_to_res(field):
-    const_map = {WOOD: Resource.WOOD, BRICK: Resource.BRICK, SHEEP: Resource.BRICK,
+    const_map = {WOOD: Resource.WOOD, BRICK: Resource.BRICK, SHEEP: Resource.SHEEP,
                  WHEAT: Resource.WHEAT, STONE: Resource.STONE}
     return const_map[field]
 
@@ -133,6 +133,7 @@ TRADE_ID = "tradeID"
 CURRENT_RESOURCES = "curResources"
 OTHER_RESOURCES = "otherResources"
 ACCEPTED = "accepted"
+CAN_ACCEPT = "canAccept"
 
 
 # Button Ids

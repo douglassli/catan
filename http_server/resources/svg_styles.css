@@ -114,7 +114,7 @@ body {
 #tradeInput {
     background-color: #999999;
     padding: 5px;
-    display: grid;
+    display: none;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(6, 1fr);
     grid-column-gap: 5px;

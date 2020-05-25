@@ -447,7 +447,7 @@
                 </div>
             </div>
             <div id="buttonBar" {{ 'class="hidden"' if not includeGame }}>
-                <button type="button" onclick="testTrade()" disabled="true" id="tradeButton">Trade</button>
+                <button type="button" onclick="startTrading()" disabled="true" id="tradeButton">Trade</button>
                 <button type="button" onclick="startRoadSelection()" disabled="true" id="buyRoadButton">Buy Road</button>
                 <button type="button" onclick="startSettleSelection()" disabled="true" id="buySettleButton">Buy Settle</button>
                 <button type="button" onclick="startCitySelection()" disabled="true" id="buyCityButton">Buy City</button>
@@ -463,22 +463,22 @@
         </div>
         <div id="tradeColumn" class="hidden">
         </div>
-        <div class="hidden" id="tradeInput">
+        <div id="tradeInput">
             <label>Wood:</label>
-            <input class="twoSpan startTwo" type="text" id="offerWood" name="offerWood">
-            <input class="twoSpan startFour" type="text" id="giveWood" name="giveWood">
+            <input class="twoSpan startTwo offerRes" type="text" id="offerWood" name="wood">
+            <input class="twoSpan startFour giveRes" type="text" id="giveWood" name="wood">
             <label>Brick:</label>
-            <input class="twoSpan startTwo" type="text" id="offerBrick" name="offerBrick">
-            <input class="twoSpan startFour" type="text" id="giveBrick" name="giveBrick">
+            <input class="twoSpan startTwo offerRes" type="text" id="offerBrick" name="brick">
+            <input class="twoSpan startFour giveRes" type="text" id="giveBrick" name="brick">
             <label>Sheep:</label>
-            <input class="twoSpan startTwo" type="text" id="offerSheep" name="offerSheep">
-            <input class="twoSpan startFour" type="text" id="giveSheep" name="giveSheep">
+            <input class="twoSpan startTwo offerRes" type="text" id="offerSheep" name="sheep">
+            <input class="twoSpan startFour giveRes" type="text" id="giveSheep" name="sheep">
             <label>Wheat:</label>
-            <input class="twoSpan startTwo" type="text" id="offerWheat" name="offerWheat">
-            <input class="twoSpan startFour" type="text" id="giveWheat" name="giveWheat">
+            <input class="twoSpan startTwo offerRes" type="text" id="offerWheat" name="wheat">
+            <input class="twoSpan startFour giveRes" type="text" id="giveWheat" name="wheat">
             <label>Stone:</label>
-            <input class="twoSpan startTwo" type="text" id="offerStone" name="offerStone">
-            <input class="twoSpan startFour" type="text" id="giveStone" name="giveStone">
+            <input class="twoSpan startTwo offerRes" type="text" id="offerStone" name="stone">
+            <input class="twoSpan startFour giveRes" type="text" id="giveStone" name="stone">
             <button id="propButton" onclick="sendTrade()">Propose</button>
         </div>
     </div>

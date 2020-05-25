@@ -144,6 +144,7 @@ interface TradeProposed extends IncomingMessage {
     name: string;
     curResources: ResourceBlock;
     otherResources: ResourceBlock;
+    canAccept: boolean;
 }
 
 interface TradeResponded extends IncomingMessage {
@@ -403,7 +404,11 @@ class MessageHandler {
             document.getElementById(`${plyr.name}Table`).classList.remove("active");
         }
         document.getElementById(`${msg.name}Table`).classList.add("active");
-        // TODO: Remove all active trades
+
+        for (let tid in activeTrades) {
+            activeTrades[tid].remove();
+        }
+        activeTrades = {};
     }
 
     DICE_ROLLED(msg: DiceRolled): void {
@@ -433,7 +438,7 @@ class MessageHandler {
     }
 
     TRADE_PROPOSED(msg: TradeProposed): void {
-        appendTradeContainer(msg.tradeID, msg.curResources, msg.otherResources);
+        appendTradeContainer(msg.tradeID, msg.curResources, msg.otherResources, msg.canAccept);
     }
 
     TRADE_RESPONDED(msg: TradeResponded): void {
@@ -441,7 +446,7 @@ class MessageHandler {
     }
 
     TRADE_CLOSED(msg: TradeClosed): void {
-        // TODO
+        activeTrades[msg.tradeID].remove();
     }
 }
 
@@ -451,6 +456,8 @@ let roomId: number;
 let username: string;
 let usercolor: string;
 let others: ModelPlayer[] = [];
+let tradeNum: number = 0;
+let activeTrades = {};
 
 function addRoomId(): void {
     document.getElementById("roomHeader").innerHTML = `Room ID: ${roomId}`;
@@ -578,7 +585,7 @@ function handlePlayerRobSelect(name: string): void {
     sendMessage(msg);
 }
 
-function appendTradeContainer(tradeId: number, curResources: ResourceBlock, otherResources: ResourceBlock): void {
+function appendTradeContainer(tradeId: number, curResources: ResourceBlock, otherResources: ResourceBlock, canAccept: boolean): void {
     const tradeContainer: HTMLElement = document.createElement("div");
     tradeContainer.classList.add("tradeContainer");
 
@@ -595,19 +602,33 @@ function appendTradeContainer(tradeId: number, curResources: ResourceBlock, othe
     const responseDiv: HTMLElement = document.createElement("div");
     responseDiv.classList.add("responseDiv");
 
-    const acceptButton: HTMLElement = document.createElement("button");
-    acceptButton.innerHTML = "Accept";
-    acceptButton.onclick = () => respondToTrade(tradeId, true);
-    responseDiv.appendChild(acceptButton);
+    if (canAccept) {
+        const acceptButton: HTMLElement = document.createElement("button");
+        acceptButton.innerHTML = "Accept";
+        acceptButton.onclick = () => acceptTrade(tradeId);
+        responseDiv.appendChild(acceptButton);
+    }
 
     const rejectButton: HTMLElement = document.createElement("button");
     rejectButton.innerHTML = "Reject";
-    rejectButton.onclick = () => respondToTrade(tradeId, false);
+    rejectButton.onclick = () => rejectTrade(tradeId);
     responseDiv.appendChild(rejectButton);
 
     tradeContainer.appendChild(responseDiv);
 
+    activeTrades[tradeId] = tradeContainer;
     document.getElementById("tradeColumn").appendChild(tradeContainer);
+}
+
+function acceptTrade(tradeId: number): void {
+    respondToTrade(tradeId, true);
+    const respDiv: HTMLElement = activeTrades[tradeId].getElementsByClassName("responseDiv")[0];
+    respDiv.innerHTML = "Accepted";
+}
+
+function rejectTrade(tradeId: number): void {
+    respondToTrade(tradeId, false);
+    activeTrades[tradeId].remove();
 }
 
 function getResourceSpans(resources: ResourceBlock): string {
@@ -625,9 +646,27 @@ function respondToTrade(tid: number, accpt: boolean): void {
 }
 
 function startTrading() {
-    document.getElementById("tradeInput").classList.remove("hidden");
+    document.getElementById("tradeInput").style.display = "grid";
 }
 
 function sendTrade() {
-    document.getElementById("tradeInput").classList.add("hidden");
+    document.getElementById("tradeInput").style.display = "none";
+    const offerResBlock: ResourceBlock = getResBlock("offerRes");
+    const giveResBlock: ResourceBlock = getResBlock("giveRes");
+    const propMsg: ProposeTrade = {type: "PROPOSE_TRADE", playerID: playerId, roomID: roomId,
+                                   tradeID: tradeNum, curResources: offerResBlock,
+                                   otherResources: giveResBlock}
+    tradeNum++;
+    sendMessage(propMsg);
+}
+
+function getResBlock(className: string): ResourceBlock {
+    const resBlock: ResourceBlock = {};
+    for (let input of document.getElementsByClassName(className) as HTMLCollectionOf<HTMLInputElement>) {
+        if (!isNaN(input.value) && +input.value > 0) {
+            resBlock[input.name] = +input.value;
+        }
+        input.value = "";
+    }
+    return resBlock;
 }

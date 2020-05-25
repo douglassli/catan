@@ -16,7 +16,7 @@ class Trade:
         self.responders[responder_id] = accept
 
     def all_rejected(self, num_players):
-        return len(self.responders) == num_players and all([not accepted for accepted in self.responders.values()])
+        return len(self.responders) == num_players - 1 and all([not accepted for accepted in self.responders.values()])
 
     def has_accepted(self, plyr_id):
         return self.has_responded(plyr_id) and self.responders[plyr_id]
