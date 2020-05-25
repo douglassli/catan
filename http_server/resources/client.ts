@@ -442,7 +442,12 @@ class MessageHandler {
     }
 
     TRADE_RESPONDED(msg: TradeResponded): void {
-        // TODO
+        if (msg.accepted) {
+            const confButton: HTMLElement = document.createElement("button");
+            confButton.innerHTML = `Confirm ${msg.name}`;
+            confButton.onclick = () => { confirmTrade(msg.tradeID, msg.name); };
+            activeTrades[msg.tradeID].getElementsByClassName("responseDiv")[0].appendChild(confButton);
+        }
     }
 
     TRADE_CLOSED(msg: TradeClosed): void {
@@ -685,4 +690,11 @@ function getResBlock(className: string): ResourceBlock {
         input.value = "";
     }
     return resBlock;
+}
+
+function confirmTrade(tradeId: number, name: string): void {
+    activeTrades[tradeId].remove();
+    const confMsg: ConfirmTrade = {type: "CONFIRM_TRADE", playerID: playerId, roomID: roomId,
+                                   tradeID: tradeId, name: name};
+    sendMessage(confMsg);
 }
