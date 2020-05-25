@@ -49,16 +49,33 @@
     </div>
     {% endif %}
     <div id="controlDiv">
-        <div class="hidden" id="lastRollDiv">
-            <table id="lastRollTable">
-                <thead>
-                    <tr><th>Last Roll</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Dice 1: <span id="dice1"></span></td></tr>
-                    <tr><td>Dice 2: <span id="dice2"></span></td></tr>
-                </tbody>
-            </table>
+        <div class="columnDiv">
+            <div class="hidden" id="lastRollDiv">
+                <table id="lastRollTable">
+                    <thead>
+                        <tr><th>Last Roll</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Dice 1: <span id="dice1"></span></td></tr>
+                        <tr><td>Dice 2: <span id="dice2"></span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hidden" id="deckStatus">
+                <table id="deckTable">
+                    <thead>
+                        <tr><th>Deck Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Wood: <span id="deckWoodNumSpan">19</span></td></tr>
+                        <tr><td>Brick: <span id="deckBrickNumSpan">19</span></td></tr>
+                        <tr><td>Sheep: <span id="deckSheepNumSpan">19</span></td></tr>
+                        <tr><td>Wheat: <span id="deckWheatNumSpan">19</span></td></tr>
+                        <tr><td>Stone: <span id="deckStoneNumSpan">19</span></td></tr>
+                        <tr><td>Dev Cards: <span id="deckDevNumSpan">25</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div id="boardDiv">
             <svg id="svgBoard" viewBox="0 0 800 800" {{ 'class="hidden"' if not includeGame }}>
@@ -430,7 +447,7 @@
                 </div>
             </div>
             <div id="buttonBar" {{ 'class="hidden"' if not includeGame }}>
-                <button type="button" onclick="" disabled="true" id="tradeButton">Trade</button>
+                <button type="button" onclick="testTrade()" disabled="true" id="tradeButton">Trade</button>
                 <button type="button" onclick="startRoadSelection()" disabled="true" id="buyRoadButton">Buy Road</button>
                 <button type="button" onclick="startSettleSelection()" disabled="true" id="buySettleButton">Buy Settle</button>
                 <button type="button" onclick="startCitySelection()" disabled="true" id="buyCityButton">Buy City</button>
@@ -444,20 +461,25 @@
             {% include 'player_bar_template.jinja2' %}
         {% endif %}
         </div>
-        <div class="hidden" id="deckStatus">
-            <table id="deckTable">
-                <thead>
-                    <tr><th>Deck Status</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Wood: <span id="deckWoodNumSpan">19</span></td></tr>
-                    <tr><td>Brick: <span id="deckBrickNumSpan">19</span></td></tr>
-                    <tr><td>Sheep: <span id="deckSheepNumSpan">19</span></td></tr>
-                    <tr><td>Wheat: <span id="deckWheatNumSpan">19</span></td></tr>
-                    <tr><td>Stone: <span id="deckStoneNumSpan">19</span></td></tr>
-                    <tr><td>Dev Cards: <span id="deckDevNumSpan">25</span></td></tr>
-                </tbody>
-            </table>
+        <div id="tradeColumn" class="hidden">
+        </div>
+        <div class="hidden" id="tradeInput">
+            <label>Wood:</label>
+            <input class="twoSpan startTwo" type="text" id="offerWood" name="offerWood">
+            <input class="twoSpan startFour" type="text" id="giveWood" name="giveWood">
+            <label>Brick:</label>
+            <input class="twoSpan startTwo" type="text" id="offerBrick" name="offerBrick">
+            <input class="twoSpan startFour" type="text" id="giveBrick" name="giveBrick">
+            <label>Sheep:</label>
+            <input class="twoSpan startTwo" type="text" id="offerSheep" name="offerSheep">
+            <input class="twoSpan startFour" type="text" id="giveSheep" name="giveSheep">
+            <label>Wheat:</label>
+            <input class="twoSpan startTwo" type="text" id="offerWheat" name="offerWheat">
+            <input class="twoSpan startFour" type="text" id="giveWheat" name="giveWheat">
+            <label>Stone:</label>
+            <input class="twoSpan startTwo" type="text" id="offerStone" name="offerStone">
+            <input class="twoSpan startFour" type="text" id="giveStone" name="giveStone">
+            <button id="propButton" onclick="sendTrade()">Propose</button>
         </div>
     </div>
 </body>

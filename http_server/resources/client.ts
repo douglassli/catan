@@ -140,7 +140,7 @@ interface BoughtDevCard extends IncomingMessage {
 
 interface TradeProposed extends IncomingMessage {
     type: "TRADE_PROPOSED";
-    tradeId: number;
+    tradeID: number;
     name: string;
     curResources: ResourceBlock;
     otherResources: ResourceBlock;
@@ -148,14 +148,14 @@ interface TradeProposed extends IncomingMessage {
 
 interface TradeResponded extends IncomingMessage {
     type: "TRADE_RESPONDED";
-    tradeId: number;
+    tradeID: number;
     name: string;
     accepted: boolean;
 }
 
 interface TradeClosed extends IncomingMessage {
     type: "TRADE_CLOSED";
-    tradeId: number;
+    tradeID: number;
 }
 
 // Outgoing Messsage type definitions **************************************************************
@@ -188,7 +188,7 @@ interface ChoseMessage extends IDMessage {
 
 interface ProposeTrade extends IDMessage {
     type: "PROPOSE_TRADE";
-    tradeId: number;
+    tradeID: number;
     curResources: ResourceBlock;
     otherResources: ResourceBlock;
 }
@@ -196,20 +196,20 @@ interface ProposeTrade extends IDMessage {
 // This is for other players to decide whether they are willing to accept this trade
 interface TradeResponse extends IDMessage {
     type: "TRADE_RESPONSE";
-    tradeId: number;
+    tradeID: number;
     accepted: boolean;
 }
 
 // This is for the current player to choose which of the other players that accepted to trade with
 interface ConfirmTrade extends IDMessage {
     type: "CONFIRM_TRADE";
-    tradeId: number;
+    tradeID: number;
     name: string;
 }
 
 interface CancelTrade extends IDMessage {
     type: "CANCEL_TRADE";
-    tradeId: number;
+    tradeID: number;
 }
 
 const enum ChoseTypes {
@@ -362,6 +362,7 @@ class MessageHandler {
         document.getElementById("buttonBar").classList.remove("hidden");
         document.getElementById("deckStatus").classList.remove("hidden");
         document.getElementById("lastRollDiv").classList.remove("hidden");
+        document.getElementById("tradeColumn").classList.remove("hidden");
         this.TURN_START({type: "TURN_START", name: msg.startingPlayer});
     }
 
@@ -429,6 +430,18 @@ class MessageHandler {
 
     PLAYER_ROBBED(msg: PlayerRobbed): void {
         // Do nothing
+    }
+
+    TRADE_PROPOSED(msg: TradeProposed): void {
+        appendTradeContainer(msg.tradeID, msg.curResources, msg.otherResources);
+    }
+
+    TRADE_RESPONDED(msg: TradeResponded): void {
+        // TODO
+    }
+
+    TRADE_CLOSED(msg: TradeClosed): void {
+        // TODO
     }
 }
 
@@ -563,4 +576,58 @@ function handlePlayerRobSelect(name: string): void {
     document.getElementById("robWindow").classList.add("hidden");
     const msg: ChosePlayerRob = {type: "CHOSE_PLAYER_ROB", roomID: roomId, playerID: playerId, name: name};
     sendMessage(msg);
+}
+
+function appendTradeContainer(tradeId: number, curResources: ResourceBlock, otherResources: ResourceBlock): void {
+    const tradeContainer: HTMLElement = document.createElement("div");
+    tradeContainer.classList.add("tradeContainer");
+
+    const offerDiv: HTMLElement = document.createElement("div");
+    offerDiv.classList.add("offerDiv");
+    offerDiv.innerHTML = getResourceSpans(curResources);
+    tradeContainer.appendChild(offerDiv);
+
+    const giveDiv: HTMLElement = document.createElement("div");
+    giveDiv.classList.add("giveDiv");
+    giveDiv.innerHTML = getResourceSpans(otherResources);
+    tradeContainer.appendChild(giveDiv);
+
+    const responseDiv: HTMLElement = document.createElement("div");
+    responseDiv.classList.add("responseDiv");
+
+    const acceptButton: HTMLElement = document.createElement("button");
+    acceptButton.innerHTML = "Accept";
+    acceptButton.onclick = () => respondToTrade(tradeId, true);
+    responseDiv.appendChild(acceptButton);
+
+    const rejectButton: HTMLElement = document.createElement("button");
+    rejectButton.innerHTML = "Reject";
+    rejectButton.onclick = () => respondToTrade(tradeId, false);
+    responseDiv.appendChild(rejectButton);
+
+    tradeContainer.appendChild(responseDiv);
+
+    document.getElementById("tradeColumn").appendChild(tradeContainer);
+}
+
+function getResourceSpans(resources: ResourceBlock): string {
+    let spans: string = "";
+    for (let res in resources) {
+        spans += `<span>${res}: ${resources[res]}</span>`;
+    }
+    return spans;
+}
+
+function respondToTrade(tid: number, accpt: boolean): void {
+    let response: TradeResponse = {type: "TRADE_RESPONSE", playerID: playerId, roomID: roomId,
+                                   tradeID: tid, accepted: accpt};
+    sendMessage(response);
+}
+
+function startTrading() {
+    document.getElementById("tradeInput").classList.remove("hidden");
+}
+
+function sendTrade() {
+    document.getElementById("tradeInput").classList.add("hidden");
 }

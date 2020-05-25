@@ -97,3 +97,42 @@ body {
     display: flex;
     justify-content: center;
 }
+
+.offerDiv, .giveDiv, .responseDiv {
+    border: 1px solid black;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #999999;
+    display: flex;
+    flex-direction: column;
+}
+.tradeContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#tradeInput {
+    background-color: #999999;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+
+    position: absolute;
+    top: 40vh;
+    left: 45vh;
+}
+.twoSpan {
+    grid-column-end: span 2;
+}
+.startTwo {
+    grid-column-start: 2;
+}
+.startFour {
+    grid-column-start: 4;
+}
+#propButton {
+    grid-area: 6 / 3 / 7 / 4;
+}
