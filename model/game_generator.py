@@ -6,6 +6,7 @@ from model.path import Path
 from model.development_cards import DevCards
 from model.catan_game import CatanGame
 from model.player import Player
+from model.ports import Port
 
 
 def generate_catan_game(plyrs, num_rows=5):
@@ -66,14 +67,27 @@ def get_tile_node_neighbors(row, col, num_rows):
     return out
 
 
+def generate_port_assignments():
+    port_vals = shuffle([Port.WOOD, Port.BRICK, Port.SHEEP, Port.WHEAT, Port.STONE] + [Port.ANY] * 4)
+    port_pairs = [(0, 0, 0, 1), (0, 3, 0, 4), (1, 0, 2, 1), (1, 7, 1, 8), (2, 10, 3, 10),
+                  (3, 1, 4, 0), (4, 7, 4, 8), (5, 0, 5, 1), (5, 3, 5, 4)]
+    out = {}
+    for port_pair in port_pairs:
+        port_val = port_vals.pop()
+        out[(port_pair[0], port_pair[1])] = port_val
+        out[(port_pair[2], port_pair[3])] = port_val
+
+    return out
+
+
 def generate_nodes(num_rows, tiles):
+    port_assignments = generate_port_assignments()
     node_coords = set([node for tile in tiles.values() for node in tile.nodes])
     out = {}
     for r, c in node_coords:
         neighbor_nodes = get_node_node_neighbors(r, c, num_rows)
         neighbor_paths = get_node_path_neighbors(r, c, num_rows)
-        # TODO determine if there is a port on this node
-        port = None
+        port = port_assignments.get((r, c), Port.NO_PORT)
         out[(r, c)] = Node(r, c, neighbor_nodes, neighbor_paths, port)
 
     return out

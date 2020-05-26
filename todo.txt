@@ -1,6 +1,5 @@
  - using dev cards
  - trading with bank
- - trading with other players
  - ports
  - make UI prettier
  - determining end of game
