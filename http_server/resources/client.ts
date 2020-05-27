@@ -451,7 +451,9 @@ class MessageHandler {
     }
 
     TRADE_CLOSED(msg: TradeClosed): void {
-        activeTrades[msg.tradeID].remove();
+        if (typeof activeTrades[msg.tradeID] !== "undefined") {
+            activeTrades[msg.tradeID].remove();
+        }
     }
 }
 

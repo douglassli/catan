@@ -142,11 +142,13 @@ class ServerPlayer:
                       mv.ACCEPTED: accepted}
         await self.send_msg(return_msg)
 
-    async def send_trade_closed(self, trade_id, updates, deck_state):
+    async def send_trade_closed(self, trade_id, updates, deck_state, active_buttons=None):
         return_msg = {mv.TYPE: mv.TRADE_CLOSED,
                       mv.TRADE_ID: trade_id}
         if updates is not None:
             return_msg[mv.STATUS_UPDATES] = updates
         if deck_state is not None:
             return_msg[mv.DECK_UPDATE] = deck_state
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)

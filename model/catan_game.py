@@ -1,6 +1,7 @@
 from random import randint
 from model.resources import Resource
 from model.buildings import Buildings
+from model.ports import Port
 from socket_server.game_state import GameState
 
 
@@ -187,6 +188,39 @@ class CatanGame:
 
     def can_do_trade(self, plyr1, p1_resources, plyr2, p2_resources):
         return plyr1.has_resources(p1_resources) and plyr2.has_resources(p2_resources)
+
+    def find_avail_ports(self):
+        cur_plyr = self.cur_player()
+        return [node.port for node in self.nodes.values() if node.owned_by(cur_plyr) and node.port != Port.NO_PORT]
+
+    def can_trade_with_bank(self, cur_resources, other_resources):
+        avail_ports = self.find_avail_ports()
+        default = 3 if Port.ANY in avail_ports else 4
+        trade_rates = {
+            Resource.WOOD: 2 if Port.WOOD in avail_ports else default,
+            Resource.BRICK: 2 if Port.BRICK in avail_ports else default,
+            Resource.SHEEP: 2 if Port.SHEEP in avail_ports else default,
+            Resource.WHEAT: 2 if Port.WHEAT in avail_ports else default,
+            Resource.STONE: 2 if Port.STONE in avail_ports else default
+        }
+
+        allowed_num = 0
+        for res, num in cur_resources.items():
+            if num % trade_rates[res] != 0:
+                return False
+            allowed_num += num // trade_rates[res]
+
+        return allowed_num == sum([num for num in other_resources.values()])
+
+    def trade_with_bank(self, cur_resources, other_resources):
+        cur_plyr = self.cur_player()
+        for res, num in cur_resources.items():
+            cur_plyr.gain_resource(res, -num)
+            self.resources[res] += num
+
+        for res, num in other_resources.items():
+            self.resources[res] -= num
+            cur_plyr.gain_resource(res, num)
 
     def perform_trade(self, plyr1, p1_resources, plyr2, p2_resources):
         for res, val in p1_resources.items():

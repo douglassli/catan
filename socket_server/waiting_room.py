@@ -200,11 +200,19 @@ class Room:
     async def propose_trade(self, plyr_id, trade_id, cur_resources, other_resources):
         cur_plyr = self.game_model.cur_player()
         if plyr_id == cur_plyr.pid and self.game_state == GameState.NORMAL and trade_id not in self.active_trades and cur_plyr.has_resources(cur_resources):
-            new_trade = Trade(trade_id, cur_plyr.pid, cur_resources, other_resources)
-            self.active_trades[trade_id] = new_trade
-            for plyr in self.players.values():
-                can_accept = self.game_model.get_player_by_id(plyr.pid).has_resources(other_resources)
-                await plyr.send_trade_proposed(cur_plyr.name, trade_id, cur_resources, other_resources, can_accept)
+            if self.game_model.can_trade_with_bank(cur_resources, other_resources):
+                self.game_model.trade_with_bank(cur_resources, other_resources)
+                deck_status = self.get_deck_state()
+                for plyr in self.players.values():
+                    updates = [self.get_private_state(cur_plyr) if plyr.pid == cur_plyr.pid else self.get_public_state(cur_plyr)]
+                    active_buttons = self.get_active_buttons() if cur_plyr.pid == plyr.pid else None
+                    await plyr.send_trade_closed(trade_id, updates, deck_status, active_buttons)
+            else:
+                new_trade = Trade(trade_id, cur_plyr.pid, cur_resources, other_resources)
+                self.active_trades[trade_id] = new_trade
+                for plyr in self.players.values():
+                    can_accept = self.game_model.get_player_by_id(plyr.pid).has_resources(other_resources)
+                    await plyr.send_trade_proposed(cur_plyr.name, trade_id, cur_resources, other_resources, can_accept)
 
     async def respond_to_trade(self, plyr_id, trade_id, accepted):
         if plyr_id not in self.players or trade_id not in self.active_trades:
@@ -235,11 +243,14 @@ class Room:
             for plyr in self.players.values():
                 if plyr.pid == cur_plyr.pid:
                     updates = [self.get_private_state(cur_plyr), confirmed_update]
+                    active_buttons = self.get_active_buttons()
                 elif plyr.pid == conf_plyr.pid:
                     updates = [self.get_private_state(conf_plyr), cur_update]
+                    active_buttons = None
                 else:
                     updates = [confirmed_update, cur_update]
-                await plyr.send_trade_closed(trade.trade_id, updates, None)
+                    active_buttons = None
+                await plyr.send_trade_closed(trade.trade_id, updates, None, active_buttons)
 
     async def cancel_trade(self, plyr_id, trade_id):
         cur_plyr = self.game_model.cur_player()

@@ -1,4 +1,3 @@
 - Instead of just moving the labels on the sails of the boats,
   bundle the label and the boat as a single symbol in order to
   maintain good label positioning on the sail
-  
