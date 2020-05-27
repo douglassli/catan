@@ -1,5 +1,6 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 from model.resources import Resource
+from model.ports import Port
 
 
 def get_template_data(game):
@@ -12,10 +13,22 @@ def get_template_data(game):
         Resource.DESERT: "#desertTile"
     }
 
+    port_map = {
+        Port.WOOD: "#woodPort",
+        Port.BRICK: "#brickPort",
+        Port.SHEEP: "#sheepPort",
+        Port.WHEAT: "#wheatPort",
+        Port.STONE: "#stonePort",
+        Port.ANY: "#anyPort"
+    }
+
     template_data = {}
     for tile in game.tiles.values():
         template_data["tile{}_{}".format(tile.row, tile.col)] = resource_map[tile.resource]
         template_data["num{}_{}".format(tile.row, tile.col)] = "#num{}".format(tile.roll_num)
+
+    for port_num, port_val in game.ports.items():
+        template_data["port_{}".format(port_num)] = port_map[port_val]
 
     template_data["players"] = [{"name": plyr.name, "color": plyr.color} for plyr in game.players]
 

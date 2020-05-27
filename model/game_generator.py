@@ -15,8 +15,10 @@ def generate_catan_game(plyrs, num_rows=5):
     dev_cards = [DevCards.KNIGHT] * 14 + [DevCards.VP] * 5 + [DevCards.ROAD, DevCards.MONOPOLY, DevCards.PLENTY] * 2
     shuffle(dev_cards)
 
+    port_nodes, ports = generate_port_assignments()
+
     tiles = generate_tiles(num_rows)
-    nodes = generate_nodes(num_rows, tiles)
+    nodes = generate_nodes(num_rows, tiles, port_nodes)
     paths = generate_paths(nodes)
 
     for tile in tiles.values():
@@ -30,7 +32,7 @@ def generate_catan_game(plyrs, num_rows=5):
         path.neighbor_nodes = [nodes[ncrd] for ncrd in path.neighbor_nodes]
         path.neighbor_paths = [paths[pcrd] for pcrd in path.neighbor_paths]
 
-    return CatanGame(players, 19, dev_cards, tiles, nodes, paths)
+    return CatanGame(players, 19, dev_cards, tiles, nodes, paths, ports)
 
 
 def generate_players(players):
@@ -68,20 +70,26 @@ def get_tile_node_neighbors(row, col, num_rows):
 
 
 def generate_port_assignments():
-    port_vals = shuffle([Port.WOOD, Port.BRICK, Port.SHEEP, Port.WHEAT, Port.STONE] + [Port.ANY] * 4)
-    port_pairs = [(0, 0, 0, 1), (0, 3, 0, 4), (1, 0, 2, 1), (1, 7, 1, 8), (2, 10, 3, 10),
-                  (3, 1, 4, 0), (4, 7, 4, 8), (5, 0, 5, 1), (5, 3, 5, 4)]
-    out = {}
+    port_vals = [Port.WOOD, Port.BRICK, Port.SHEEP, Port.WHEAT, Port.STONE] + [Port.ANY] * 4
+    shuffle(port_vals)
+    # Hard coded port positions for a 5 row board. Tuples are of the form:
+    # (node1_row, node1_col, node2_row, node2_col, port_num)
+    # port num is counted from 0 starting at top left port and moving clockwise
+    port_pairs = [(0, 0, 0, 1, 0), (0, 3, 0, 4, 1), (1, 0, 2, 1, 8), (1, 7, 1, 8, 2), (2, 10, 3, 10, 3),
+                  (3, 1, 4, 0, 7), (4, 7, 4, 8, 4), (5, 0, 5, 1, 6), (5, 3, 5, 4, 5)]
+    port_nodes = {}
+    ports = {}
     for port_pair in port_pairs:
         port_val = port_vals.pop()
-        out[(port_pair[0], port_pair[1])] = port_val
-        out[(port_pair[2], port_pair[3])] = port_val
+        port_nodes[(port_pair[0], port_pair[1])] = port_val
+        port_nodes[(port_pair[2], port_pair[3])] = port_val
 
-    return out
+        ports[port_pair[4]] = port_val
+
+    return port_nodes, ports
 
 
-def generate_nodes(num_rows, tiles):
-    port_assignments = generate_port_assignments()
+def generate_nodes(num_rows, tiles, port_assignments):
     node_coords = set([node for tile in tiles.values() for node in tile.nodes])
     out = {}
     for r, c in node_coords:

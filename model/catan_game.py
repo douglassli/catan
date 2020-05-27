@@ -5,7 +5,7 @@ from socket_server.game_state import GameState
 
 
 class CatanGame:
-    def __init__(self, players, num_each_res, dev_cards, tiles, nodes, paths):
+    def __init__(self, players, num_each_res, dev_cards, tiles, nodes, paths, ports):
         self.players = players
         self.cur_plyr_ind = 0
 
@@ -15,6 +15,8 @@ class CatanGame:
         self.tiles = tiles
         self.nodes = nodes
         self.paths = paths
+
+        self.ports = ports
 
     def cur_player(self):
         return self.players[self.cur_plyr_ind]
