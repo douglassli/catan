@@ -455,7 +455,7 @@
                 <button type="button" onclick="useDevCard('USE_KNIGHT')" disabled="true" id="useKnightButton">Use Knight</button>
                 <button type="button" onclick="useDevCard('USE_PLENTY')" disabled="true" id="usePlentyButton">Use Plenty</button>
                 <button type="button" onclick="useDevCard('USE_ROAD_BUILDER')" disabled="true" id="useRoadBuilderButton">Use Road Builder</button>
-                <button type="button" onclick="useDevCard('USE_MONOPOLY')" disabled="true" id="useMonopolyButton">Use Monopoly</button>
+                <button type="button" onclick="startMonopolySelection()" disabled="true" id="useMonopolyButton">Use Monopoly</button>
                 <button type="button" onclick="rollDice()" disabled="true" id="rollButton">Roll Dice</button>
                 <button type="button" onclick="endTurn()" disabled="true" id="endTurnButton">End Turn</button>
             </div>
@@ -484,6 +484,13 @@
             <input class="twoSpan startTwo offerRes" type="text" id="offerStone" name="stone">
             <input class="twoSpan startFour giveRes" type="text" id="giveStone" name="stone">
             <button id="propButton" onclick="sendTrade()">Propose</button>
+        </div>
+        <div class="hidden" id="monopolySelect">
+            <button type="button" onclick="useMonopoly('wood')">Wood</button>
+            <button type="button" onclick="useMonopoly('brick')">Brick</button>
+            <button type="button" onclick="useMonopoly('sheep')">Sheep</button>
+            <button type="button" onclick="useMonopoly('wheat')">Wheat</button>
+            <button type="button" onclick="useMonopoly('stone')">Stone</button>
         </div>
     </div>
 </body>

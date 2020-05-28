@@ -258,3 +258,11 @@ class CatanGame:
                 prev_holder = player
                 player.largest_army = True
                 largest = player.army_size
+
+    def use_monopoly(self, res):
+        cur_plyr = self.cur_player()
+        cur_plyr.use_monopoly()
+        for plyr in self.players:
+            if plyr is not cur_plyr:
+                num = plyr.steal_all_of_resource(res)
+                cur_plyr.gain_resource(res, num)

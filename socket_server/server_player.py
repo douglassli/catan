@@ -154,3 +154,11 @@ class ServerPlayer:
         if active_buttons is not None:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
+
+    async def send_monopoly_used(self, name, updates, active_buttons):
+        return_msg = {mv.TYPE: mv.MONOPOLY_USED,
+                      mv.NAME: name,
+                      mv.STATUS_UPDATES: updates}
+        if active_buttons is not None:
+            return_msg[mv.ACTIVE_BUTTONS] = active_buttons
+        await self.send_msg(return_msg)

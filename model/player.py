@@ -115,5 +115,14 @@ class Player:
         self.dev_cards[DevCards.ROAD] -= 1
         self.used_dev_card = True
 
+    def use_monopoly(self):
+        self.dev_cards[DevCards.MONOPOLY] -= 1
+        self.used_dev_card = True
+
     def can_use_dev_card(self, dev_card):
         return not self.used_dev_card and self.dev_cards[dev_card] > 0
+
+    def steal_all_of_resource(self, res):
+        num = self.resources[res]
+        self.resources[res] = 0
+        return num

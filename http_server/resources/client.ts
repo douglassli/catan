@@ -164,6 +164,11 @@ interface TradeClosed extends IncomingMessage {
     tradeID: number;
 }
 
+interface MonopolyUsed extends IncomingMessage {
+    type: "MONOPOLY_USED";
+    name: string;
+}
+
 // Outgoing Messsage type definitions **************************************************************
 
 interface IDMessage extends Message {
@@ -194,6 +199,11 @@ const enum DevUseTypes {
     MONOPOLY = "USE_MONOPOLY"
 }
 interface UseDevCard extends IDMessage { type: DevUseTypes; }
+
+interface UseMonopoly extends UseDevCard {
+    type: DevUseTypes.MONOPOLY;
+    resource: string;
+}
 
 interface ChoseMessage extends IDMessage {
     row: number;
@@ -473,6 +483,10 @@ class MessageHandler {
             activeTrades[msg.tradeID].remove();
         }
     }
+
+    MONOPOLY_USED(msg: MonopolyUsed): void {
+        // Do nothing
+    }
 }
 
 // Waiting Room Code *******************************************************************************
@@ -721,5 +735,15 @@ function confirmTrade(tradeId: number, name: string): void {
 
 function useDevCard(devType: DevUseTypes): void {
     var msg: UseDevCard = {type: devType, playerID: playerId, roomID: roomId};
+    sendMessage(msg);
+}
+
+function startMonopolySelection(): void {
+    document.getElementById("monopolySelect").style.display = "inline-flex";
+}
+
+function useMonopoly(res: string): void {
+    document.getElementById("monopolySelect").style.display = "none";
+    var msg: UseMonopoly = {type: DevUseTypes.MONOPOLY, playerID: playerId, roomID: roomId, resource: res};
     sendMessage(msg);
 }

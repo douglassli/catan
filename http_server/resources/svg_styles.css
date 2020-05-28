@@ -136,3 +136,13 @@ body {
 #propButton {
     grid-area: 6 / 3 / 7 / 4;
 }
+
+#monopolySelect {
+    background-color: #999999;
+    display: none;
+    padding: 5px;
+
+    position: absolute;
+    top: 40vh;
+    left: 45vh;
+}

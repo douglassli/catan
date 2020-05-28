@@ -141,4 +141,4 @@ class UsePlentyMsg(InputMessage):
 
 class UseMonopolyMsg(InputMessage):
     async def handler(self, room):
-        await room.use_monopoly(self.msg[mv.PLAYER_ID])
+        await room.use_monopoly(self.msg[mv.PLAYER_ID], mv.field_to_res(self.msg[mv.RESOURCE]))
