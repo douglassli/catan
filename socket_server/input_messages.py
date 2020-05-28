@@ -122,3 +122,23 @@ class ConfirmTradeMsg(InputMessage):
 class CancelTradeMsg(InputMessage):
     async def handler(self, room):
         await room.cancel_trade(self.msg[mv.PLAYER_ID], self.msg[mv.TRADE_ID])
+
+
+class UseKnightMsg(InputMessage):
+    async def handler(self, room):
+        await room.use_knight(self.msg[mv.PLAYER_ID])
+
+
+class UseRoadBuilderMsg(InputMessage):
+    async def handler(self, room):
+        await room.use_road_builder(self.msg[mv.PLAYER_ID])
+
+
+class UsePlentyMsg(InputMessage):
+    async def handler(self, room):
+        await room.use_plenty(self.msg[mv.PLAYER_ID])
+
+
+class UseMonopolyMsg(InputMessage):
+    async def handler(self, room):
+        await room.use_monopoly(self.msg[mv.PLAYER_ID])

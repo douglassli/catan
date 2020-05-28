@@ -260,6 +260,22 @@ class Room:
             for plyr in [p for p in self.players.values() if p.pid != cur_plyr.pid]:
                 await plyr.send_trade_closed(trade_id, None, None)
 
+    async def use_knight(self, plyr_id):
+        # TODO
+        pass
+
+    async def use_road_builder(self, plyr_id):
+        # TODO
+        pass
+
+    async def use_plenty(self, plyr_id):
+        # TODO
+        pass
+
+    async def use_monopoly(self, plyr_id):
+        # TODO
+        pass
+
     def get_deck_state(self):
         return {
             mv.WOOD: self.game_model.resources[Resource.WOOD],
@@ -290,11 +306,11 @@ class Room:
         public[mv.SHEEP] = player.resources[Resource.SHEEP]
         public[mv.WHEAT] = player.resources[Resource.WHEAT]
         public[mv.STONE] = player.resources[Resource.STONE]
-        public[mv.VP_DEV_CARD] = player.dev_cards[DevCards.VP]
-        public[mv.KNIGHT] = player.dev_cards[DevCards.KNIGHT]
-        public[mv.ROAD_BUILDER] = player.dev_cards[DevCards.ROAD]
-        public[mv.PLENTY] = player.dev_cards[DevCards.PLENTY]
-        public[mv.MONOPOLY] = player.dev_cards[DevCards.MONOPOLY]
+        public[mv.VP_DEV_CARD] = player.dev_cards[DevCards.VP] + player.tmp_dev_cards[DevCards.VP]
+        public[mv.KNIGHT] = player.dev_cards[DevCards.KNIGHT] + player.tmp_dev_cards[DevCards.KNIGHT]
+        public[mv.ROAD_BUILDER] = player.dev_cards[DevCards.ROAD] + player.tmp_dev_cards[DevCards.ROAD]
+        public[mv.PLENTY] = player.dev_cards[DevCards.PLENTY] + player.tmp_dev_cards[DevCards.PLENTY]
+        public[mv.MONOPOLY] = player.dev_cards[DevCards.MONOPOLY] + player.tmp_dev_cards[DevCards.MONOPOLY]
         return public
 
     def get_updates(self, cur_plyr):
@@ -324,4 +340,12 @@ class Room:
             buttons.append(mv.ROAD_BUTTON)
         if is_normal:
             buttons.append(mv.TRADE_BUTTON)
+        if cur_plyr.dev_cards[DevCards.KNIGHT] > 0 and is_normal:
+            buttons.append(mv.KNIGHT_BUTTON)
+        if cur_plyr.dev_cards[DevCards.ROAD] > 0 and is_normal:
+            buttons.append(mv.ROAD_BUILDER_BUTTON)
+        if cur_plyr.dev_cards[DevCards.PLENTY] > 0 and is_normal:
+            buttons.append(mv.PLENTY_BUTTON)
+        if cur_plyr.dev_cards[DevCards.MONOPOLY] > 0 and is_normal:
+            buttons.append(mv.MONOPOLY_BUTTON)
         return buttons

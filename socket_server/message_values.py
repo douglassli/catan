@@ -23,6 +23,10 @@ class InTypes(Enum):
     TRADE_RESPONSE = "TRADE_RESPONSE"
     CONFIRM_TRADE = "CONFIRM_TRADE"
     CANCEL_TRADE = "CANCEL_TRADE"
+    USE_KNIGHT = "USE_KNIGHT"
+    USE_ROAD_BUILDER = "USE_ROAD_BUILDER"
+    USE_PLENTY = "USE_PLENTY"
+    USE_MONOPOLY = "USE_MONOPOLY"
 
     @classmethod
     def is_member(cls, value):
@@ -48,7 +52,11 @@ class InTypes(Enum):
             self.PROPOSE_TRADE: im.ProposeTradeMsg,
             self.TRADE_RESPONSE: im.TradeResponseMsg,
             self.CONFIRM_TRADE: im.ConfirmTradeMsg,
-            self.CANCEL_TRADE: im.CancelTradeMsg
+            self.CANCEL_TRADE: im.CancelTradeMsg,
+            self.USE_KNIGHT: im.UseKnightMsg,
+            self.USE_ROAD_BUILDER: im.UseRoadBuilderMsg,
+            self.USE_PLENTY: im.UsePlentyMsg,
+            self.USE_MONOPOLY: im.UseMonopolyMsg
         }
         return constructor_map[self](msg, websocket)
 
@@ -148,3 +156,7 @@ CITY_BUTTON = "buyCityButton"
 DEV_BUTTON = "buyDevCardButton"
 ROLL_BUTTON = "rollButton"
 END_TURN_BUTTON = "endTurnButton"
+KNIGHT_BUTTON = "useKnightButton"
+PLENTY_BUTTON = "usePlentyButton"
+ROAD_BUILDER_BUTTON = "useRoadBuilderButton"
+MONOPOLY_BUTTON = "useMonopolyButton"

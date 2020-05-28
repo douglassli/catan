@@ -41,6 +41,9 @@ class CatanGame:
             self.cur_plyr_ind -= 1
             return GameState.SETUP_REV
         else:
+            prev_cur_player = self.cur_player()
+            prev_cur_player.move_dev_cards()
+            prev_cur_player.used_dev_card = False
             self.cur_plyr_ind = (self.cur_plyr_ind + 1) % len(self.players)
             return GameState.SETUP if game_state == GameState.SETUP else GameState.PRE_ROLL
 

@@ -10,6 +10,7 @@ class Player:
         self.color = color
         self.resources = {res: 0 for res in Resource if res != Resource.DESERT}
         self.dev_cards = {dc: 0 for dc in DevCards}
+        self.tmp_dev_cards = {dc: 0 for dc in DevCards}
         self.num_roads = 15
         self.num_settles = 5
         self.num_cities = 4
@@ -17,6 +18,7 @@ class Player:
         self.largest_army = False
         self.road_length = 0
         self.longest_road = False
+        self.used_dev_card = False
 
     def can_build_settle(self):
         has_settles = self.num_settles >= 1
@@ -65,11 +67,16 @@ class Player:
         return {}
 
     def buy_dev_card(self, dev_card):
-        self.dev_cards[dev_card] += 1
+        self.tmp_dev_cards[dev_card] += 1
         self.resources[Resource.WHEAT] -= 1
         self.resources[Resource.SHEEP] -= 1
         self.resources[Resource.STONE] -= 1
         return {Resource.WHEAT: 1, Resource.SHEEP: 1, Resource.STONE: 1}
+
+    def move_dev_cards(self):
+        for dev_card, num in self.tmp_dev_cards.items():
+            self.dev_cards[dev_card] += num
+        self.tmp_dev_cards = {dc: 0 for dc in DevCards}
 
     def gain_resource(self, resource, count):
         self.resources[resource] += count
@@ -78,14 +85,14 @@ class Player:
         return sum([v for v in self.resources.values()])
 
     def get_dev_card_hand_size(self):
-        return sum([v for v in self.dev_cards.values()])
+        return sum([v for v in self.dev_cards.values()]) + sum([v for v in self.tmp_dev_cards.values()])
 
     def get_victory_points(self):
         return (5 - self.num_settles) + \
                (2 * (4 - self.num_cities)) + \
                (2 if self.longest_road else 0) + \
                (2 if self.largest_army else 0) + \
-               self.dev_cards[DevCards.VP]
+               self.dev_cards[DevCards.VP] + self.tmp_dev_cards[DevCards.VP]
 
     def steal_random_resource(self):
         weights = [val for val in self.resources.values()]

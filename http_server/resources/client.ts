@@ -187,6 +187,14 @@ interface RollDice extends IDMessage { type: "ROLL_DICE"; }
 interface BuyDevCard extends IDMessage { type: "BUY_DEV_CARD"; }
 interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB"; name: string; }
 
+const enum DevUseTypes {
+    KNIGHT = "USE_KNIGHT",
+    BUILDER = "USE_ROAD_BUILDER",
+    PLENTY = "USE_PLENTY",
+    MONOPOLY = "USE_MONOPOLY"
+}
+interface UseDevCard extends IDMessage { type: DevUseTypes; }
+
 interface ChoseMessage extends IDMessage {
     row: number;
     col: number;
@@ -709,4 +717,9 @@ function confirmTrade(tradeId: number, name: string): void {
     const confMsg: ConfirmTrade = {type: "CONFIRM_TRADE", playerID: playerId, roomID: roomId,
                                    tradeID: tradeId, name: name};
     sendMessage(confMsg);
+}
+
+function useDevCard(devType: DevUseTypes): void {
+    var msg: UseDevCard = {type: devType, playerID: playerId, roomID: roomId};
+    sendMessage(msg);
 }
