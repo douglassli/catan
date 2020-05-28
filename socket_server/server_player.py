@@ -96,7 +96,7 @@ class ServerPlayer:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_robber_moved(self, row, col, prev_row, prev_col, active_buttons, avail_to_rob):
+    async def send_robber_moved(self, row, col, prev_row, prev_col, active_buttons, avail_to_rob, status):
         return_msg = {mv.TYPE: mv.ROBBER_MOVED,
                       mv.ROW: row,
                       mv.COL: col,
@@ -106,6 +106,8 @@ class ServerPlayer:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         if avail_to_rob is not None:
             return_msg[mv.AVAIL_TO_ROB] = avail_to_rob
+        if status is not None:
+            return_msg[mv.STATUS_UPDATES] = status
         await self.send_msg(return_msg)
 
     async def send_player_robbed(self, player_gained, player_robbed, updates, active_buttons):

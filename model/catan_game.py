@@ -233,3 +233,21 @@ class CatanGame:
         for res, val in p2_resources.items():
             plyr1.gain_resource(res, val)
             plyr2.gain_resource(res, -val)
+
+    def use_knight(self):
+        self.cur_player().use_knight()
+
+        largest = 0
+        prev_holder = None
+        for player in self.players:
+            if player.largest_army and player.army_size >= largest:
+                prev_holder = player
+                largest = player.army_size
+            elif player.largest_army and player.army_size < largest:
+                player.largest_army = False
+            elif not player.largest_army and player.army_size > largest and player.army_size >= 3:
+                if prev_holder is not None:
+                    prev_holder.largest_army = False
+                prev_holder = player
+                player.largest_army = True
+                largest = player.army_size

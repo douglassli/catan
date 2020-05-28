@@ -11,6 +11,7 @@ class GameState(Enum):
     SETUP_REV_ROAD_SEL = auto()
     PRE_ROLL = auto()
     ROBBER_SEL = auto()
+    KNIGHT_SEL = auto()
     PLAYER_ROB_SEL = auto()
     NORMAL = auto()
     ROAD_SEL = auto()
@@ -32,10 +33,12 @@ class GameState(Enum):
             GameState.SETUP_REV_ROAD_SEL: {Transitions.CHOSE_ROAD: GameState.SETUP_REV},
             GameState.PRE_ROLL: {Transitions.ROLL_DICE: GameState.NORMAL, Transitions.ROLL_SEVEN: GameState.ROBBER_SEL},
             GameState.ROBBER_SEL: {Transitions.CHOSE_ROBBER: GameState.PLAYER_ROB_SEL},
+            GameState.KNIGHT_SEL: {Transitions.CHOSE_ROBBER: GameState.PLAYER_ROB_SEL},
             GameState.PLAYER_ROB_SEL: {Transitions.CHOSE_PLAYER_ROB: GameState.NORMAL},
             GameState.NORMAL: {Transitions.START_ROAD_SEL: GameState.ROAD_SEL,
                                Transitions.START_SETTLE_SEL: GameState.SETTLE_SEL,
-                               Transitions.START_CITY_SEL: GameState.CITY_SEL},
+                               Transitions.START_CITY_SEL: GameState.CITY_SEL,
+                               Transitions.USE_KNIGHT: GameState.KNIGHT_SEL},
             GameState.ROAD_SEL: {Transitions.CHOSE_ROAD: GameState.NORMAL},
             GameState.SETTLE_SEL: {Transitions.CHOSE_SETTLE: GameState.NORMAL},
             GameState.CITY_SEL: {Transitions.CHOSE_CITY: GameState.NORMAL}
@@ -68,3 +71,4 @@ class Transitions(Enum):
     END_TURN = auto()
     ROLL_DICE = auto()
     ROLL_SEVEN = auto()
+    USE_KNIGHT = auto()

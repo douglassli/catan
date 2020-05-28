@@ -82,7 +82,7 @@ class Room:
 
     async def start_select(self, plyr_id, can_build, avail, msg_type, transition):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == plyr_id and self.game_state.is_valid_transition(transition) and can_build and len(avail) > 0:
+        if cur_player.pid == plyr_id and self.valid_trans(transition) and can_build and len(avail) > 0:
             self.game_state = self.game_state.get_next_state(transition)
             await self.players[plyr_id].display_options(msg_type, avail)
 
@@ -114,7 +114,7 @@ class Room:
 
     async def chose(self, plyr_id, row, col, can_build, builder, msg_type, transition):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == plyr_id and self.game_state.is_valid_transition(transition) and can_build:
+        if cur_player.pid == plyr_id and self.valid_trans(transition) and can_build:
             self.game_state = self.game_state.get_next_state(transition)
             color = builder((row, col), self.game_state.is_setup())
 
@@ -139,7 +139,7 @@ class Room:
 
     async def roll_dice(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
-        if plyr_id == cur_plyr.pid and self.game_state.is_valid_transition(Transitions.ROLL_DICE):
+        if plyr_id == cur_plyr.pid and self.valid_trans(Transitions.ROLL_DICE):
             roll_num1, roll_num2 = self.game_model.roll_dice()
             if roll_num1 + roll_num2 == 7:
                 self.game_state = self.game_state.get_next_state(Transitions.ROLL_SEVEN)
@@ -158,21 +158,26 @@ class Room:
 
     async def robber_moved(self, plyr_id, row, col):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == plyr_id and self.game_state.is_valid_transition(Transitions.CHOSE_ROBBER):
+        if cur_player.pid == plyr_id and self.valid_trans(Transitions.CHOSE_ROBBER):
+            was_knight = self.game_state == GameState.KNIGHT_SEL
+            if was_knight:
+                self.game_model.use_knight()
             self.game_state = self.game_state.get_next_state(Transitions.CHOSE_ROBBER)
             prev_coord = self.game_model.get_robber_coord()
             self.game_model.move_robber((row, col))
             avail = self.game_model.get_avail_to_rob((row, col))
             if len(avail) == 0:
                 self.game_state = self.game_state.get_next_state(Transitions.CHOSE_PLAYER_ROB)
+            updated_army = {mv.NAME: cur_player.name, mv.ARMY_SIZE: cur_player.army_size}
             for player in self.players.values():
                 active_buttons = self.get_active_buttons() if cur_player.pid == player.pid else None
                 avail_to_rob = avail if player.pid == cur_player.pid and len(avail) > 0 else None
-                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons, avail_to_rob)
+                status = [updated_army] if was_knight else None
+                await player.send_robber_moved(row, col, prev_coord[0], prev_coord[1], active_buttons, avail_to_rob, status)
 
     async def chose_player_rob(self, plyr_id, robbed_name):
         cur_player = self.game_model.cur_player()
-        if cur_player.pid == plyr_id and self.game_model.can_rob(robbed_name) and self.game_state.is_valid_transition(Transitions.CHOSE_PLAYER_ROB):
+        if cur_player.pid == plyr_id and self.game_model.can_rob(robbed_name) and self.valid_trans(Transitions.CHOSE_PLAYER_ROB):
             self.game_state = self.game_state.get_next_state(Transitions.CHOSE_PLAYER_ROB)
             self.game_model.rob_player(robbed_name)
             robbed_player = self.game_model.get_player_by_name(robbed_name)
@@ -261,8 +266,11 @@ class Room:
                 await plyr.send_trade_closed(trade_id, None, None)
 
     async def use_knight(self, plyr_id):
-        # TODO
-        pass
+        cur_plyr = self.game_model.cur_player()
+        if cur_plyr.pid == plyr_id and self.valid_trans(Transitions.USE_KNIGHT) and cur_plyr.can_use_dev_card(DevCards.KNIGHT):
+            self.game_state = self.game_state.get_next_state(Transitions.USE_KNIGHT)
+            avail = self.game_model.get_avail_robber_coords()
+            await self.players[cur_plyr.pid].display_options(mv.AVAIL_ROBBERS, avail)
 
     async def use_road_builder(self, plyr_id):
         # TODO
@@ -349,3 +357,6 @@ class Room:
         if cur_plyr.dev_cards[DevCards.MONOPOLY] > 0 and is_normal:
             buttons.append(mv.MONOPOLY_BUTTON)
         return buttons
+
+    def valid_trans(self, trans):
+        return self.game_state.is_valid_transition(trans)
