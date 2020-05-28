@@ -111,5 +111,9 @@ class Player:
         self.dev_cards[DevCards.KNIGHT] -= 1
         self.used_dev_card = True
 
+    def use_road_builder(self):
+        self.dev_cards[DevCards.ROAD] -= 1
+        self.used_dev_card = True
+
     def can_use_dev_card(self, dev_card):
         return not self.used_dev_card and self.dev_cards[dev_card] > 0

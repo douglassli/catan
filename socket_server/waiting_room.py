@@ -96,9 +96,17 @@ class Room:
             await self.start_road_select(plyr_id)
 
     async def chose_road(self, plyr_id, row, col):
-        can_build = self.game_model.can_build_road() or self.game_state.is_setup()
-        await self.chose(plyr_id, row, col, can_build, self.game_model.build_road,
-                         mv.ROAD_BUILT, Transitions.CHOSE_ROAD)
+        if self.game_state in [GameState.BUILDER_SEL1, GameState.BUILDER_SEL2]:
+            can_build = True
+            builder = self.game_model.build_road_dev_card
+        else:
+            can_build = self.game_model.can_build_road() or self.game_state.is_setup()
+            builder = self.game_model.build_road
+        await self.chose(plyr_id, row, col, can_build, builder, mv.ROAD_BUILT, Transitions.CHOSE_ROAD)
+
+        if self.game_state == GameState.BUILDER_SEL2:
+            avail = self.game_model.get_avail_paths(self.game_state.is_setup())
+            await self.players[plyr_id].display_options(mv.AVAIL_ROADS, avail)
 
         if self.game_state == GameState.SETUP or self.game_state == GameState.SETUP_REV:
             await self.end_turn(plyr_id)
@@ -273,8 +281,12 @@ class Room:
             await self.players[cur_plyr.pid].display_options(mv.AVAIL_ROBBERS, avail)
 
     async def use_road_builder(self, plyr_id):
-        # TODO
-        pass
+        cur_plyr = self.game_model.cur_player()
+        can_build = cur_plyr.can_use_dev_card(DevCards.ROAD)
+        avail = self.game_model.get_avail_paths(self.game_state.is_setup())
+        cur_plyr.use_road_builder()
+        # TODO send status update that dev card has been used
+        await self.start_select(plyr_id, can_build, avail, mv.AVAIL_ROADS, Transitions.USE_ROAD_BUILDER)
 
     async def use_plenty(self, plyr_id):
         # TODO

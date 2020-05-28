@@ -113,6 +113,13 @@ class CatanGame:
         self.update_longest_road()
         return cur_player.color
 
+    def build_road_dev_card(self, coord, is_setup):
+        cur_player = self.cur_player()
+        cur_player.num_roads -= 1
+        self.paths[coord].build_road(cur_player)
+        self.update_longest_road()
+        return cur_player.color
+
     def get_robber_coord(self):
         for tcrd, tile in self.tiles.items():
             if tile.has_robber:

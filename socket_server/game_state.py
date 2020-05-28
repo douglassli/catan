@@ -17,6 +17,8 @@ class GameState(Enum):
     ROAD_SEL = auto()
     SETTLE_SEL = auto()
     CITY_SEL = auto()
+    BUILDER_SEL1 = auto()
+    BUILDER_SEL2 = auto()
 
     def get_trans_map(self):
         transition_map = {
@@ -38,10 +40,13 @@ class GameState(Enum):
             GameState.NORMAL: {Transitions.START_ROAD_SEL: GameState.ROAD_SEL,
                                Transitions.START_SETTLE_SEL: GameState.SETTLE_SEL,
                                Transitions.START_CITY_SEL: GameState.CITY_SEL,
-                               Transitions.USE_KNIGHT: GameState.KNIGHT_SEL},
+                               Transitions.USE_KNIGHT: GameState.KNIGHT_SEL,
+                               Transitions.USE_ROAD_BUILDER: GameState.BUILDER_SEL1},
             GameState.ROAD_SEL: {Transitions.CHOSE_ROAD: GameState.NORMAL},
             GameState.SETTLE_SEL: {Transitions.CHOSE_SETTLE: GameState.NORMAL},
-            GameState.CITY_SEL: {Transitions.CHOSE_CITY: GameState.NORMAL}
+            GameState.CITY_SEL: {Transitions.CHOSE_CITY: GameState.NORMAL},
+            GameState.BUILDER_SEL1: {Transitions.CHOSE_ROAD: GameState.BUILDER_SEL2},
+            GameState.BUILDER_SEL2: {Transitions.CHOSE_ROAD: GameState.NORMAL}
         }
         return transition_map[self]
 
@@ -72,3 +77,4 @@ class Transitions(Enum):
     ROLL_DICE = auto()
     ROLL_SEVEN = auto()
     USE_KNIGHT = auto()
+    USE_ROAD_BUILDER = auto()
