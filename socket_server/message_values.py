@@ -134,7 +134,11 @@ CURRENT_RESOURCES = "curResources"
 OTHER_RESOURCES = "otherResources"
 ACCEPTED = "accepted"
 CAN_ACCEPT = "canAccept"
-
+VP_DEV_CARD = "vpDevCard"
+KNIGHT = "knight"
+PLENTY = "plenty"
+ROAD_BUILDER = "roadBuilder"
+MONOPOLY = "monopoly"
 
 # Button Ids
 TRADE_BUTTON = "tradeButton"

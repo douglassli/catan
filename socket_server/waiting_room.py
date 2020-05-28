@@ -5,6 +5,7 @@ from socket_server.server_player import ServerPlayer
 from socket_server.game_state import GameState, Transitions
 import socket_server.message_values as mv
 from model.resources import Resource
+from model.development_cards import DevCards
 from socket_server.trade import Trade
 
 
@@ -289,6 +290,11 @@ class Room:
         public[mv.SHEEP] = player.resources[Resource.SHEEP]
         public[mv.WHEAT] = player.resources[Resource.WHEAT]
         public[mv.STONE] = player.resources[Resource.STONE]
+        public[mv.VP_DEV_CARD] = player.dev_cards[DevCards.VP]
+        public[mv.KNIGHT] = player.dev_cards[DevCards.KNIGHT]
+        public[mv.ROAD_BUILDER] = player.dev_cards[DevCards.ROAD]
+        public[mv.PLENTY] = player.dev_cards[DevCards.PLENTY]
+        public[mv.MONOPOLY] = player.dev_cards[DevCards.MONOPOLY]
         return public
 
     def get_updates(self, cur_plyr):

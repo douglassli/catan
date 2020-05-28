@@ -28,6 +28,11 @@ interface StatusUpdate {
     sheep?: number;
     wheat?: number;
     stone?: number;
+    vpDevCard?: number;
+    knight?: number;
+    roadBuilder?: number;
+    plenty?: number;
+    monopoly?: number;
 }
 
 interface ResourceBlock {
@@ -180,7 +185,7 @@ interface RoadSelectStart extends IDMessage { type: SelectTypes.ROAD; }
 interface EndTurn extends IDMessage { type: "END_TURN"; }
 interface RollDice extends IDMessage { type: "ROLL_DICE"; }
 interface BuyDevCard extends IDMessage { type: "BUY_DEV_CARD"; }
-interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB"; name: string; };
+interface ChosePlayerRob extends IDMessage { type: "CHOSE_PLAYER_ROB"; name: string; }
 
 interface ChoseMessage extends IDMessage {
     row: number;
@@ -296,6 +301,11 @@ class MessageHandler {
             updateStatVal(`${status.name}SheepSpan`, 'sheep', status);
             updateStatVal(`${status.name}WheatSpan`, 'wheat', status);
             updateStatVal(`${status.name}StoneSpan`, 'stone', status);
+            updateStatVal(`${status.name}VPDevSpan`, 'vpDevCard', status);
+            updateStatVal(`${status.name}KnightSpan`, 'knight', status);
+            updateStatVal(`${status.name}RoadBuilderSpan`, 'roadBuilder', status);
+            updateStatVal(`${status.name}PlentySpan`, 'plenty', status);
+            updateStatVal(`${status.name}MonopolySpan`, 'monopoly', status);
         }
     }
 
