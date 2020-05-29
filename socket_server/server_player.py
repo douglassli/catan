@@ -155,10 +155,12 @@ class ServerPlayer:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
         await self.send_msg(return_msg)
 
-    async def send_monopoly_used(self, name, updates, active_buttons):
-        return_msg = {mv.TYPE: mv.MONOPOLY_USED,
+    async def send_dev_card_used(self, name, updates, active_buttons, deck_state=None):
+        return_msg = {mv.TYPE: mv.DEV_CARD_USED,
                       mv.NAME: name,
                       mv.STATUS_UPDATES: updates}
         if active_buttons is not None:
             return_msg[mv.ACTIVE_BUTTONS] = active_buttons
+        if deck_state is not None:
+            return_msg[mv.DECK_UPDATE] = deck_state
         await self.send_msg(return_msg)

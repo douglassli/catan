@@ -288,9 +288,15 @@ class Room:
         # TODO send status update that dev card has been used
         await self.start_select(plyr_id, can_build, avail, mv.AVAIL_ROADS, Transitions.USE_ROAD_BUILDER)
 
-    async def use_plenty(self, plyr_id):
-        # TODO
-        pass
+    async def use_plenty(self, plyr_id, res1, res2):
+        cur_plyr = self.game_model.cur_player()
+        if cur_plyr.pid == plyr_id and self.game_state == GameState.NORMAL and cur_plyr.can_use_dev_card(DevCards.PLENTY):
+            self.game_model.use_plenty(res1, res2)
+            deck_state = self.get_deck_state()
+            for plyr in self.players.values():
+                updates = [self.get_private_state(cur_plyr) if plyr.pid == cur_plyr.pid else self.get_public_state(cur_plyr)]
+                active_buttons = self.get_active_buttons() if plyr.pid == cur_plyr.pid else None
+                await plyr.send_dev_card_used(cur_plyr.name, updates, active_buttons, deck_state)
 
     async def use_monopoly(self, plyr_id, resource):
         cur_plyr = self.game_model.cur_player()
@@ -298,8 +304,8 @@ class Room:
             self.game_model.use_monopoly(resource)
             for plyr in self.players.values():
                 updates = self.get_updates(plyr)
-                avail_buttons = self.get_active_buttons() if plyr.pid == cur_plyr.pid else None
-                await plyr.send_monopoly_used(cur_plyr.name, updates, avail_buttons)
+                active_buttons = self.get_active_buttons() if plyr.pid == cur_plyr.pid else None
+                await plyr.send_dev_card_used(cur_plyr.name, updates, active_buttons)
 
     def get_deck_state(self):
         return {

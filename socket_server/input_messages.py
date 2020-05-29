@@ -136,7 +136,9 @@ class UseRoadBuilderMsg(InputMessage):
 
 class UsePlentyMsg(InputMessage):
     async def handler(self, room):
-        await room.use_plenty(self.msg[mv.PLAYER_ID])
+        await room.use_plenty(self.msg[mv.PLAYER_ID],
+                              mv.field_to_res(self.msg[mv.RESOURCE1]),
+                              mv.field_to_res(self.msg[mv.RESOURCE2]))
 
 
 class UseMonopolyMsg(InputMessage):

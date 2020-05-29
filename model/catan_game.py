@@ -266,3 +266,9 @@ class CatanGame:
             if plyr is not cur_plyr:
                 num = plyr.steal_all_of_resource(res)
                 cur_plyr.gain_resource(res, num)
+
+    def use_plenty(self, res1, res2):
+        cur_plyr = self.cur_player()
+        cur_plyr.use_plenty(res1, res2)
+        self.resources[res1] -= 1
+        self.resources[res2] -= 1

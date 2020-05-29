@@ -146,3 +146,21 @@ body {
     top: 40vh;
     left: 45vh;
 }
+
+#plentySelect {
+    background-color: #999999;
+    padding: 5px;
+    display: none;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: repeat(7, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    justify-items: center;
+
+    position: absolute;
+    top: 40vh;
+    left: 45vh;
+}
+#plentySubmitButton {
+    grid-column: 1 / span 3;
+}

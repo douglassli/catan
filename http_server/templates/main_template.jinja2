@@ -453,7 +453,7 @@
                 <button type="button" onclick="startCitySelection()" disabled="true" id="buyCityButton">Buy City</button>
                 <button type="button" onclick="buyDevCard()" disabled="true" id="buyDevCardButton">Buy Dev Card</button>
                 <button type="button" onclick="useDevCard('USE_KNIGHT')" disabled="true" id="useKnightButton">Use Knight</button>
-                <button type="button" onclick="useDevCard('USE_PLENTY')" disabled="true" id="usePlentyButton">Use Plenty</button>
+                <button type="button" onclick="startPlentySelect()" disabled="true" id="usePlentyButton">Use Plenty</button>
                 <button type="button" onclick="useDevCard('USE_ROAD_BUILDER')" disabled="true" id="useRoadBuilderButton">Use Road Builder</button>
                 <button type="button" onclick="startMonopolySelection()" disabled="true" id="useMonopolyButton">Use Monopoly</button>
                 <button type="button" onclick="rollDice()" disabled="true" id="rollButton">Roll Dice</button>
@@ -491,6 +491,26 @@
             <button type="button" onclick="useMonopoly('sheep')">Sheep</button>
             <button type="button" onclick="useMonopoly('wheat')">Wheat</button>
             <button type="button" onclick="useMonopoly('stone')">Stone</button>
+        </div>
+        <div id="plentySelect">
+            <span style="grid-column-start: 2">Res1</span>
+            <span style="grid-column-start: 3">Res2</span>
+            <span>Wood</span>
+            <input type="radio" id="plentyWood1" name="plentyRes1" value="wood" checked>
+            <input type="radio" id="plentyWood2" name="plentyRes2" value="wood" checked>
+            <span>Brick</span>
+            <input type="radio" id="plentyBrick1" name="plentyRes1" value="brick">
+            <input type="radio" id="plentyBrick2" name="plentyRes2" value="brick">
+            <span>Sheep</span>
+            <input type="radio" id="plentySheep1" name="plentyRes1" value="sheep">
+            <input type="radio" id="plentySheep2" name="plentyRes2" value="sheep">
+            <span>Wheat</span>
+            <input type="radio" id="plentyWheat1" name="plentyRes1" value="wheat">
+            <input type="radio" id="plentyWheat2" name="plentyRes2" value="wheat">
+            <span>Stone</span>
+            <input type="radio" id="plentyStone1" name="plentyRes1" value="stone">
+            <input type="radio" id="plentyStone2" name="plentyRes2" value="stone">
+            <button type="button" name="button" id="plentySubmitButton" onclick="usePlenty()">Submit</button>
         </div>
     </div>
 </body>

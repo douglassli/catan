@@ -119,6 +119,12 @@ class Player:
         self.dev_cards[DevCards.MONOPOLY] -= 1
         self.used_dev_card = True
 
+    def use_plenty(self, res1, res2):
+        self.dev_cards[DevCards.PLENTY] -= 1
+        self.used_dev_card = True
+        self.gain_resource(res1, 1)
+        self.gain_resource(res2, 1)
+
     def can_use_dev_card(self, dev_card):
         return not self.used_dev_card and self.dev_cards[dev_card] > 0
 

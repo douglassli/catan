@@ -164,8 +164,8 @@ interface TradeClosed extends IncomingMessage {
     tradeID: number;
 }
 
-interface MonopolyUsed extends IncomingMessage {
-    type: "MONOPOLY_USED";
+interface DevCardUsed extends IncomingMessage {
+    type: "DEV_CARD_USED";
     name: string;
 }
 
@@ -203,6 +203,12 @@ interface UseDevCard extends IDMessage { type: DevUseTypes; }
 interface UseMonopoly extends UseDevCard {
     type: DevUseTypes.MONOPOLY;
     resource: string;
+}
+
+interface UsePlenty extends UseDevCard {
+    type: DevUseTypes.PLENTY;
+    resource1: string;
+    resource2: string;
 }
 
 interface ChoseMessage extends IDMessage {
@@ -484,7 +490,7 @@ class MessageHandler {
         }
     }
 
-    MONOPOLY_USED(msg: MonopolyUsed): void {
+    DEV_CARD_USED(msg: DevCardUsed): void {
         // Do nothing
     }
 }
@@ -734,7 +740,7 @@ function confirmTrade(tradeId: number, name: string): void {
 }
 
 function useDevCard(devType: DevUseTypes): void {
-    var msg: UseDevCard = {type: devType, playerID: playerId, roomID: roomId};
+    let msg: UseDevCard = {type: devType, playerID: playerId, roomID: roomId};
     sendMessage(msg);
 }
 
@@ -744,6 +750,26 @@ function startMonopolySelection(): void {
 
 function useMonopoly(res: string): void {
     document.getElementById("monopolySelect").style.display = "none";
-    var msg: UseMonopoly = {type: DevUseTypes.MONOPOLY, playerID: playerId, roomID: roomId, resource: res};
+    let msg: UseMonopoly = {type: DevUseTypes.MONOPOLY, playerID: playerId, roomID: roomId, resource: res};
+    sendMessage(msg);
+}
+
+function startPlentySelect(): void {
+    document.getElementById("plentySelect").style.display = "inline-grid";
+}
+
+function getRadioValue(groupName: string): string {
+    for (let rad of document.getElementsByName(groupName) as NodeListOf<HTMLInputElement>) {
+        if (rad.checked) {
+            return rad.value;
+        }
+    }
+}
+
+function usePlenty(): void {
+    document.getElementById("plentySelect").style.display = "none";
+    let res1: string = getRadioValue("plentyRes1");
+    let res2: string = getRadioValue("plentyRes2");
+    let msg: UsePlenty = {type: DevUseTypes.PLENTY, playerID: playerId, roomID: roomId, resource1: res1, resource2: res2};
     sendMessage(msg);
 }

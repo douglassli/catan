@@ -96,7 +96,7 @@ PLAYER_ROBBED = "PLAYER_ROBBED"
 TRADE_PROPOSED = "TRADE_PROPOSED"
 TRADE_RESPONDED = "TRADE_RESPONDED"
 TRADE_CLOSED = "TRADE_CLOSED"
-MONOPOLY_USED = "MONOPOLY_USED"
+DEV_CARD_USED = "DEV_CARD_USED"
 
 # Message field names
 TYPE = "type"
@@ -149,6 +149,8 @@ PLENTY = "plenty"
 ROAD_BUILDER = "roadBuilder"
 MONOPOLY = "monopoly"
 RESOURCE = "resource"
+RESOURCE1 = "resource1"
+RESOURCE2 = "resource2"
 
 # Button Ids
 TRADE_BUTTON = "tradeButton"
