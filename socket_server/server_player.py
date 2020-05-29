@@ -164,3 +164,13 @@ class ServerPlayer:
         if deck_state is not None:
             return_msg[mv.DECK_UPDATE] = deck_state
         await self.send_msg(return_msg)
+
+    async def send_game_over(self, winner_name, updates, deck_state):
+        return_msg = {mv.TYPE: mv.GAME_FINISHED,
+                      mv.NAME: winner_name,
+                      mv.ACTIVE_BUTTONS: []}
+        if updates is not None:
+            return_msg[mv.STATUS_UPDATES] = updates
+        if deck_state is not None:
+            return_msg[mv.DECK_UPDATE] = deck_state
+        await self.send_msg(return_msg)

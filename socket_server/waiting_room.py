@@ -135,6 +135,10 @@ class Room:
                 updates = self.get_updates(plyr)
                 await plyr.send_built(msg_type, row, col, color, updates, deck_state, active_buttons)
 
+            if self.game_model.is_game_over():
+                await self.end_game()
+                return
+
     async def end_turn(self, plyr_id):
         cur_plyr = self.game_model.cur_player()
         if plyr_id == cur_plyr.pid and self.game_state in [GameState.NORMAL, GameState.SETUP, GameState.SETUP_REV]:
@@ -170,6 +174,12 @@ class Room:
             was_knight = self.game_state == GameState.KNIGHT_SEL
             if was_knight:
                 self.game_model.use_knight()
+
+            if self.game_model.is_game_over():
+                # TODO maybe send that the robber has moved, but without prompting the player to steal
+                await self.end_game()
+                return
+
             self.game_state = self.game_state.get_next_state(Transitions.CHOSE_ROBBER)
             prev_coord = self.game_model.get_robber_coord()
             self.game_model.move_robber((row, col))
@@ -205,6 +215,11 @@ class Room:
         cur_plyr = self.game_model.cur_player()
         if cur_plyr.pid == plyr_id and self.game_state == GameState.NORMAL and cur_plyr.can_buy_dev_card():
             self.game_model.buy_dev_card()
+
+            if self.game_model.is_game_over():
+                await self.end_game()
+                return
+
             deck_state = self.get_deck_state()
             updates = self.get_updates(cur_plyr)
             for plyr in self.players.values():
@@ -306,6 +321,17 @@ class Room:
                 updates = self.get_updates(plyr)
                 active_buttons = self.get_active_buttons() if plyr.pid == cur_plyr.pid else None
                 await plyr.send_dev_card_used(cur_plyr.name, updates, active_buttons)
+
+    async def end_game(self):
+        winner_name = self.game_model.get_winner_name()
+        deck_state = self.get_deck_state()
+        for plyr in self.players.values():
+            updates = self.get_updates(plyr)
+            await plyr.send_game_over(winner_name, updates, deck_state)
+
+        self.active_trades = {}
+        self.game_model = None
+        self.game_state = GameState.NOT_STARTED
 
     def get_deck_state(self):
         return {

@@ -164,3 +164,16 @@ body {
 #plentySubmitButton {
     grid-column: 1 / span 3;
 }
+
+
+#winnerDisplay {
+    background-color: #999999;
+    padding: 5px 50px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    top: 40vh;
+    left: 45vh;
+}

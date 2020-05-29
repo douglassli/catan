@@ -1,4 +1,3 @@
- - using dev cards
  - make UI prettier
- - determining end of game
  - handle no more cards of certain resource
+ - make sure no 6 or 8 tiles are next to each other

@@ -272,3 +272,14 @@ class CatanGame:
         cur_plyr.use_plenty(res1, res2)
         self.resources[res1] -= 1
         self.resources[res2] -= 1
+
+    def is_game_over(self):
+        for plyr in self.players:
+            if plyr.get_victory_points() >= 10:
+                return True
+        return False
+
+    def get_winner_name(self):
+        for plyr in self.players:
+            if plyr.get_victory_points() >= 10:
+                return plyr.name

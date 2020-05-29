@@ -169,6 +169,11 @@ interface DevCardUsed extends IncomingMessage {
     name: string;
 }
 
+interface GameFinished extends IncomingMessage {
+    type: "GAME_FINISHED";
+    name: string;
+}
+
 // Outgoing Messsage type definitions **************************************************************
 
 interface IDMessage extends Message {
@@ -492,6 +497,11 @@ class MessageHandler {
 
     DEV_CARD_USED(msg: DevCardUsed): void {
         // Do nothing
+    }
+
+    GAME_FINISHED(msg: GameFinished): void {
+        document.getElementById("winnerSpan").innerHTML = msg.name;
+        document.getElementById("winnerDisplay").style.display = "inline-flex";
     }
 }
 
