@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style media="screen">
+            .brickColor {fill: #BC4D15;}
+            .desertColor {fill: #BC7739;}
+            .sheepColor {fill: #81AF07;}
+            .wheatColor {fill: #F4BB00;}
+            .treeColor {fill: #357924;}
+            .stoneColor {fill: #939393;}
+            .bgColor {fill: #C48D2E;}
+            .oceanColor {fill: #0E46E6;}
+
+            body {
+                background-color: #0E46E6;
+            }
+
+            @keyframes flip-horizontal-bottom1 {
+                0% {transform: scale(1) rotateY(0);}
+                50% {transform: scale(0.75) rotateY(90deg);}
+                100% {transform: scale(1) rotateY(180deg);}
+            }
+            @keyframes flip-horizontal-bottom2 {
+                0% {transform: scale(1) rotateY(180deg);}
+                50% {transform: scale(0.75) rotateY(90deg);}
+                100% {transform: scale(1) rotateY(0);}
+            }
+            .flip {
+	             animation: flip-horizontal-bottom1 0.4s linear both;
+            }
+            .flipBack {
+	             animation: flip-horizontal-bottom2 0.4s linear both;
+            }
+            .black {
+                fill: #000000;
+            }
+
+            .tileContainer {
+                background-color: transparent;
+                height: 30vh;
+                width: 30vh;
+            }
+            .tileContainerInner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transform-style: preserve-3d;
+            }
+
+            .front, .back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+            }
+
+            .back {
+                transform: rotateY(180deg);
+            }
+
+            .menuContainer {
+                position: relative;
+                height: 100vh;
+            }
+
+            #brickMenu {
+                position: absolute;
+                right: 50%;
+                bottom: 50%;
+                /* top: 46.3%; */
+            }
+            #treeMenu {
+                position: absolute;
+                left: 50%;
+                bottom: 50%;
+                /* top: 46.3%; */
+            }
+            #wheatMenu {
+                position: absolute;
+                left: 50%;
+                top: 46.3%;
+                /* bottom: 50%; */
+                transform: translate(-50%, 0%);
+            }
+
+            .clearCover {
+                position: absolute;
+                top: 0;
+                left: 0;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+                fill: transparent;
+                cursor: pointer;
+            }
+
+            .menuTile {
+                transition: 0.2s;
+            }
+
+            .hover {
+                transform: scale(1.1);
+            }
+            .hoverBack {
+                transform: scale(1.1) rotateY(180deg);
+            }
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+            .centerLabel {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 24px;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+            }
+
+            #createNameLabel {
+                position: absolute;
+                bottom: 56%;
+                left: 11%;
+            }
+            #createNameInput {
+                width: 70%;
+                position: absolute;
+                left: 50%;
+                top: 45%;
+                transform: translateX(-50%);
+            }
+
+            #joinNameInput, #joinRoomIdInput {
+                width: 70%;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            #joinNameLabel {
+                position: absolute;
+                bottom: 70%;
+                left: 11%;
+            }
+            #joinNameInput {
+                top: 30%;
+            }
+            #joinRoomIdLabel {
+                position: absolute;
+                bottom: 43%;
+                left: 11%;
+            }
+            #joinRoomIdInput {
+                top: 57%;
+            }
+
+            .menuTile input {
+                font-size: 24px;
+                font-family: serif;
+                border-radius: 10px;
+                border: none;
+                padding: 10px;
+            }
+
+            .menuTile label {
+                font-size: 16px;
+            }
+        </style>
+        <script type="text/javascript">
+            function flip(flipId) {
+                flipBackAll(flipId);
+                const activeTileCL = document.getElementById(flipId).classList;
+                if (activeTileCL.contains("flip")) {
+                    activeTileCL.remove("flip");
+                    activeTileCL.add("flipBack");
+                } else if (activeTileCL.contains("flipBack")) {
+                    activeTileCL.remove("flipBack");
+                    activeTileCL.add("flip");
+                } else {
+                    activeTileCL.add("flip");
+                }
+            }
+
+            function flipBackAll(ignoreId) {
+                const tiles = document.getElementsByClassName("tileContainerInner");
+                for (let i = 0; i < tiles.length; i++) {
+                    const tile = tiles[i];
+                    if (tile.id !== ignoreId && tile.classList.contains("flip")) {
+                        tile.classList.remove("flip");
+                        tile.classList.add("flipBack");
+                    }
+                }
+            }
+
+            function hoverStartListener(front, back) {
+                front.classList.add("hover");
+                // back.classList.add("hoverBack");
+            }
+
+            function hoverEndListener(front, back) {
+                front.classList.remove("hover");
+                // back.classList.remove("hoverBack");
+            }
+
+            function initHover(frontTileId, backTileId, frontMenuId, backMenuId) {
+                const frontTile = document.getElementById(frontTileId);
+                const backTile = document.getElementById(backTileId);
+                const frontMenu = document.getElementById(frontMenuId);
+                const backMenu = document.getElementById(backMenuId);
+                frontTile.addEventListener("mouseenter", e => {hoverStartListener(frontMenu, backMenu);});
+                frontTile.addEventListener("mouseleave", e => {hoverEndListener(frontMenu, backMenu);});
+                // backTile.addEventListener("mouseenter", e => {hoverStartListener(frontMenu, backMenu);});
+                // backTile.addEventListener("mouseleave", e => {hoverEndListener(frontMenu, backMenu);});
+            }
+
+            function initialize() {
+                initHover("wheatTileFront", "wheatTileBack", "menuFront1", "menuBack1");
+                initHover("treeTileFront", "treeTileBack", "menuFront2", "menuBack2");
+                initHover("brickTileFront", "brickTileBack", "menuFront3", "menuBack3");
+
+                document.addEventListener("keypress", (evt) => {
+                    if (evt.key === "Escape") {
+                        flipBackAll('');
+                    }
+                })
+            }
+
+        </script>
+    </head>
+    <body onload="initialize()">
+        <div class="menuContainer">
+            <div id="brickMenu" class="tileContainer">
+                <div id="brickMenuInner" class="tileContainerInner">
+                    <div id="menuFront3" class="front menuTile">
+                        <span class="centerLabel">Create Game</span>
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="brickColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 121.24 136.91">
+                            <path id="brickTileFront" class="hexTile" onclick="flip('brickMenuInner')" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                    <div id="menuBack3" class="back menuTile">
+                        <label id="createNameLabel" for="createNameInput">Username:</label>
+                        <input id="createNameInput" type="text" name="createNameInput" value="">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path id="brickTileBack" class="brickColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="treeMenu" class="tileContainer">
+                <div id="treeMenuInner" class="tileContainerInner">
+                    <div id="menuFront2" class="front menuTile">
+                        <span class="centerLabel">Join Game</span>
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="treeColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 121.24 136.91">
+                            <path id="treeTileFront" class="hexTile" onclick="flip('treeMenuInner')" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                    <div id="menuBack2" class="back menuTile">
+                        <label id="joinNameLabel" for="joinNameInput">Username:</label>
+                        <input id="joinNameInput" type="text" name="joinNameInput" value="">
+                        <label id="joinRoomIdLabel" for="joinRoomIdInput">Game ID:</label>
+                        <input id="joinRoomIdInput" type="text" name="joinRoomIdInput" value="">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path id="treeTileBack" class="treeColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="wheatMenu" class="tileContainer">
+                <div id="wheatMenuInner" class="tileContainerInner">
+                    <div id="menuFront1" class="front menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="wheatColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 121.24 136.91">
+                            <path id="wheatTileFront" class="hexTile" onclick="flip('wheatMenuInner')" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                    <div id="menuBack1" class="back menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path id="wheatTileBack" class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
