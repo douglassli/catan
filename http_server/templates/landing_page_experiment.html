@@ -70,19 +70,16 @@
                 position: absolute;
                 right: 50%;
                 bottom: 50%;
-                /* top: 46.3%; */
             }
             #treeMenu {
                 position: absolute;
                 left: 50%;
                 bottom: 50%;
-                /* top: 46.3%; */
             }
             #wheatMenu {
                 position: absolute;
                 left: 50%;
                 top: 46.3%;
-                /* bottom: 50%; */
                 transform: translate(-50%, 0%);
             }
 
@@ -194,31 +191,17 @@
                 }
             }
 
-            function hoverStartListener(front, back) {
-                front.classList.add("hover");
-                // back.classList.add("hoverBack");
-            }
-
-            function hoverEndListener(front, back) {
-                front.classList.remove("hover");
-                // back.classList.remove("hoverBack");
-            }
-
-            function initHover(frontTileId, backTileId, frontMenuId, backMenuId) {
+            function initHover(frontTileId, frontMenuId) {
                 const frontTile = document.getElementById(frontTileId);
-                const backTile = document.getElementById(backTileId);
                 const frontMenu = document.getElementById(frontMenuId);
-                const backMenu = document.getElementById(backMenuId);
-                frontTile.addEventListener("mouseenter", e => {hoverStartListener(frontMenu, backMenu);});
-                frontTile.addEventListener("mouseleave", e => {hoverEndListener(frontMenu, backMenu);});
-                // backTile.addEventListener("mouseenter", e => {hoverStartListener(frontMenu, backMenu);});
-                // backTile.addEventListener("mouseleave", e => {hoverEndListener(frontMenu, backMenu);});
+                frontTile.addEventListener("mouseenter", e => {frontMenu.classList.add("hover");});
+                frontTile.addEventListener("mouseleave", e => {frontMenu.classList.remove("hover");});
             }
 
             function initialize() {
-                initHover("wheatTileFront", "wheatTileBack", "menuFront1", "menuBack1");
-                initHover("treeTileFront", "treeTileBack", "menuFront2", "menuBack2");
-                initHover("brickTileFront", "brickTileBack", "menuFront3", "menuBack3");
+                initHover("wheatTileFront", "menuFront1");
+                initHover("treeTileFront", "menuFront2");
+                initHover("brickTileFront", "menuFront3");
 
                 document.addEventListener("keypress", (evt) => {
                     if (evt.key === "Escape") {
