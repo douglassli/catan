@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link href="https://fonts.googleapis.com/css2?family=Carter+One&family=Fredoka+One&family=Luckiest+Guy&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+        <style media="screen">
+            .brickColor {fill: #BC4D15;}
+            .desertColor {fill: #BC7739;}
+            .sheepColor {fill: #81AF07;}
+            .wheatColor {fill: #F4BB00;}
+            .treeColor {fill: #357924;}
+            .stoneColor {fill: #939393;}
+            .bgColor {fill: #C48D2E;}
+            .oceanColor {fill: #0E46E6;}
+
+            .wheatIcon {fill: #e1a800;}
+            .brickIcon {fill: #c35b23;}
+            .cactusIcon {fill: #357924;}
+            .treeIcon {fill: #3b8428;}
+            .stoneIcon {fill: #848484;}
+
+            body {
+                background-color: #0E46E6;
+                padding: 0;
+                margin: 0;
+                font-family: 'Carter One', cursive;
+                letter-spacing: 1px;
+            }
+
+            @keyframes test-move {
+                0% {
+                    transform: rotateY(0) translate(0, 0);
+                    width: 20vh;
+                    height: 20vh;
+                }
+                100% {
+                    transform: rotateY(180deg);
+                    width: 35vh;
+                    height: 35vh;
+                    top: calc(50% - 17.5vh);
+                    left: calc(50% - 17.5vh);
+                }
+            }
+
+            @keyframes test-move-back {
+                0% {
+                    transform: rotateY(180deg);
+                    width: 35vh;
+                    height: 35vh;
+                    top: calc(50% - 17.5vh);
+                    left: calc(50% - 17.5vh);
+                }
+                100% {
+                    transform: rotateY(0) translate(0, 0);
+                    width: 20vh;
+                    height: 20vh;
+                }
+            }
+
+            .flip {
+	             animation: test-move 0.4s linear both;
+            }
+            .flipBack {
+	             animation: test-move-back 0.4s linear both;
+            }
+            .black {
+                fill: #000000;
+            }
+
+            .tileContainerInner {
+                transform-style: preserve-3d;
+            }
+
+            .front, .back {
+                width: 100%;
+                height: 100%;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+            }
+
+            .back {
+                transform: rotateY(180deg);
+            }
+
+            .menuContainer {
+                position: relative;
+                height: 100vh;
+            }
+
+            .menuSize {
+                position: fixed;
+                width: 20vh;
+                height: 20vh;
+            }
+
+            #brickMenu, #brickMenuInner {
+                top: 17.95%;
+                left: 38.35%;
+            }
+            #treeMenu, #treeMenuInner {
+                top: 18.15%;
+                left: 51.5%;
+            }
+            #wheatMenu, #wheatMenuInner {
+                left: 58%;
+                top: 40.1%;
+            }
+            #sheepMenu, #sheepMenuInner {
+                left: 31.75%;
+                top: 40.1%;
+            }
+            #stoneMenu, #stoneMenuInner {
+                left: 51.53%;
+                top: 62.1%;
+            }
+            #desertMenu, #desertMenuInner {
+                left: 38.33%;
+                top: 62.25%;
+            }
+
+            .clearCover {
+                position: absolute;
+                top: 0;
+                left: 0;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+                fill: transparent;
+                cursor: pointer;
+            }
+
+            .menuTile {
+                transition: 0.2s;
+                position: absolute;
+                top: 0;
+            }
+
+            .hover {
+                transform: scale(1.05);
+            }
+
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            .centerLabel {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 30px;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+                text-align: center;
+            }
+
+            #createNameLabel {
+                position: absolute;
+                bottom: 60%;
+                left: 11%;
+            }
+            #createNameInput {
+                width: 70%;
+                position: absolute;
+                left: 50%;
+                top: 40%;
+                transform: translateX(-50%);
+            }
+            #createButton {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 70%;
+            }
+
+            #joinNameInput, #joinRoomIdInput {
+                width: 70%;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            #joinNameLabel {
+                position: absolute;
+                bottom: 70%;
+                left: 11%;
+            }
+            #joinNameInput {
+                top: 30%;
+            }
+            #joinRoomIdLabel {
+                position: absolute;
+                bottom: 43%;
+                left: 11%;
+            }
+            #joinRoomIdInput {
+                top: 57%;
+            }
+            #joinButton {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 80%;
+            }
+
+            .menuButton {
+                font-family: 'Carter One', cursive;
+                font-size: 20px;
+                border: 2px solid black;
+                border-radius: 10px;
+                cursor: pointer;
+                padding: 5px 10px;
+                background-color: transparent;
+            }
+
+            .menuButton:active {
+                color: #000;
+                border: 2px solid black;
+            }
+
+            .menuTile input {
+                font-size: 24px;
+                font-family: 'Carter One', cursive;
+                border-radius: 10px;
+                border: 2px solid black;
+                padding: 10px;
+                background-color: white;
+            }
+
+            .menuTile input:focus {
+                outline: none;
+            }
+
+            .menuTile label {
+                font-size: 16px;
+            }
+        </style>
+        <script type="text/javascript">
+            function flip(flipId) {
+                flipBackAll(flipId);
+                const activeTileCL = document.getElementById(flipId).classList;
+                if (activeTileCL.contains("flip")) {
+                    activeTileCL.remove("flip");
+                    activeTileCL.add("flipBack");
+                } else if (activeTileCL.contains("flipBack")) {
+                    activeTileCL.remove("flipBack");
+                    activeTileCL.add("flip");
+                } else {
+                    activeTileCL.add("flip");
+                }
+            }
+
+            function flipBackAll(ignoreId) {
+                const tiles = document.getElementsByClassName("tileContainerInner");
+                for (let i = 0; i < tiles.length; i++) {
+                    const tile = tiles[i];
+                    if (tile.id !== ignoreId && tile.classList.contains("flip")) {
+                        tile.classList.remove("flip");
+                        tile.classList.add("flipBack");
+                    }
+                }
+            }
+
+            function initHover(frontTileId, frontMenuId) {
+                const frontTile = document.getElementById(frontTileId);
+                const frontMenu = document.getElementById(frontMenuId);
+                frontTile.addEventListener("mouseenter", e => {frontMenu.classList.add("hover");});
+                frontTile.addEventListener("mouseleave", e => {frontMenu.classList.remove("hover");});
+            }
+
+            function initialize() {
+                initHover("wheatTileFront", "wheatFront");
+                initHover("treeTileFront", "treeFront");
+                initHover("brickTileFront", "brickFront");
+                initHover("sheepTileFront", "sheepFront");
+                initHover("stoneTileFront", "stoneFront");
+                initHover("desertTileFront", "desertFront");
+
+                document.addEventListener("keypress", (evt) => {
+                    if (evt.key === "Escape") {
+                        flipBackAll('');
+                    }
+                })
+            }
+
+        </script>
+    </head>
+    <body onload="initialize()">
+        <div class="menuContainer">
+
+            <div id="brickMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="brickMenuInner" class="tileContainerInner menuSize">
+                    <div id="brickFront" class="front menuTile">
+                        <span class="centerLabel">Create Game</span>
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="brickColor" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="brickTileFront" class="hexTile" onclick="flip('brickMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <label id="createNameLabel" for="createNameInput">Username:</label>
+                        <input id="createNameInput" type="text" name="createNameInput" value="">
+                        <button id="createButton" type="button" name="button" class="menuButton">Create</button>
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="brickColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="treeMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="treeMenuInner" class="tileContainerInner menuSize">
+                    <div id="treeFront" class="front menuTile">
+                        <span class="centerLabel">Join Game</span>
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="treeColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="treeTileFront" class="hexTile" onclick="flip('treeMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <label id="joinNameLabel" for="joinNameInput">Username:</label>
+                        <input id="joinNameInput" type="text" name="joinNameInput" value="">
+                        <label id="joinRoomIdLabel" for="joinRoomIdInput">Game ID:</label>
+                        <input id="joinRoomIdInput" type="text" name="joinRoomIdInput" value="">
+                        <button id="joinButton" type="button" name="button" class="menuButton">Join</button>
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="treeColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wheatMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="wheatMenuInner" class="tileContainerInner menuSize">
+                    <div id="wheatFront" class="front menuTile">
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="wheatColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="wheatTileFront" class="hexTile" onclick="flip('wheatMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="sheepMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="sheepMenuInner" class="tileContainerInner menuSize">
+                    <div id="sheepFront" class="front menuTile">
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="sheepColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="sheepTileFront" class="hexTile" onclick="flip('sheepMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="stoneMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="stoneMenuInner" class="tileContainerInner menuSize">
+                    <div id="stoneFront" class="front menuTile">
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="stoneColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="stoneTileFront" class="hexTile" onclick="flip('stoneMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="desertMenu" class="menuSize">
+                <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="desertMenuInner" class="tileContainerInner menuSize">
+                    <div id="desertFront" class="front menuTile">
+                        <svg viewBox="0 0 135.1 152.91">
+                            <path class="desertColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover" viewBox="0 0 135.1 152.91">
+                            <path id="desertTileFront" class="hexTile" onclick="flip('desertMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

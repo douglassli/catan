@@ -181,15 +181,21 @@
 
             #createNameLabel {
                 position: absolute;
-                bottom: 56%;
+                bottom: 60%;
                 left: 11%;
             }
             #createNameInput {
                 width: 70%;
                 position: absolute;
                 left: 50%;
-                top: 45%;
+                top: 40%;
                 transform: translateX(-50%);
+            }
+            #createButton {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 70%;
             }
 
             #joinNameInput, #joinRoomIdInput {
@@ -214,13 +220,43 @@
             #joinRoomIdInput {
                 top: 57%;
             }
+            #joinButton {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 80%;
+            }
+
+            .hexTile {
+                border: 2px solid black;
+            }
+
+            .menuButton {
+                font-family: 'Carter One', cursive;
+                font-size: 20px;
+                border: 2px solid black;
+                border-radius: 10px;
+                cursor: pointer;
+                padding: 5px 10px;
+                background-color: transparent;
+            }
+
+            .menuButton:active {
+                color: #000;
+                border: 2px solid black;
+            }
 
             .menuTile input {
                 font-size: 24px;
                 font-family: 'Carter One', cursive;
                 border-radius: 10px;
-                border: none;
+                border: 2px solid black;
                 padding: 10px;
+                background-color: white;
+            }
+
+            .menuTile input:focus {
+                outline: none;
             }
 
             .menuTile label {
@@ -292,6 +328,7 @@
                 <div class="back menuTile">
                     <label id="createNameLabel" for="createNameInput">Username:</label>
                     <input id="createNameInput" type="text" name="createNameInput" value="">
+                    <button id="createButton" type="button" name="button" class="menuButton">Create</button>
                     <svg viewBox="0 0 121.24 136.91">
                         <path class="brickColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
                     </svg>
@@ -313,6 +350,7 @@
                     <input id="joinNameInput" type="text" name="joinNameInput" value="">
                     <label id="joinRoomIdLabel" for="joinRoomIdInput">Game ID:</label>
                     <input id="joinRoomIdInput" type="text" name="joinRoomIdInput" value="">
+                    <button id="joinButton" type="button" name="button" class="menuButton">Join</button>
                     <svg viewBox="0 0 121.24 136.91">
                         <path class="treeColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
                     </svg>
