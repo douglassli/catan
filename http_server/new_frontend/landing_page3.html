@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="landing_page_styles.css">
+        <link rel="stylesheet" type="text/css" href="waiting_room_styles.css">
+        <script src="landing_page_scripts.js"></script>
+        <script src="waiting_room_scripts.js"></script>
+    </head>
+    <body onload="initialize()">
+        <div class="menuContainer">
+
+            <div id="brickMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="brickMenuInner" class="tileContainerInner menuSize">
+                    <div id="brickFront" class="front menuTile">
+                        <span class="centerLabel">Create Game</span>
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="brickColor" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="brickTileFront" class="hexTile" onclick="flip('brickMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <label id="createNameLabel" for="createNameInput">Username:</label>
+                        <input id="createNameInput" type="text" name="createNameInput" value="">
+                        <button id="createButton" type="button" name="button" class="menuButton">Create</button>
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="brickColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="treeMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="treeMenuInner" class="tileContainerInner menuSize">
+                    <div id="treeFront" class="front menuTile">
+                        <span class="centerLabel">Join Game</span>
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="treeColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="treeTileFront" class="hexTile" onclick="flip('treeMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <label id="joinNameLabel" for="joinNameInput">Username:</label>
+                        <input id="joinNameInput" type="text" name="joinNameInput" value="">
+                        <label id="joinRoomIdLabel" for="joinRoomIdInput">Game ID:</label>
+                        <input id="joinRoomIdInput" type="text" name="joinRoomIdInput" value="">
+                        <button id="joinButton" type="button" name="button" class="menuButton">Join</button>
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="treeColor hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wheatMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="wheatMenuInner" class="tileContainerInner menuSize">
+                    <div id="wheatFront" class="front menuTile">
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="wheatColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="wheatTileFront" class="hexTile" onclick="flip('wheatMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="sheepMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="sheepMenuInner" class="tileContainerInner menuSize">
+                    <div id="sheepFront" class="front menuTile">
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="sheepColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="sheepTileFront" class="hexTile" onclick="flip('sheepMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="stoneMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="stoneMenuInner" class="tileContainerInner menuSize">
+                    <div id="stoneFront" class="front menuTile">
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="stoneColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="stoneTileFront" class="hexTile" onclick="flip('stoneMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="desertMenu" class="menuSize">
+                <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+                </svg>
+                <div id="desertMenuInner" class="tileContainerInner menuSize">
+                    <div id="desertFront" class="front menuTile">
+                        <svg class="fullSize" viewBox="0 0 135.1 152.91">
+                            <path class="desertColor hexTile" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                        <svg class="clearCover fullSize" viewBox="0 0 135.1 152.91">
+                            <path id="desertTileFront" class="hexTile" onclick="flip('desertMenuInner')" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                        </svg>
+                    </div>
+                    <div class="back menuTile">
+                        <svg class="fullSize" viewBox="0 0 121.24 136.91">
+                            <path class="black hexTile" d="M55.62,1.34,5,30.57a10,10,0,0,0-5,8.66V97.68a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V39.23a10,10,0,0,0-5-8.66L65.62,1.34A10,10,0,0,0,55.62,1.34Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="roomContainer" class="menuContainer">
+            <svg class="bgTile" viewBox="0 0 135.1 152.91">
+                <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
+            </svg>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,230 @@
+.brickColor {fill: #BC4D15;}
+.desertColor {fill: #BC7739;}
+.sheepColor {fill: #81AF07;}
+.wheatColor {fill: #F4BB00;}
+.treeColor {fill: #357924;}
+.stoneColor {fill: #939393;}
+.bgColor {fill: #C48D2E;}
+.oceanColor {fill: #0E46E6;}
+
+.wheatIcon {fill: #e1a800;}
+.brickIcon {fill: #c35b23;}
+.cactusIcon {fill: #357924;}
+.treeIcon {fill: #3b8428;}
+.stoneIcon {fill: #848484;}
+
+body {
+    background-color: #0E46E6;
+    padding: 0;
+    margin: 0;
+    font-family: 'Carter One', cursive;
+    letter-spacing: 1px;
+}
+
+@keyframes test-move {
+    0% {
+        transform: rotateY(0);
+        width: 20vh;
+        height: 20vh;
+    }
+    100% {
+        transform: rotateY(180deg);
+        width: 35vh;
+        height: 35vh;
+        top: calc(50% - 17.5vh);
+        left: calc(50% - 17.5vh);
+    }
+}
+
+@keyframes test-move-back {
+    0% {
+        transform: rotateY(180deg);
+        width: 35vh;
+        height: 35vh;
+        top: calc(50% - 17.5vh);
+        left: calc(50% - 17.5vh);
+    }
+    100% {
+        transform: rotateY(0);
+        width: 20vh;
+        height: 20vh;
+    }
+}
+
+.flip {
+     animation: test-move 0.4s linear both;
+}
+.flipBack {
+     animation: test-move-back 0.4s linear both;
+}
+.black {
+    fill: #000000;
+}
+
+.tileContainerInner {
+    transform-style: preserve-3d;
+}
+
+.front, .back {
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+.back {
+    transform: rotateY(180deg);
+}
+
+.menuContainer {
+    position: relative;
+    height: 100vh;
+}
+
+.menuSize {
+    position: fixed;
+    width: 20vh;
+    height: 20vh;
+}
+
+#brickMenu, #brickMenuInner {
+    top: 17.95%;
+    left: 38.35%;
+}
+#treeMenu, #treeMenuInner {
+    top: 18.15%;
+    left: 51.5%;
+}
+#wheatMenu, #wheatMenuInner {
+    left: 58%;
+    top: 40.1%;
+}
+#sheepMenu, #sheepMenuInner {
+    left: 31.75%;
+    top: 40.1%;
+}
+#stoneMenu, #stoneMenuInner {
+    left: 51.53%;
+    top: 62.1%;
+}
+#desertMenu, #desertMenuInner {
+    left: 38.33%;
+    top: 62.25%;
+}
+
+.clearCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    fill: transparent;
+    cursor: pointer;
+}
+
+.menuTile {
+    transition: 0.2s;
+    position: absolute;
+    top: 0;
+}
+
+.hover {
+    transform: scale(1.05);
+}
+
+.fullSize {
+    width: 100%;
+    height: 100%;
+}
+
+.centerLabel {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    text-align: center;
+    line-height: 36px;
+}
+
+#createNameLabel {
+    position: absolute;
+    bottom: 60%;
+    left: 11%;
+}
+#createNameInput {
+    width: 70%;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translateX(-50%);
+}
+#createButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 70%;
+}
+
+#joinNameInput, #joinRoomIdInput {
+    width: 70%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#joinNameLabel {
+    position: absolute;
+    bottom: 70%;
+    left: 11%;
+}
+#joinNameInput {
+    top: 30%;
+}
+#joinRoomIdLabel {
+    position: absolute;
+    bottom: 43%;
+    left: 11%;
+}
+#joinRoomIdInput {
+    top: 57%;
+}
+#joinButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 80%;
+}
+
+.menuButton {
+    font-family: 'Carter One', cursive;
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: transparent;
+}
+
+.menuButton:active {
+    color: #000;
+    border: 2px solid black;
+}
+
+.menuTile input {
+    font-size: 24px;
+    font-family: 'Carter One', cursive;
+    border-radius: 10px;
+    border: 2px solid black;
+    padding: 10px;
+    background-color: white;
+}
+
+.menuTile input:focus {
+    outline: none;
+}
+
+.menuTile label {
+    font-size: 16px;
+}
