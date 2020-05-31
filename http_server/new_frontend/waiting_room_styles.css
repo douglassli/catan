@@ -17,31 +17,31 @@
     height: var(--tile-size);
 }
 
-#plyr1BG, #plyr1Status {
+#plyr1BG, #plyr0Status {
     position: fixed;
     top: 10%;
     left: calc(50% - var(--tile-size) / 2);
 }
 
-#plyr2BG, #plyr2Status {
+#plyr2BG, #plyr1Status {
     position: fixed;
     top: 34%;
     left: 21.2%;
 }
 
-#plyr3BG, #plyr3Status {
+#plyr3BG, #plyr2Status {
     position: fixed;
     top: 34%;
     left: 48.8%;
 }
 
-#plyr4BG, #plyr4Status {
+#plyr4BG, #plyr3Status {
     position: fixed;
     top: 58%;
     left: calc(50% - var(--tile-size) / 2);
 }
 
-#plyr1Tile {
+/* #plyr1Tile {
     fill: red;
 }
 
@@ -55,7 +55,7 @@
 
 #plyr4Tile {
     fill: yellow;
-}
+} */
 
 .plyrName {
     font-size: 32px;
@@ -73,11 +73,11 @@
     transform: translateX(-50%);
 }
 
-#p1Ready {
+#p0Ready {
     top: 42%;
 }
 
-#p1Name {
+#p0Name {
     top: 27%;
 }
 

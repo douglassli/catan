@@ -361,6 +361,8 @@ class MessageHandler {
         usercolor = msg.color;
         addRoomId();
         appendPlayer(username, usercolor, false, 0);
+        document.getElementById("landingContainer").classList.add("hidden");
+        document.getElementById("roomContainer").classList.remove("hidden");
     }
 
     JOINED_ROOM(msg: JoinedRoom): void {
@@ -370,6 +372,8 @@ class MessageHandler {
         addRoomId();
         appendPlayer(username, usercolor, false, 0);
         addOtherPlayers();
+        document.getElementById("landingContainer").classList.add("hidden");
+        document.getElementById("roomContainer").classList.remove("hidden");
     }
 
     PLAYER_JOINED(msg: PlayerJoined): void {
@@ -515,7 +519,7 @@ let tradeNum: number = 0;
 let activeTrades = {};
 
 function addRoomId(): void {
-    document.getElementById("roomHeader").innerHTML = `Room ID: ${roomId}`;
+    // document.getElementById("roomHeader").innerHTML = `Room ID: ${roomId}`;
 }
 
 function addOtherPlayers(): void {
@@ -527,23 +531,27 @@ function addOtherPlayers(): void {
 
 function appendPlayer(playerName: string, playerColor: string, playerReady: boolean, pNum: number): void {
     document.getElementById(`p${pNum}Name`).innerHTML = playerName;
-    document.getElementById(`p${pNum}Color`).innerHTML = playerColor;
-    document.getElementById(`p${pNum}Ready`).innerHTML = playerReady.toString();
-    document.getElementById(`p${pNum}Entry`).hidden = false;
+    document.getElementById(`plyr${pNum}Tile`).style.fill = playerColor;
+    document.getElementById(`p${pNum}Ready`).innerHTML = playerReady ? "Ready!" : "Not Ready!";
+    document.getElementById(`plyr${pNum}Status`).classList.remove("hidden");
 }
 
 function displayReady(pNum: number): void {
-    document.getElementById(`p${pNum}Ready`).innerHTML = true.toString();
+    document.getElementById(`p${pNum}Ready`).innerHTML = "Ready!";
+    document.getElementById(`p${pNum}Ready`).classList.remove("hidden");
+    if (pNum === 0) {
+        document.getElementById('markReadyButton').classList.add("hidden");
+    }
 }
 
 function createRoom(): void {
-    username = (document.getElementById('nameInput') as HTMLInputElement).value;
+    username = (document.getElementById('createNameInput') as HTMLInputElement).value;
     sendMessage({type: "CREATE_ROOM", name: username});
 }
 
 function joinRoom(): void {
-    username = (document.getElementById('nameInput') as HTMLInputElement).value;
-    roomId = parseInt((document.getElementById('roomIdInput') as HTMLInputElement).value, 10);
+    username = (document.getElementById('joinNameInput') as HTMLInputElement).value;
+    roomId = parseInt((document.getElementById('joinRoomIdInput') as HTMLInputElement).value, 10);
     sendMessage({type: "JOIN_ROOM", name: username, roomID: roomId});
 }
 

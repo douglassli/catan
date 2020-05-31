@@ -73,7 +73,7 @@ table {
 .active {
     background-color: #ffffff;
 }
-
+/*
 svg {
     height: 90vh;
     width: 90vh;
@@ -82,7 +82,7 @@ svg {
 body {
     margin: 0;
     background-color: #0E46E6;
-}
+} */
 
 #robWindow {
     background-color: gray;

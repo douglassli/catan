@@ -8,9 +8,19 @@
         <link rel="stylesheet" type="text/css" href="waiting_room_styles.css">
         <script src="landing_page_scripts.js"></script>
         <script src="waiting_room_scripts.js"></script>
+        <style media="screen">
+            .bgColor {fill: #C48D2E;}
+            .brickColor {fill: #BC4D15;}
+            .desertColor {fill: #BC7739;}
+            .sheepColor {fill: #81AF07;}
+            .wheatColor {fill: #F4BB00;}
+            .treeColor {fill: #357924;}
+            .stoneColor {fill: #939393;}
+            .oceanColor {fill: #0E46E6;}
+        </style>
     </head>
     <body onload="initialize()">
-        <div class="menuContainer" style="display:none;">
+        <div class="menuContainer">
 
             <div id="brickMenu" class="menuSize">
                 <svg class="bgTile fullSize" viewBox="0 0 135.1 152.91">
@@ -152,7 +162,7 @@
 
         <!-- ************************** Waiting Room ****************************************** -->
 
-        <div id="roomContainer" class="menuContainer">
+        <div id="roomContainer" class="menuContainer hidden" style="display:none;">
             <svg id="plyr1BG" class="bgTile roomTileSize" viewBox="0 0 135.1 152.91">
                 <path class="bgColor" d="M62.55,1.34,5,34.57a10,10,0,0,0-5,8.66v66.45a10,10,0,0,0,5,8.66l57.55,33.23a10,10,0,0,0,10,0l57.55-33.23a10,10,0,0,0,5-8.66V43.23a10,10,0,0,0-5-8.66L72.55,1.34A10,10,0,0,0,62.55,1.34Z" />
             </svg>
@@ -167,33 +177,33 @@
             </svg>
 
 
-            <div id="plyr1Status" class="roomTileSize">
-                <span id="p1Name" class="plyrName">Username1</span>
-                <span id="p1Ready" class="plyrReady hidden">Ready!</span>
+            <div id="plyr0Status" class="roomTileSize">
+                <span id="p0Name" class="plyrName">Username0</span>
+                <span id="p0Ready" class="plyrReady hidden">Ready!</span>
                 <button id="markReadyButton" onclick="markReady()" type="button" name="button" class="menuButton statusButton">Mark ready</button>
                 <button id="startGameButton" type="button" name="button" class="menuButton statusButton hidden">Start Game</button>
+                <svg id="plyr0Tile" class="fullSize" viewBox="0 0 135.1 152.91">
+                    <path class="" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
+                </svg>
+            </div>
+            <div id="plyr1Status" class="roomTileSize hidden">
+                <span id="p1Name" class="plyrName">Username1</span>
+                <span id="p1Ready" class="plyrReady">Not ready!</span>
                 <svg id="plyr1Tile" class="fullSize" viewBox="0 0 135.1 152.91">
                     <path class="" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
                 </svg>
             </div>
-            <div id="plyr2Status" class="roomTileSize">
+            <div id="plyr2Status" class="roomTileSize hidden">
                 <span id="p2Name" class="plyrName">Username2</span>
                 <span id="p2Ready" class="plyrReady">Not ready!</span>
                 <svg id="plyr2Tile" class="fullSize" viewBox="0 0 135.1 152.91">
                     <path class="" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
                 </svg>
             </div>
-            <div id="plyr3Status" class="roomTileSize">
+            <div id="plyr3Status" class="roomTileSize hidden">
                 <span id="p3Name" class="plyrName">Username3</span>
                 <span id="p3Ready" class="plyrReady">Not ready!</span>
                 <svg id="plyr3Tile" class="fullSize" viewBox="0 0 135.1 152.91">
-                    <path class="" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
-                </svg>
-            </div>
-            <div id="plyr4Status" class="roomTileSize">
-                <span id="p4Name" class="plyrName">Username4</span>
-                <span id="p4Ready" class="plyrReady">Not ready!</span>
-                <svg id="plyr4Tile" class="fullSize" viewBox="0 0 135.1 152.91">
                     <path class="" d="M62.55,9.34,11.93,38.57a10,10,0,0,0-5,8.66v58.45a10,10,0,0,0,5,8.66l50.62,29.23a10,10,0,0,0,10,0l50.62-29.23a10,10,0,0,0,5-8.66V47.23a10,10,0,0,0-5-8.66L72.55,9.34A10,10,0,0,0,62.55,9.34Z" />
                 </svg>
             </div>

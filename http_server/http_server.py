@@ -10,7 +10,10 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             "/": self.get_root,
             "/room": self.get_room,
             "/client.js": self.get_room_js,
-            "/svg_styles.css": self.get_css
+            "/svg_styles.css": self.get_css,
+            "/landing_page_styles.css": self.get_landing_css,
+            "/waiting_room_styles.css": self.get_waiting_css,
+            "/landing_page_scripts.js": self.get_landing_js,
         }
         get_handlers.get(self.path, self.not_found)()
 
@@ -62,6 +65,21 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def get_room_js(self):
         with open("http_server/resources/client.js", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/javascript")
+
+    def get_landing_css(self):
+        with open("http_server/new_frontend/landing_page_styles.css", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/css")
+
+    def get_waiting_css(self):
+        with open("http_server/new_frontend/waiting_room_styles.css", "r") as f:
+            data = f.read().encode("utf-8")
+        self.send_resource(data, "text/css")
+
+    def get_landing_js(self):
+        with open("http_server/new_frontend/landing_page_scripts.js", "r") as f:
             data = f.read().encode("utf-8")
         self.send_resource(data, "text/javascript")
 

@@ -1,4 +1,4 @@
-.brickColor {fill: #BC4D15;}
+/* .brickColor {fill: #BC4D15;}
 .desertColor {fill: #BC7739;}
 .sheepColor {fill: #81AF07;}
 .wheatColor {fill: #F4BB00;}
@@ -11,11 +11,7 @@
 .brickIcon {fill: #c35b23;}
 .cactusIcon {fill: #357924;}
 .treeIcon {fill: #3b8428;}
-.stoneIcon {fill: #848484;}
-
-.hidden {
-    display: none;
-}
+.stoneIcon {fill: #848484;} */
 
 body {
     background-color: #0E46E6;
@@ -23,6 +19,7 @@ body {
     margin: 0;
     font-family: 'Carter One', cursive;
     letter-spacing: 1px;
+    zoom: reset;
 }
 
 @keyframes test-move {
