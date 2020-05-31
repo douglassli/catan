@@ -1,0 +1,89 @@
+:root {
+    --tile-size: 30vh;
+}
+
+#roomContainer {
+    position fixed;
+    left: 50vw;
+    top: 0;
+    transform: translateX(-50%);
+    width: 100vh;
+    height: 100vh;
+    /* border: 2px solid black; */
+}
+
+.roomTileSize {
+    width: var(--tile-size);
+    height: var(--tile-size);
+}
+
+#plyr1BG, #plyr1Status {
+    position: fixed;
+    top: 10%;
+    left: calc(50% - var(--tile-size) / 2);
+}
+
+#plyr2BG, #plyr2Status {
+    position: fixed;
+    top: 34%;
+    left: 21.2%;
+}
+
+#plyr3BG, #plyr3Status {
+    position: fixed;
+    top: 34%;
+    left: 48.8%;
+}
+
+#plyr4BG, #plyr4Status {
+    position: fixed;
+    top: 58%;
+    left: calc(50% - var(--tile-size) / 2);
+}
+
+#plyr1Tile {
+    fill: red;
+}
+
+#plyr2Tile {
+    fill: blue;
+}
+
+#plyr3Tile {
+    fill: green;
+}
+
+#plyr4Tile {
+    fill: yellow;
+}
+
+.plyrName {
+    font-size: 32px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.plyrReady {
+    font-size: 20px;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#p1Ready {
+    top: 42%;
+}
+
+#p1Name {
+    top: 27%;
+}
+
+.statusButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 55%;
+}
