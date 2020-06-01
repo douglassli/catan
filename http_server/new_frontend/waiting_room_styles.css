@@ -3,13 +3,12 @@
 }
 
 #roomContainer {
-    position fixed;
+    position: fixed;
     left: 50vw;
     top: 0;
     transform: translateX(-50%);
     width: 100vh;
     height: 100vh;
-    /* border: 2px solid black; */
 }
 
 .roomTileSize {
