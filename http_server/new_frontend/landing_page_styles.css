@@ -1,18 +1,3 @@
-/* .brickColor {fill: #BC4D15;}
-.desertColor {fill: #BC7739;}
-.sheepColor {fill: #81AF07;}
-.wheatColor {fill: #F4BB00;}
-.treeColor {fill: #357924;}
-.stoneColor {fill: #939393;}
-.bgColor {fill: #C48D2E;}
-.oceanColor {fill: #0E46E6;}
-
-.wheatIcon {fill: #e1a800;}
-.brickIcon {fill: #c35b23;}
-.cactusIcon {fill: #357924;}
-.treeIcon {fill: #3b8428;}
-.stoneIcon {fill: #848484;} */
-
 :root {
     --land-size: 20vh;
     --land-grow-size: 33vh;
@@ -209,11 +194,11 @@ body {
 
 .menuButton {
     font-family: 'Carter One', cursive;
-    font-size: 20px;
+    font-size: 2vh;
     border: 2px solid black;
-    border-radius: 10px;
+    border-radius: 1vh;
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 0.5vh 1vh;
     background-color: transparent;
 }
 
@@ -223,11 +208,11 @@ body {
 }
 
 .menuTile input {
-    font-size: 24px;
+    font-size: 2.4vh;
     font-family: 'Carter One', cursive;
-    border-radius: 10px;
+    border-radius: 1vh;
     border: 2px solid black;
-    padding: 10px;
+    padding: 1vh;
     background-color: white;
 }
 
@@ -236,5 +221,5 @@ body {
 }
 
 .menuTile label {
-    font-size: 16px;
+    font-size: 1.6vh;
 }

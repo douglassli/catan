@@ -40,24 +40,8 @@
     left: calc(50% - var(--tile-size) / 2);
 }
 
-/* #plyr1Tile {
-    fill: red;
-}
-
-#plyr2Tile {
-    fill: blue;
-}
-
-#plyr3Tile {
-    fill: green;
-}
-
-#plyr4Tile {
-    fill: yellow;
-} */
-
 .plyrName {
-    font-size: 32px;
+    font-size: 3.2vh;
     position: absolute;
     top: 30%;
     left: 50%;
@@ -65,7 +49,7 @@
 }
 
 .plyrReady {
-    font-size: 20px;
+    font-size: 2vh;
     position: absolute;
     top: 55%;
     left: 50%;
